@@ -1,32 +1,10 @@
 import * as React from 'react'
-import ReactDOM from 'react-dom'
-import Button from '@mui/material/Button'
+
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import Header from '../components/header/header'
 
 const Home: NextPage = () => {
-  const { data, status } = useSession()
-
-  console.log(data)
-
-  const renderAutBth = () => {
-    return data ? (
-      <Button variant="contained" onClick={() => signOut()}>
-        Sign Out
-      </Button>
-    ) : (
-      <Button
-        variant="contained"
-        onClick={() =>
-          signIn('', { callbackUrl: 'http://localhost:3000/hello' })
-        }
-      >
-        Sign In
-      </Button>
-    )
-  }
-
   return (
     <div>
       <Head>
@@ -36,14 +14,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <h1>hello creation</h1>
-        {renderAutBth()}
-        {data && (
-          <div>
-            <p>{data?.user.name}</p>
-            <p>{data?.user.email}</p>
-          </div>
-        )}
+        <Header />
       </main>
     </div>
   )

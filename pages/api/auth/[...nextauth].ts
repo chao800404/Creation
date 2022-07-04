@@ -1,21 +1,32 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import EmailProvider from 'next-auth/providers/email'
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { getToken } from 'next-auth/jwt'
+import prisma from '../../../lib/prisma'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
 
 export const authOptions = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
     EmailProvider({
-      server: process.env.EMAIL_SERVER,
-      from: process.env.EMAIL_FROM,
+      server: {
+        host: 'smtp.mailtrap.io',
+        port: 2525,
+        auth: {
+          user: 'c1257e13f2d0a7',
+          pass: '13ca8117947111',
+        },
+      },
+      from: '<no-reply@example.com>',
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+
+  page: {
+    signIn: '/auth/signin',
+  },
 }
 
 // export default async function handler(
