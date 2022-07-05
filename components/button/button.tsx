@@ -1,7 +1,6 @@
-import Button from '@mui/material/Button'
 import React from 'react'
 import { signIn, signOut } from 'next-auth/react'
-import CircularProgress from '@mui/material/CircularProgress'
+import { Button, ButtonGroup } from '@chakra-ui/react'
 
 type HeaderBtnProps = {
   text: string
@@ -17,24 +16,8 @@ const BasicButton = ({
   isLoading,
 }: HeaderBtnProps) => {
   return (
-    <Button
-      size="medium"
-      variant="contained"
-      onClick={() => (isSignIn ? signOut() : signIn(authProvider))}
-      sx={{
-        width: 200,
-        backgroundColor: 'primary.dark',
-        '&:hover': {
-          backgroundColor: 'primary.main',
-          opacity: [0.9, 0.8, 0.7],
-        },
-      }}
-    >
-      {isLoading ? (
-        <span>{text}</span>
-      ) : (
-        <CircularProgress sx={{ display: 'flex', color: 'inherit' }} />
-      )}
+    <Button colorScheme="green" color="brand.300" variant="solid" size="xl">
+      Button
     </Button>
   )
 }
