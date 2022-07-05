@@ -2,24 +2,37 @@ import { extendTheme } from '@chakra-ui/react'
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const theme = {
-  colors: {
-    brand: {
-      100: '#f7fafc',
-      300: '#E31E1E',
-      900: '#1a202c',
+  styles: {
+    global: {
+      body: {
+        bg: 'gray.100',
+        color: 'gray.600',
+        fontWeight: 'bold',
+      },
     },
+    a: {
+      color: 'teal.500',
+      _hover: {
+        textDecoration: 'underline',
+      },
+    },
+  },
+  colors: {
+    brand: {},
+  },
+  lineHeights: {
+    '12': '4.5rem',
   },
   components: {
     Button: {
       baseStyle: {
         fontWeight: 'bold',
       },
-
       sizes: {
-        xl: {
-          h: '56px',
+        base: {
+          h: '4rem',
           fontSize: 'lg',
-          px: '70px',
+          w: '10rem',
         },
       },
     },

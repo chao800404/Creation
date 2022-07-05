@@ -1,24 +1,26 @@
 import React from 'react'
 import { signIn, signOut } from 'next-auth/react'
 import { Button, ButtonGroup } from '@chakra-ui/react'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
 
-type HeaderBtnProps = {
-  text: string
-  authProvider: 'google' | 'email'
-  isSignIn: boolean
-  isLoading: boolean
-}
-
-const BasicButton = ({
-  text,
-  authProvider,
-  isSignIn,
-  isLoading,
-}: HeaderBtnProps) => {
+const BasicButton = () => {
   return (
-    <Button colorScheme="green" color="brand.300" variant="solid" size="xl">
-      Button
-    </Button>
+    <Link href="login">
+      <Button
+        as={motion.div}
+        bg="gray.800"
+        borderRadius="none"
+        loadingText=""
+        color="white"
+        variant="solid"
+        size="base"
+        whileTap={{ scale: 0.98 }}
+        _hover={{ bg: 'gray.900' }}
+      >
+        立即開始
+      </Button>
+    </Link>
   )
 }
 
