@@ -1,26 +1,78 @@
 import React from 'react'
 import { signIn, signOut } from 'next-auth/react'
 import { Button, ButtonGroup } from '@chakra-ui/react'
-import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/router'
+import { buttonProps } from '../../types/button'
+import useStore from '../../store/store'
+import { FcGoogle } from 'react-icons/fc'
 
-const BasicButton = () => {
-  return (
-    <Link href="login">
+const BasicButton = ({
+  url,
+  text,
+  size,
+  ml,
+  bg = 'gray.800',
+  type = 'basic',
+}: buttonProps) => {
+  const router = useRouter()
+  const toggle = useStore((state) => state.toggle)
+
+  const handleClick = () => {
+    if (url) return router.push(`${url}`)
+    return toggle()
+  }
+
+  if (type === 'google') {
+    return (
       <Button
-        as={motion.div}
-        bg="gray.800"
+        w="full"
+        bg="white"
+        border="1px"
+        borderColor="gray.400"
+        leftIcon={<FcGoogle />}
+      >
+        Google
+      </Button>
+    )
+  }
+
+  if (type === 'email') {
+    return (
+      <Button
+        w="full"
+        as={motion.a}
+        bg={bg}
         borderRadius="none"
-        loadingText=""
         color="white"
         variant="solid"
-        size="base"
+        size={size}
         whileTap={{ scale: 0.98 }}
         _hover={{ bg: 'gray.900' }}
+        ml={ml}
+        cursor="pointer"
       >
-        立即開始
+        {text}
       </Button>
-    </Link>
+    )
+  }
+
+  return (
+    <Button
+      as={motion.a}
+      bg={bg}
+      borderRadius="none"
+      color="white"
+      variant="solid"
+      size={size}
+      whileTap={{ scale: 0.98 }}
+      _hover={{ bg: 'gray.900' }}
+      ml={ml}
+      cursor="pointer"
+      onClick={handleClick}
+    >
+      {text}
+    </Button>
   )
 }
 

@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Navbar, Banner } from '../components/index'
+import { Navbar, Banner, LoginPopup } from '../components/index'
 import { Box } from '@chakra-ui/react'
 
 const Home: NextPage = () => {
@@ -14,9 +14,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Box w="100vw" h="100%">
+        <Box w="100vw" h="100%" pos="relative">
           <Navbar />
           <Banner />
+          <LoginPopup />
         </Box>
       </main>
     </div>

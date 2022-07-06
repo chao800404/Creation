@@ -11,7 +11,6 @@ const theme = {
       },
     },
     a: {
-      color: 'teal.500',
       _hover: {
         textDecoration: 'underline',
       },
@@ -32,6 +31,11 @@ const theme = {
         base: {
           h: '4rem',
           fontSize: 'lg',
+          w: '10rem',
+        },
+        md: {
+          h: '3rem',
+          fontSize: 'md',
           w: '10rem',
         },
       },

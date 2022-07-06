@@ -13,9 +13,13 @@ const Navbar = () => {
       shadow="md"
       w="100%"
       zIndex="9999"
+      as="header"
     >
-      <Logo />
-      <BasicButton />
+      <Box ml="10">
+        <Logo />
+      </Box>
+
+      <BasicButton text="立即開始" url="login" size="base" />
     </Flex>
   )
 }
