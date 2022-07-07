@@ -2,19 +2,20 @@ export const validateEamil = (email: string) => {
   const trimEmail = email.trim()
   const emailRule =
     /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
-  const validaty = emailRule.test(trimEmail)
+  const validity = emailRule.test(trimEmail)
 
   return {
-    validaty,
+    validity,
     email: trimEmail,
   }
 }
 
 export const validateUserName = (name: string) => {
-  const trimName = name.trim()
+  console.log(name)
+  const trimName = name?.trim()
   const nameRule = trimName.length >= 2
   return {
-    validaty: nameRule,
+    validity: nameRule,
     name: trimName,
   }
 }

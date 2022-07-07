@@ -1,11 +1,19 @@
 export type UserSlice = {
   user: {
-    username: string
-    email: string
+    username?: string
+    email?: string
     photoUrl?: string
+    [key: string]: string
   }
-  togglePopup: boolean
+  validity: {
+    name: boolean
+    email: boolean
+  }
+  openPopup: boolean
+  showError: boolean
 
-  addUser: (user: UserSlice['user']) => void
+  addUser: (name: string, email: string) => void
   toggle: () => void
+  updateValidity: () => void
+  setShowError: (error: boolean) => void
 }

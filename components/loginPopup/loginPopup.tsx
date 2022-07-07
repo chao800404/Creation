@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useCallback, memo } from 'react'
 import {
   SlideFade,
   Box,
@@ -7,6 +7,7 @@ import {
   Checkbox,
   Text,
   Link,
+  FormHelperText,
 } from '@chakra-ui/react'
 import useStore from '../../store/store'
 import { CloseIcon } from '@chakra-ui/icons'
@@ -16,25 +17,36 @@ import Line from '../line/line'
 import BasicInput from '../input/input'
 import { HiOutlineMail } from 'react-icons/Hi'
 import { FaRegUser } from 'react-icons/Fa'
+import { UserSlice } from '../../types/user'
+import shallow from 'zustand/shallow'
 
 const LoginPopup = () => {
-  const togglePopup = useStore((state) => state.togglePopup)
-  const toggle = useStore((state) => state.toggle)
+  const { openPopup, toggle } = useStore(
+    (state) => ({ openPopup: state.openPopup, toggle: state.toggle }),
+    shallow
+  )
+  const validity = useStore((state: UserSlice) => state.validity, shallow)
+  const showError = useStore((state: UserSlice) => state.showError, shallow)
 
-  // const [user, setUser] = useState({
-  //   username: '',
-  //   email: '',
-  // })
+  const elemRef = useRef<HTMLDivElement>(null)
+
+  const handleClick = (e: React.MouseEvent) => {
+    const target = (e.target as Element).closest('#login-form-box')
+    const formParent = elemRef.current
+    if (target === formParent) return
+    return toggle()
+  }
 
   return (
     <>
-      {togglePopup && (
+      {openPopup && (
         <Box
           w="full"
           h="full"
           pos="absolute"
           top="0"
           backdropFilter="blur(.3rem) hue-rotate(90deg)"
+          zIndex="9999"
           _before={{
             content: `""`,
             position: 'absolute',
@@ -45,9 +57,10 @@ const LoginPopup = () => {
             opacity: `.7`,
             zIndex: 2,
           }}
+          onClick={handleClick}
         >
           <Center w="full" h="full" pos="absolute" top="0" zIndex="20">
-            <SlideFade in={togglePopup} offsetY="100px">
+            <SlideFade in={openPopup} offsetY="100px">
               <Box
                 p="20px 3rem"
                 w="30rem"
@@ -58,6 +71,8 @@ const LoginPopup = () => {
                 shadow="xl"
                 zIndex="300"
                 pos="relative"
+                ref={elemRef}
+                id="login-form-box"
               >
                 <Box
                   pos="absolute"
@@ -78,7 +93,7 @@ const LoginPopup = () => {
                   <Logo type="secondType" />
                 </Center>
                 <Center mt="10">
-                  <BasicButton type="google" />
+                  <BasicButton validity type="google" />
                 </Center>
                 <Center mt="5">
                   <Line mr="1rem" />
@@ -87,16 +102,27 @@ const LoginPopup = () => {
                 </Center>
                 <FormControl mt="3">
                   <Box pos="relative">
-                    <BasicInput type="email" placeholder="輸入電子郵件">
+                    <BasicInput
+                      type="email"
+                      placeholder="輸入電子郵件"
+                      validity={validity.email}
+                    >
                       <HiOutlineMail size="1.5rem" />
                     </BasicInput>
                   </Box>
                   <Box pos="relative" mt="3">
-                    <BasicInput type="username" placeholder="輸入您的姓名">
+                    <BasicInput
+                      type="username"
+                      placeholder="輸入您的姓名"
+                      validity={validity.name}
+                    >
                       <FaRegUser size="1.5rem" />
                     </BasicInput>
                   </Box>
-                  <Checkbox mt="5" size="lg" colorScheme="gray" defaultChecked>
+                  <FormHelperText color="red.800" h="1rem" fontSize=".5rem">
+                    {showError && '帳號或密碼錯誤'}
+                  </FormHelperText>
+                  <Checkbox mt="2" size="lg" colorScheme="gray" defaultChecked>
                     <Text fontSize="sm">
                       註冊帳號即表示您同意我們的
                       <Link color="blue.700" href="#">
@@ -109,7 +135,11 @@ const LoginPopup = () => {
                     </Text>
                   </Checkbox>
                   <Box mt="5">
-                    <BasicButton type="email" text="登入" />
+                    <BasicButton
+                      type="email"
+                      text="註冊"
+                      validity={validity.email && validity.name}
+                    />
                   </Box>
                   <Center mt="5">
                     <Text>已經註冊過了？ </Text>
@@ -118,7 +148,7 @@ const LoginPopup = () => {
                     </Link>
                   </Center>
                   <Box h="1rem" borderBottom="1px" borderColor="gray.300" />
-                  <Center mt="5">
+                  <Center mt="2">
                     <Text fontSize="xs" w="80%" color="gray.500" align="center">
                       This site is protected by reCAPTCHA and the Google Privacy
                       Policy and Terms of Service apply.
@@ -134,4 +164,4 @@ const LoginPopup = () => {
   )
 }
 
-export default LoginPopup
+export default memo(LoginPopup)

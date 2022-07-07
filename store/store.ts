@@ -1,5 +1,6 @@
 import create from 'zustand'
-import { UserSlice, createUserSlice } from './userSlice'
+import { createUserSlice } from './userSlice'
+import { UserSlice } from '../types/user'
 
 const useStore = create<UserSlice>()((...a) => ({
   ...createUserSlice(...a),

@@ -12,14 +12,14 @@ const Navbar = () => {
       bg="white"
       shadow="md"
       w="100%"
-      zIndex="9999"
+      zIndex="8888"
       as="header"
     >
       <Box ml="10">
         <Logo />
       </Box>
 
-      <BasicButton text="立即開始" url="login" size="base" />
+      <BasicButton text="立即開始" size="base" />
     </Flex>
   )
 }
