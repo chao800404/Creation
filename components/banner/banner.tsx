@@ -4,12 +4,16 @@ import { Container } from '@chakra-ui/react'
 import { Grid, GridItem, Text, Flex, Box, Center } from '@chakra-ui/react'
 import Image from 'next/image'
 import Button from '../button/button'
+import useStore from '../../store/store'
+import shallow from 'zustand/shallow'
 
-const banner = () => {
+const Banner = () => {
+  const toggle = useStore((state) => state.toggle, shallow)
+
   return (
     <Box
       h="100vh"
-      backgroundPosition="center"
+      backgroundSize="auto"
       backgroundImage="url('static/png/banner-bg.png')"
     >
       <Container h="100%" maxW="container.xl">
@@ -51,8 +55,18 @@ const banner = () => {
                   提供數位筆記功能，整合了線上筆記、文件管理、專案管理、知識資料庫等，一體集成，實現從工作到生活。
                 </Text>
                 <Box mt={8} color="white">
-                  <Button size="md" bg="gray.500" text="立即登入" />
-                  <Button size="md" ml={2} text="windows" url="/" />
+                  <Button
+                    size="md"
+                    bg="gray.500"
+                    text="立即登入"
+                    handleClick={toggle}
+                  />
+                  <Button
+                    size="md"
+                    ml={2}
+                    text="windows"
+                    handleClick={toggle}
+                  />
                 </Box>
               </Box>
             </Flex>
@@ -63,4 +77,4 @@ const banner = () => {
   )
 }
 
-export default banner
+export default React.memo(Banner)

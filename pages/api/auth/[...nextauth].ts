@@ -1,10 +1,14 @@
-import NextAuth from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import EmailProvider from 'next-auth/providers/email'
+import EmailProvider, { EmailConfig } from 'next-auth/providers/email'
 import prisma from '../../../lib/prisma'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
 
-export const authOptions = {
+import emailTemplate from '../../../src/email.template'
+
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { createTransport } from 'nodemailer'
+
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -21,22 +25,48 @@ export const authOptions = {
         },
       },
       from: '<no-reply@example.com>',
+      sendVerificationRequest,
     }),
   ],
-
-  page: {
-    signIn: '/auth/signin',
+  theme: {
+    colorScheme: 'light',
+    logo: '/static/png/logo.png',
+    brandColor: '#B3C1E5',
+  },
+  debug: process.env.NODE_ENV === 'development',
+  secret: process.env.SECRET,
+  session: {
+    strategy: 'jwt',
+  },
+  jwt: {
+    secret: process.env.SECRET,
   },
 }
 
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse
-// ) {
-//   NextAuth(authOptions)
+async function sendVerificationRequest(params: {
+  identifier: string
+  url: string
+  expires: Date
+  provider: EmailConfig
+  token: string
+}) {
+  console.log(params)
 
-//   const token = await getToken({ req })
-//   console.log('JSON Web Token', token)
-// }
+  const { identifier, url, provider } = params
+  const { host } = new URL(url)
+
+  const transport = createTransport(provider.server)
+  const result = await transport.sendMail({
+    to: identifier,
+    from: provider.from,
+    subject: `Sign in to ${host}`,
+    text: `Sign in to ${host}\n${url}\n\n`,
+    html: emailTemplate({ url, host }),
+  })
+  const failed = result.rejected.concat(result.pending).filter(Boolean)
+  if (failed.length) {
+    throw new Error(`Email(s) (${failed.join(', ')}) could not be sent`)
+  }
+}
 
 export default NextAuth(authOptions)

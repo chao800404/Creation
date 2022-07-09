@@ -1,13 +1,11 @@
-import React, { memo, useState } from 'react'
-import { signIn, signOut } from 'next-auth/react'
+import React, { memo } from 'react'
+
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import { useRouter } from 'next/router'
+
 import { buttonProps } from '../../types/button'
-import useStore from '../../store/store'
+
 import { FcGoogle } from 'react-icons/fc'
-import { UserSlice } from '../../types/user'
-import shallow from 'zustand/shallow'
 
 const BasicButton = ({
   url,
@@ -16,28 +14,8 @@ const BasicButton = ({
   ml,
   bg = 'gray.800',
   type = 'basic',
-  validity,
+  handleClick,
 }: buttonProps) => {
-  const router = useRouter()
-  const toggle = useStore((state) => state.toggle, shallow)
-  const setShowError = useStore((state) => state.setShowError)
-  const { username, email } = useStore((state) => state.user, shallow)
-
-  const handleClick = () => {
-    if (url) return router.push(`${url}`)
-    if (type === 'google') return signIn('google')
-    if (type === 'email') {
-      if (!validity) {
-        return setShowError(!validity)
-      }
-      return signIn('email', {
-        username,
-        email,
-      })
-    }
-    return toggle()
-  }
-
   if (type === 'google') {
     return (
       <Button

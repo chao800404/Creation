@@ -17,7 +17,9 @@ const theme = {
     },
   },
   colors: {
-    brand: {},
+    brand: {
+      basic: '#B3C1E5',
+    },
   },
   lineHeights: {
     '12': '4.5rem',

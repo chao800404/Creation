@@ -5,5 +5,5 @@ export type buttonProps = {
   ml?: number
   bg?: string
   type?: 'google' | 'basic' | 'email'
-  validity: boolean
+  handleClick: () => void
 }

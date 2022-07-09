@@ -2,10 +2,19 @@ import * as React from 'react'
 
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Navbar, Banner, LoginPopup } from '../components/index'
+import { Navbar, Banner, LoginPopup, Features } from '../components/index'
 import { Box } from '@chakra-ui/react'
+import useStore from '../store/store'
+import shallow from 'zustand/shallow'
+
+import authOptions from './api/auth/[...nextauth]'
 
 const Home: NextPage = () => {
+  const openPopup = useStore((state) => state.openPopup, shallow)
+  // const { data } = useSession()
+
+  // console.log(data)
+
   return (
     <div>
       <Head>
@@ -14,10 +23,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Box w="100vw" h="100%" pos="relative">
+        <Box w="full" h="100%" pos="relative">
           <Navbar />
           <Banner />
-          <LoginPopup />
+          {openPopup && <LoginPopup />}
+          <Features />
         </Box>
       </main>
     </div>

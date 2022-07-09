@@ -12,7 +12,7 @@ const Navbar = () => {
       bg="white"
       shadow="md"
       w="100%"
-      zIndex="8888"
+      zIndex="30"
       as="header"
     >
       <Box ml="10">
@@ -24,4 +24,4 @@ const Navbar = () => {
   )
 }
 
-export default Navbar
+export default React.memo(Navbar)

@@ -40,4 +40,18 @@ export const createUserSlice: StateCreator<UserSlice, [], []> = (set, get) => ({
     set(() => ({
       showError: error,
     })),
+
+  clearUser: () =>
+    set(() => ({
+      user: {
+        username: '',
+        email: '',
+        photoUrl: '',
+      },
+      validity: {
+        email: false,
+        name: false,
+      },
+      showError: false,
+    })),
 })

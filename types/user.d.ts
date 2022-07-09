@@ -16,4 +16,5 @@ export type UserSlice = {
   toggle: () => void
   updateValidity: () => void
   setShowError: (error: boolean) => void
+  clearUser: () => void
 }
