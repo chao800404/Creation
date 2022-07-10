@@ -1,5 +1,6 @@
-import * as React from 'react'
-
+import React, { memo } from 'react'
+import encodeUser from '../utils/encodeUser'
+import { NextApiResponse, NextApiRequest } from 'next'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Navbar, Banner, LoginPopup, Features } from '../components/index'
@@ -7,13 +8,10 @@ import { Box } from '@chakra-ui/react'
 import useStore from '../store/store'
 import shallow from 'zustand/shallow'
 
-import authOptions from './api/auth/[...nextauth]'
+import { useRouter, RouterEvent } from 'next/router'
 
 const Home: NextPage = () => {
   const openPopup = useStore((state) => state.openPopup, shallow)
-  // const { data } = useSession()
-
-  // console.log(data)
 
   return (
     <div>
@@ -32,6 +30,36 @@ const Home: NextPage = () => {
       </main>
     </div>
   )
+}
+
+export async function getServerSideProps({
+  req,
+  res,
+}: {
+  req: NextApiRequest
+  res: NextApiResponse
+}) {
+  const user = await encodeUser(req)
+
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=10, stale-while-revalidate=59'
+  )
+
+  if (user) {
+    return {
+      redirect: {
+        destination: '/custom',
+        statusCode: 307,
+      },
+    }
+  }
+
+  return {
+    props: {
+      user,
+    },
+  }
 }
 
 export default Home

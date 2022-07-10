@@ -1,9 +1,13 @@
 import * as React from 'react'
 import { Flex, Box } from '@chakra-ui/react'
-import BasicButton from '../button/button'
+import Button from '../button/button'
 import Logo from '../logo/logo'
+import useStore from '../../store/store'
+import shallow from 'zustand/shallow'
 
 const Navbar = () => {
+  const toggle = useStore((state) => state.toggle, shallow)
+
   return (
     <Flex
       pos="fixed"
@@ -19,7 +23,7 @@ const Navbar = () => {
         <Logo />
       </Box>
 
-      <BasicButton text="立即開始" size="base" />
+      <Button handleClick={() => toggle()} text="立即開始" size="base" />
     </Flex>
   )
 }
