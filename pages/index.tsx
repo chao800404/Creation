@@ -7,6 +7,7 @@ import { Navbar, Banner, LoginPopup, Features } from '../components/index'
 import { Box } from '@chakra-ui/react'
 import useStore from '../store/store'
 import shallow from 'zustand/shallow'
+import { signIn } from 'next-auth/react'
 
 import { useRouter, RouterEvent } from 'next/router'
 
@@ -30,36 +31,6 @@ const Home: NextPage = () => {
       </main>
     </div>
   )
-}
-
-export async function getServerSideProps({
-  req,
-  res,
-}: {
-  req: NextApiRequest
-  res: NextApiResponse
-}) {
-  const user = await encodeUser(req)
-
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=10, stale-while-revalidate=59'
-  )
-
-  if (user) {
-    return {
-      redirect: {
-        destination: '/custom',
-        statusCode: 307,
-      },
-    }
-  }
-
-  return {
-    props: {
-      user,
-    },
-  }
 }
 
 export default Home

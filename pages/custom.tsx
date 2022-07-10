@@ -7,7 +7,7 @@ import encodeUser from '../utils/encodeUser'
 import { NextApiResponse, NextApiRequest } from 'next'
 import { useRouter, RouterEvent } from 'next/router'
 
-const Custom = ({ user }) => {
+const Custom = ({}) => {
   const handleSignOut = async () => await signOut()
 
   return (
@@ -16,28 +16,8 @@ const Custom = ({ user }) => {
         Sign Out
       </Button>
       <Link href="/coffee">coffee</Link>
-      <div>{user?.name}</div>
     </div>
   )
-}
-
-export async function getServerSideProps({ req }: { req: NextApiRequest }) {
-  const user = await encodeUser(req)
-
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/',
-        statusCode: 307,
-      },
-    }
-  }
-
-  return {
-    props: {
-      user,
-    },
-  }
 }
 
 export default Custom
