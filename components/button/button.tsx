@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 
 import { buttonProps } from '../../types/button'

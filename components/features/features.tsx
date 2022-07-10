@@ -8,10 +8,10 @@ import React, { ReactElement } from 'react'
 //   Center,
 //   Flex,
 // } from '@chakra-ui/react'
-// import { RiFileExcel2Fill } from 'react-icons/Ri'
-// import { FaFilePdf } from 'react-icons/Fa'
-// import { IoLogoMarkdown } from 'react-icons/Io'
-// import { SiAdobeillustrator, SiAdobephotoshop } from 'react-icons/Si'
+// import { RiFileExcel2Fill } from 'react-icons/ri'
+// import { FaFilePdf } from 'react-icons/fa'
+// import { IoLogoMarkdown } from 'react-icons/io'
+// import { SiAdobeillustrator, SiAdobephotoshop } from 'react-icons/si'
 // import { IconType } from 'react-icons'
 
 // const featuresIcons: {

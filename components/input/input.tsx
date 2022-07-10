@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import useStore from '../../store/store'
 import shallow from 'zustand/shallow'
 import {
@@ -7,8 +7,7 @@ import {
   InputLeftElement,
   InputRightElement,
 } from '@chakra-ui/react'
-import { BsCheckLg, BsXLg } from 'react-icons/Bs'
-import { UserSlice } from '../../types/user'
+import { BsCheckLg, BsXLg } from 'react-icons/bs'
 
 const BasicInput = ({
   children,
