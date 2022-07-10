@@ -1,4 +1,4 @@
-// import React, { ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 // import {
 //   Box,
 //   Container,
@@ -24,27 +24,28 @@
 //   Ps: SiAdobephotoshop,
 // }
 
-// const Features = () => {
-//   const fullIconsName = Object.keys(featuresIcons)
+const Features = () => {
+  // const fullIconsName = Object.keys(featuresIcons)
 
-//   return (
-//     <Box w="full" bg="brand.basic">
-//       <Container h="100%" maxW="container.xl">
-//         <Grid templateColumns={`repeat(${fullIconsName.length}, 1fr)`} gap={6}>
-//           {fullIconsName.map((name, index) => (
-//             <GridItem key={index} w="100%" bg="blue.500">
-//               <Center>
-//                 <Flex direction="column">
-//                   {React.createElement(featuresIcons[name])}
-//                   <Text>{name}</Text>
-//                 </Flex>
-//               </Center>
-//             </GridItem>
-//           ))}
-//         </Grid>
-//       </Container>
-//     </Box>
-//   )
-// }
+  return (
+    <h1>Feature</h1>
+    // <Box w="full" bg="brand.basic">
+    //   <Container h="100%" maxW="container.xl">
+    //     <Grid templateColumns={`repeat(${fullIconsName.length}, 1fr)`} gap={6}>
+    //       {fullIconsName.map((name, index) => (
+    //         <GridItem key={index} w="100%" bg="blue.500">
+    //           <Center>
+    //             <Flex direction="column">
+    //               {React.createElement(featuresIcons[name])}
+    //               <Text>{name}</Text>
+    //             </Flex>
+    //           </Center>
+    //         </GridItem>
+    //       ))}
+    //     </Grid>
+    //   </Container>
+    // </Box>
+  )
+}
 
-// export default Features
+export default Features
