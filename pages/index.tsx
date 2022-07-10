@@ -26,7 +26,7 @@ const Home: NextPage = () => {
           <Navbar />
           <Banner />
           {openPopup && <LoginPopup />}
-          <Features />
+          {/* <Features /> */}
         </Box>
       </main>
     </div>
