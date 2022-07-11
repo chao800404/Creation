@@ -7,7 +7,7 @@ import encodeUser from '../utils/encodeUser'
 import { NextApiResponse, NextApiRequest } from 'next'
 import { useRouter, RouterEvent } from 'next/router'
 
-const Custom = ({}) => {
+const Dashboard = ({}) => {
   const handleSignOut = async () => await signOut()
 
   return (
@@ -20,4 +20,4 @@ const Custom = ({}) => {
   )
 }
 
-export default Custom
+export default Dashboard

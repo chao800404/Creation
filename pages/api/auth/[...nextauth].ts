@@ -2,11 +2,16 @@ import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import EmailProvider, { EmailConfig } from 'next-auth/providers/email'
 import prisma from '../../../lib/prisma'
-
 import emailTemplate from '../../../src/email.template'
+import path from 'path'
 
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { createTransport } from 'nodemailer'
+
+const severEmail =
+  process.env.NODE_ENV === 'production'
+    ? process.env.EMAIL_SERVER
+    : process.env.DEVELOPMENT_EMAIL_SERVER
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -16,14 +21,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_SECRET,
     }),
     EmailProvider({
-      server: {
-        host: 'smtp.mailtrap.io',
-        port: 2525,
-        auth: {
-          user: 'c1257e13f2d0a7',
-          pass: '13ca8117947111',
-        },
-      },
+      server: severEmail,
       from: '<no-reply@example.com>',
       sendVerificationRequest,
     }),
@@ -50,8 +48,6 @@ async function sendVerificationRequest(params: {
   provider: EmailConfig
   token: string
 }) {
-  console.log(params)
-
   const { identifier, url, provider } = params
   const { host } = new URL(url)
 
@@ -62,6 +58,13 @@ async function sendVerificationRequest(params: {
     subject: `Sign in to ${host}`,
     text: `Sign in to ${host}\n${url}\n\n`,
     html: emailTemplate({ url, host }),
+    attachments: [
+      {
+        filename: 'logo.svg',
+        path: path.join(process.cwd(), 'public/static/svg/logo-2.svg'),
+        cid: 'logo',
+      },
+    ],
   })
   const failed = result.rejected.concat(result.pending).filter(Boolean)
   if (failed.length) {

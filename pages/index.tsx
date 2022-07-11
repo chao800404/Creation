@@ -2,7 +2,7 @@ import React from 'react'
 
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Navbar, Banner, LoginPopup } from '../components/index'
+import { Navbar, Banner, LoginPopup, Features } from '../components/index'
 import { Box } from '@chakra-ui/react'
 import useStore from '../store/store'
 import shallow from 'zustand/shallow'
@@ -22,7 +22,7 @@ const Home: NextPage = () => {
           <Navbar />
           <Banner />
           {openPopup && <LoginPopup />}
-          {/* <Features /> */}
+          <Features />
         </Box>
       </main>
     </div>

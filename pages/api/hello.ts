@@ -12,6 +12,7 @@ export default async function handler(
   // const token = await getToken({ req, secret })
 
   // console.log(req)
+
   console.log('hello')
   res.end()
 }
