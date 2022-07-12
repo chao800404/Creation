@@ -1,8 +1,6 @@
 import { NextApiResponse, NextApiRequest } from 'next'
 import { getToken } from 'next-auth/jwt'
 
-const secret = process.env.SECRET
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -12,7 +10,5 @@ export default async function handler(
   // const token = await getToken({ req, secret })
 
   // console.log(req)
-
-  console.log('hello')
-  res.end()
+  res.status(200).send('hello')
 }

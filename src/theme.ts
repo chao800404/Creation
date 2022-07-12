@@ -19,6 +19,10 @@ const theme = {
   colors: {
     brand: {
       basic: '#B3C1E5',
+      'secondary-100': '#F4F4F4',
+      'secondary-400': '#EFEFEF',
+      'secondary-600': '#E4E1E1',
+      'secondary-700': '#888888',
     },
   },
   lineHeights: {

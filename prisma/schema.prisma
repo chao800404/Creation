@@ -1,6 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,6 +11,8 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+
 
 model Account {
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -45,7 +49,7 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
-  image         String?
+  image         String @default("/static/default.png")
   accounts      Account[]
   sessions      Session[]
 

@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { Navbar, Banner, LoginPopup, Features } from '../components/index'
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import React from 'react'
+import { Button } from '@chakra-ui/react'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
-import encodeUser from '../utils/encodeUser'
-import { NextApiResponse, NextApiRequest } from 'next'
-import { useRouter, RouterEvent } from 'next/router'
+import { Flex, Box } from '@chakra-ui/react'
+import { Side, SearchBarBtn, DashBoardContainer } from '../components/index'
 
 const Dashboard = ({}) => {
   const handleSignOut = async () => await signOut()
 
   return (
-    <div>
-      <Button onClick={handleSignOut} colorScheme="blue">
-        Sign Out
-      </Button>
-      <Link href="/coffee">coffee</Link>
-    </div>
+    <Flex w="full" h="100vh" flex="1 1 0%">
+      <Side>
+        <SearchBarBtn text="Qucik Find In a Base" />
+      </Side>
+      <DashBoardContainer></DashBoardContainer>
+    </Flex>
   )
 }
 

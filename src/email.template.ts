@@ -1,11 +1,7 @@
 export default function emailTemplate(params: { url: string; host: string }) {
-  // console.log(params)
-
   const { url, host } = params
-
   const escapedHost = host.replace(/\./g, '&#8203;.')
 
-  const brandColor = '#346df1'
   const color = {
     background: 'linear-gradient(#D1E6E8, #EEE3FE);',
     text: '#3A3939',
