@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { protectRouter } from './utils/protectRouter'
-import { isPublicFilesFilter, isAuthFilesFilter } from './utils/filterFile'
+import { protectRouter } from './src/utils/protectRouter'
+import { isPublicFilesFilter, isAuthFilesFilter } from './src/utils/filterFile'
 
 import { getToken } from 'next-auth/jwt'
 

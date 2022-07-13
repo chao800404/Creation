@@ -1,10 +1,7 @@
 import React, { memo } from 'react'
-
 import { Button } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-
 import { buttonProps } from '../../types/button'
-
 import { FcGoogle } from 'react-icons/fc'
 
 const BasicButton = ({

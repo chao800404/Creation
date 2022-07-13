@@ -1,8 +1,8 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import EmailProvider, { EmailConfig } from 'next-auth/providers/email'
-import prisma from '../../../lib/prisma'
-import emailTemplate from '../../../src/email.template'
+import prisma from '../../../src/lib/prisma'
+import emailTemplate from '../../../src/utils/email.template'
 import path from 'path'
 
 import { PrismaAdapter } from '@next-auth/prisma-adapter'

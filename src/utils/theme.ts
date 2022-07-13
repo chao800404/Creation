@@ -9,12 +9,18 @@ const theme = {
         color: 'gray.600',
         fontWeight: 'bold',
       },
+      div: {
+        userSelect: 'none',
+      },
     },
     a: {
       _hover: {
         textDecoration: 'underline',
       },
     },
+  },
+  fontSize: {
+    sm: '.9rem',
   },
   colors: {
     brand: {
@@ -23,6 +29,7 @@ const theme = {
       'secondary-400': '#EFEFEF',
       'secondary-600': '#E4E1E1',
       'secondary-700': '#888888',
+      'priamry-black': '#3A3939',
     },
   },
   lineHeights: {
