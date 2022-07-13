@@ -11,6 +11,7 @@ import {
   IconContainer,
   FeaturesBtn,
   SidebarContainer,
+  SearchPopup,
 } from '../src/components/index'
 
 const Dashboard = ({}) => {
@@ -31,8 +32,15 @@ const Dashboard = ({}) => {
         <Box p="0 1rem">
           <SearchBarBtn text={searchBarBtn.text} />
           <Flex direction="column" gap="2" mt="10">
-            <Accordion text={favorite.text} />
-            <Accordion text={interfaces.text} icon={interfaces.icon} />
+            <Accordion
+              color={SIDE_OPTION.base.color.active}
+              text={favorite.text}
+            />
+            <Accordion
+              color={SIDE_OPTION.base.color.active}
+              text={interfaces.text}
+              icon={interfaces.icon}
+            />
           </Flex>
           <Flex fontWeight="400" mt="5" align="center" justify="space-between">
             <Text>{workspaces.text}</Text>

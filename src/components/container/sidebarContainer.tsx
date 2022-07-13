@@ -6,17 +6,16 @@ import { motion } from 'framer-motion'
 const SidebarContainer = ({ children }: { children: React.ReactNode }) => {
   const scrollElem = useRef<HTMLDivElement | null>(null)
   const [isCeiling, setIsCeiling] = useState(true)
+  const [hover, setHover] = useState(false)
 
   useEffect(() => {
     let ref: HTMLDivElement
-
     const updateScroll = () => {
       if (scrollElem && scrollElem.current) {
         const scrollValue = ref?.scrollTop
         setIsCeiling(scrollValue === 0)
       }
     }
-
     if (scrollElem && scrollElem.current) {
       ref = scrollElem.current
       ref.addEventListener('scroll', updateScroll, false)
@@ -37,17 +36,19 @@ const SidebarContainer = ({ children }: { children: React.ReactNode }) => {
       borderColor="brand.secondary-600"
       bg={`${!isCeiling && 'brand.secondary-100'}`}
       pos="relative"
+      onMouseEnter={() => setHover((hover) => !hover)}
+      onMouseLeave={() => setHover((hover) => !hover)}
       zIndex="300"
       css={{
         '&::-webkit-scrollbar': {
-          width: '4px',
+          width: hover ? '4px' : '0px',
         },
         '&::-webkit-scrollbar-track': {
-          width: '6px',
+          width: hover ? '6px' : '0px',
         },
         '&::-webkit-scrollbar-thumb': {
-          background: '#888888',
-          borderRadius: '1rem',
+          background: hover ? '#888888' : 'transparent',
+          borderRadius: hover ? '1rem' : '0px',
         },
       }}
     >

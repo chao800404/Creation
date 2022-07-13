@@ -29,7 +29,8 @@ const theme = {
       'secondary-400': '#EFEFEF',
       'secondary-600': '#E4E1E1',
       'secondary-700': '#888888',
-      'priamry-black': '#3A3939',
+      'priamry-black': '#4A5568',
+      'primary-black-300': '#8F8F8F',
     },
   },
   lineHeights: {

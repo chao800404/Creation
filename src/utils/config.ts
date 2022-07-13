@@ -27,6 +27,10 @@ export const SIDE_OPTION = {
   },
   base: {
     icon: BsCaretRightFill,
+    color: {
+      base: 'brand.primary-black-300',
+      active: 'brand.priamry-black',
+    },
   },
   importFile: {
     text: 'Import Flie',
