@@ -1,8 +1,33 @@
 import React from 'react'
-import { Box } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
+import shallow from 'zustand/shallow'
+import useStore from '../../store/store'
+import { imageFormatFilter } from '../../utils/filterFile'
+import Image from 'next/image'
+import { truncatedText } from '../../utils/truncatedText'
+import UserPopup from '../popup/userPopup'
 
 const DashBoardNav = () => {
-  return <Box w="full" h="3rem" bg="white"></Box>
+  const { name, email, image } = useStore((state) => state?.user, shallow)
+  console.log(name, email, image)
+
+  return (
+    <Flex
+      w="inherit"
+      h="3rem"
+      display="flex"
+      alignItems="center"
+      bg="white"
+      p="0 2rem"
+      justify="space-between"
+      pos="fixed"
+      top="0"
+      right="0"
+    >
+      <Box />
+      <UserPopup name={name} email={email} image={image} />
+    </Flex>
+  )
 }
 
-export default DashBoardNav
+export default React.memo(DashBoardNav)

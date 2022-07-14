@@ -6,7 +6,7 @@ const initialUser = {
   user: {
     username: '',
     email: '',
-    photoUrl: '',
+    image: '',
   },
   validity: {
     email: false,

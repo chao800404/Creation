@@ -1,13 +1,20 @@
 import { FaRegTrashAlt } from 'react-icons/fa'
 import { BiSearch, BiImport } from 'react-icons/bi'
-import { AiFillDatabase, AiOutlinePlusSquare } from 'react-icons/ai'
-import { HiOutlineViewList } from 'react-icons/hi'
+import {
+  AiFillDatabase,
+  AiOutlinePlusSquare,
+  AiOutlinePlus,
+} from 'react-icons/ai'
+import { HiOutlineViewList, HiDocumentText } from 'react-icons/hi'
 import { BsFillGridFill, BsCaretRightFill } from 'react-icons/bs'
+import { TbGridDots } from 'react-icons/tb'
 
 const SIDE_MAX_WIDTH = 450
 const SIDE_MIN_WIDTH = 250
 const SIDE_BASIC_WIDTH = 350
 export { SIDE_MAX_WIDTH, SIDE_MIN_WIDTH, SIDE_BASIC_WIDTH }
+
+export const BASE_ICON_SIZE = '1rem'
 
 export const SIDE_OPTION = {
   searchBarBtn: {
@@ -23,7 +30,7 @@ export const SIDE_OPTION = {
   },
   workspaces: {
     text: 'WORKSPACES',
-    icon: [BsFillGridFill, HiOutlineViewList],
+    icon: [AiOutlinePlusSquare, BsFillGridFill, HiOutlineViewList],
   },
   base: {
     icon: BsCaretRightFill,
@@ -43,5 +50,8 @@ export const SIDE_OPTION = {
   newPage: {
     text: 'New Page',
     icon: AiOutlinePlusSquare,
+  },
+  workspaceItem: {
+    icon: [HiDocumentText, AiOutlinePlus, TbGridDots],
   },
 }

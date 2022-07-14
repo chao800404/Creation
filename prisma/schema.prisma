@@ -49,7 +49,7 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
-  image         String @default("/static/default.png")
+  image         String @default("/static/png/default.png")
   accounts      Account[]
   sessions      Session[]
 

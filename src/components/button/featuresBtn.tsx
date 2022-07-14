@@ -1,6 +1,6 @@
 import React from 'react'
-import { Flex, Text, Button, Box } from '@chakra-ui/react'
-import Base from '../base/base'
+import { Box } from '@chakra-ui/react'
+import Base from '../list-item/base'
 import { FeatureBtnProps } from '../../types/button'
 
 const FeaturesBtn: React.FC<FeatureBtnProps> = ({

@@ -1,10 +1,7 @@
+type UserDetail = username | email | image
+
 export type UserSlice = {
-  user: {
-    username?: string
-    email?: string
-    photoUrl?: string
-    [key: string]: string
-  }
+  user: Record<UserDetail, string>
   validity: {
     name: boolean
     email: boolean
@@ -12,7 +9,7 @@ export type UserSlice = {
   openPopup: boolean
   showError: boolean
 
-  addUser: (name: string, email: string) => void
+  addUser: (key: string, value: string) => void
   toggle: () => void
   updateValidity: () => void
   setShowError: (error: boolean) => void

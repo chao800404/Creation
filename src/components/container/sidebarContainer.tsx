@@ -1,8 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Flex, Text, Box } from '@chakra-ui/react'
 
-import { motion } from 'framer-motion'
-
 const SidebarContainer = ({ children }: { children: React.ReactNode }) => {
   const scrollElem = useRef<HTMLDivElement | null>(null)
   const [isCeiling, setIsCeiling] = useState(true)
@@ -29,7 +27,6 @@ const SidebarContainer = ({ children }: { children: React.ReactNode }) => {
       p="0 1rem"
       overflowY="scroll"
       ref={scrollElem}
-      overflowX="hidden"
       flex="1"
       mt="2"
       borderTop={`${!isCeiling && '1px'}`}

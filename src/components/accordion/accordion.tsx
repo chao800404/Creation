@@ -1,44 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import Base from '../base/base'
+import Base from '../list-item/base'
 import IconContainer from '../iconContainer/iconContainer'
 import { SIDE_OPTION } from '../../utils/config'
-import { IconType } from 'react-icons'
+import { BaseProps } from '../../types/base'
 
-const Accordion = ({
-  text,
-  icon,
-  color,
-}: {
-  text: string
-  icon?: IconType
-  color?: string
-}) => {
-  const [toggle, setToggle] = useState(false)
-  const [hover, setHover] = useState(false)
-
+const Accordion: React.FC<BaseProps> = ({ text, icon, color, children }) => {
   return (
-    <Box
-      onClick={() => !icon && setToggle((prev) => !prev)}
-      onMouseEnter={() => setHover((hover) => !hover)}
-      onMouseLeave={() => setHover((hover) => !hover)}
-      color={
-        color
-          ? color
-          : hover
-          ? SIDE_OPTION.base.color.active
-          : SIDE_OPTION.base.color.base
-      }
-    >
+    <Box>
       <Base text={text} color="inherit">
-        <Box as={motion.span} animate={{ rotate: toggle ? 90 : 0 }}>
+        <Box as={motion.span}>
           {icon ? (
-            <IconContainer icon={icon} color={SIDE_OPTION.base.color.active} />
+            <IconContainer icon={icon} />
           ) : (
             <IconContainer icon={SIDE_OPTION.base.icon} />
           )}
         </Box>
+        {children}
       </Base>
     </Box>
   )

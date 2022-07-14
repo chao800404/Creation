@@ -1,6 +1,10 @@
 export interface BaseProps {
-  text: string
+  text?: string
   icon?: IconType
-  children?: JSX.Element
+  children?: ReactNode
   color?: string
+}
+
+export interface WorkspaceItemProp extends BaseProps {
+  id: string
 }

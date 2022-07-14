@@ -1,8 +1,9 @@
-import React from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useCallback } from 'react'
 import { SIDE_OPTION } from '../src/utils/config'
+import { useSession } from 'next-auth/react'
 
-import { signOut } from 'next-auth/react'
-import { Flex, Text, Box } from '@chakra-ui/react'
+import { Flex, Text, Box, Spinner, Center } from '@chakra-ui/react'
 import {
   Side,
   SearchBarBtn,
@@ -11,11 +12,40 @@ import {
   IconContainer,
   FeaturesBtn,
   SidebarContainer,
-  SearchPopup,
+  WorkspaceItem,
+  DashboardMain,
+  WorkspaceControl,
 } from '../src/components/index'
 
+import useStore from '../src/store/store'
+import shallow from 'zustand/shallow'
+
 const Dashboard = ({}) => {
-  const handleSignOut = async () => await signOut()
+  const { data, status } = useSession()
+  const setUser = useStore((state) => state.addUser, shallow)
+  const list = useStore((state) => state.list, shallow)
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      const { user } = data
+      if (user) {
+        for (const [key, value] of Object.entries(user)) {
+          setUser(key, value as string)
+        }
+      }
+    }
+  }, [data, status])
+
+  if (status === 'loading') {
+    return (
+      <Center h="100vh">
+        <Spinner />
+      </Center>
+    )
+  }
+
+  console.log(list)
+
   const {
     searchBarBtn,
     favorite,
@@ -27,7 +57,7 @@ const Dashboard = ({}) => {
   } = SIDE_OPTION
 
   return (
-    <Flex w="full" h="100vh" flex="1 1 0%">
+    <Flex w="full" minH="100vh" flex="1 1 0%">
       <Side>
         <Box p="0 1rem">
           <SearchBarBtn text={searchBarBtn.text} />
@@ -44,35 +74,13 @@ const Dashboard = ({}) => {
           </Flex>
           <Flex fontWeight="400" mt="5" align="center" justify="space-between">
             <Text>{workspaces.text}</Text>
-            <Flex gap="2">
-              {workspaces.icon.map((icon, index) => (
-                <IconContainer key={index} icon={icon} />
-              ))}
-            </Flex>
+            <WorkspaceControl />
           </Flex>
         </Box>
         <SidebarContainer>
-          <Accordion text="離散數學" />
-          <Accordion text="FrontEnd" />
-          <Accordion text="線性代數" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
-          <Accordion text="演算法" />
+          {list?.map((item, i) => (
+            <WorkspaceItem key={i} text={item.title} />
+          ))}
         </SidebarContainer>
 
         <Box p="0 1rem" borderTop="1px" borderColor="brand.secondary-600">
@@ -101,7 +109,9 @@ const Dashboard = ({}) => {
           </Flex>
         </Box>
       </Side>
-      <DashBoardContainer></DashBoardContainer>
+      <DashBoardContainer>
+        <DashboardMain></DashboardMain>
+      </DashBoardContainer>
     </Flex>
   )
 }

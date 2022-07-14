@@ -43,11 +43,12 @@ const Side = ({ children }: { children: React.ReactNode }) => {
       maxW={`${SIDE_MAX_WIDTH}px`}
       minW={`${SIDE_MIN_WIDTH}px`}
       w={`${sideLineX}px`}
-      h="full"
+      h="100vh"
       bg="brand.secondary-400"
       shadow="sm"
-      pos="relative"
-      position="relative"
+      pos="sticky"
+      top="0"
+      left="0"
       zIndex="999"
     >
       <Flex direction="column" h="inherit" p=".5rem 0">

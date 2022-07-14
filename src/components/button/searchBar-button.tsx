@@ -22,13 +22,11 @@ const SearchBarBtn: React.FC<SearchBarBtnProps> = ({ text }) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const ctrlKey = e.ctrlKey
       const key = e.key
-
       if (ctrlKey && key === 'k') {
         e.preventDefault()
         setKeydown((toggle) => !toggle)
       }
     }
-
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
@@ -62,4 +60,4 @@ const SearchBarBtn: React.FC<SearchBarBtnProps> = ({ text }) => {
   )
 }
 
-export default SearchBarBtn
+export default React.memo(SearchBarBtn)

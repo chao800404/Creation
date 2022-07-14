@@ -12,10 +12,10 @@ const theme = {
       div: {
         userSelect: 'none',
       },
-    },
-    a: {
-      _hover: {
-        textDecoration: 'underline',
+      a: {
+        _hover: {
+          textDecoration: 'underline',
+        },
       },
     },
   },
