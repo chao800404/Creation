@@ -25,13 +25,6 @@ const Dashboard = ({}) => {
   const { data, status } = useSession()
   const setUser = useStore((state) => state.addUser, shallow)
   const list = useStore((state) => state.list, shallow)
-  const [items, setItems] = useState(list.map((_, i) => i))
-
-  console.log(items)
-
-  useEffect(() => {
-    setItems(list.map((_, i) => i))
-  }, [list])
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -51,8 +44,6 @@ const Dashboard = ({}) => {
       </Center>
     )
   }
-
-  console.log(list)
 
   const {
     searchBarBtn,
@@ -86,17 +77,10 @@ const Dashboard = ({}) => {
           </Flex>
         </Box>
         <SidebarContainer>
-          <Reorder.Group axis="y" values={items} onReorder={setItems}>
-            {list &&
-              items?.map((item) => (
-                <WorkspaceItem
-                  key={item}
-                  order={item}
-                  text={list[item].title}
-                  id={list[item].id}
-                />
-              ))}
-          </Reorder.Group>
+          {list &&
+            list?.map((item, index) => (
+              <WorkspaceItem key={index} text={item?.title} id={item?.id} />
+            ))}
         </SidebarContainer>
 
         <Box p="0 1rem" borderTop="1px" borderColor="brand.secondary-600">

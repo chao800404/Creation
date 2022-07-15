@@ -3,9 +3,13 @@ export interface BaseProps {
   icon?: IconType
   children?: ReactNode
   color?: string
+  fontSize?: string
 }
 
 export interface WorkspaceItemProp extends BaseProps {
   id: string
-  order: number
+}
+
+export interface PopupType extends BaseProps {
+  handleClick: () => void
 }

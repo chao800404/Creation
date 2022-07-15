@@ -10,7 +10,7 @@ const WorkspaceControl = () => {
   const addItem = useStore((state) => state.addToList, shallow)
 
   const handleAddWorkspaceItem = () => {
-    addItem('資料結構')
+    addItem('Nextjs')
   }
 
   return (

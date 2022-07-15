@@ -38,10 +38,10 @@ const SidebarContainer = ({ children }: { children: React.ReactNode }) => {
       zIndex="300"
       css={{
         '&::-webkit-scrollbar': {
-          width: hover ? '4px' : '0px',
+          width: '4px',
         },
         '&::-webkit-scrollbar-track': {
-          width: hover ? '6px' : '0px',
+          width: '6px',
         },
         '&::-webkit-scrollbar-thumb': {
           background: hover ? '#888888' : 'transparent',

@@ -1,14 +1,20 @@
+import { Map } from 'typescript'
+
 export type WorkspaceItem = {
   id: string
-  isHover?: boolean
-  isActive?: boolean
   title?: string
   list?: WorkspaceItem[]
 }
 
-export type WorkspaceSlice = {
+export type InitiallWorkspace = {
   list: WorkspaceItem[]
-  item: WorkspaceItem
-  setWorksapceItemHover: (id: string) => void
+  status: {
+    activeItem: string
+  }
+}
+
+export interface WorkspaceSlice extends InitiallWorkspace {
   addToList: (payload?: string) => void
+  updateActiveItem: (id: string) => void
+  removeListItem: (id: string) => void
 }

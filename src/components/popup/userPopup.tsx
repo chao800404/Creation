@@ -24,8 +24,6 @@ import useStore from '../../store/store'
 import UserPopupItem from '../list-item/UserPopupItem'
 
 const UserPopup: React.FC<UserSlice['user']> = ({ image, name, email }) => {
-  console.log(name, image, email)
-
   return (
     <Popover>
       <PopoverTrigger>

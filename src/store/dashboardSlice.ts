@@ -2,9 +2,11 @@ import { StateCreator } from 'zustand'
 import { DashboardSlice } from '../types/dashboard'
 import { SIDE_BASIC_WIDTH } from '../utils/config'
 import { devtools, persist } from 'zustand/middleware'
+import produce from 'immer'
 
 const initialDashboard = {
   sideLineX: SIDE_BASIC_WIDTH,
+  rightClickId: '',
 }
 
 export const createDashboardSlice: StateCreator<DashboardSlice, [], []> = (
@@ -12,5 +14,16 @@ export const createDashboardSlice: StateCreator<DashboardSlice, [], []> = (
   get
 ) => ({
   ...initialDashboard,
-  setSideLineX: (sideX) => set(() => ({ sideLineX: sideX })),
+  setSideLineX: (sideX) =>
+    set(
+      produce((state) => {
+        state.sideLineX = sideX
+      })
+    ),
+  setRightClickId: (id) =>
+    set(
+      produce((state) => {
+        state.rightClickId = id
+      })
+    ),
 })

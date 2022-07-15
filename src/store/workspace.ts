@@ -1,15 +1,13 @@
 import { StateCreator } from 'zustand'
 
-import { WorkspaceItem, WorkspaceSlice } from '../types/workspace'
+import { WorkspaceSlice, InitiallWorkspace } from '../types/workspace'
 import { v4 as uuidv4 } from 'uuid'
 import produce from 'immer'
 
-const initialWorkspace: { list: WorkspaceItem[]; item: WorkspaceItem } = {
+const initialWorkspace: InitiallWorkspace = {
   list: [],
-  item: {
-    id: '',
-    isHover: false,
-    isActive: false,
+  status: {
+    activeItem: '',
   },
 }
 
@@ -18,39 +16,28 @@ export const createWorkspaceSlice: StateCreator<WorkspaceSlice, [], []> = (
   get
 ) => ({
   ...initialWorkspace,
-  setWorksapceItemHover: (id) => {
-    const list = get().list
-    const newList = list.map((item) => {
-      if (item.id === id) {
-        return { ...item, isHover: !item.isHover }
-      } else {
-        return item
-      }
-    })
 
-    set({ list: newList })
-  },
+  updateActiveItem: (id) =>
+    set(
+      produce(({ status }) => {
+        status.activeItem = id
+      })
+    ),
   addToList: (payload = '未命名檔案') =>
     set(
-      produce(({ list }) => {
+      produce(({ list }: { list: InitiallWorkspace['list'] }) => {
         list.push({
-          istHover: false,
-          isActive: false,
           id: uuidv4(),
           title: payload,
           list: [],
         })
       })
     ),
+  removeListItem: (id) =>
+    set(
+      produce(({ list }: { list: InitiallWorkspace['list'] }) => {
+        const listIndex = list.findIndex((item) => item.id === id)
+        if (listIndex !== -1) list.splice(listIndex, 1)
+      })
+    ),
 })
-
-// list: [
-//   ...list,
-//   {
-//     isHover: false,
-//     isActive: false,
-//     id: uuidv4(),
-//     title: payload,
-//     list: [],
-//   },
-// ],

@@ -6,8 +6,17 @@ const theme = {
     global: {
       body: {
         bg: 'gray.100',
-        color: 'gray.600',
-        fontWeight: 'bold',
+        color: 'brand.primary-black',
+        fontWeight: '600',
+        '&::-webkit-scrollbar': {
+          width: '0px',
+        },
+        '&::-webkit-scrollbar-track': {
+          width: '0px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          display: 'none',
+        },
       },
       div: {
         userSelect: 'none',
@@ -32,7 +41,7 @@ const theme = {
       'secondary-400': '#EFEFEF',
       'secondary-600': '#E4E1E1',
       'secondary-700': '#888888',
-      'priamry-black': '#4A5568',
+      'priamry-black': '#353535',
       'primary-black-300': '#8F8F8F',
     },
   },
