@@ -11,7 +11,7 @@ const IconContainer = ({
   size?: string
 }) => {
   return (
-    <Center cursor="pointer" _hover={{ bg: 'brand.secondary-600' }} p=".2rem">
+    <Center _hover={{ bg: 'brand.secondary-600' }} p=".2rem">
       {React.createElement(icon, {
         style: { fontSize: size, color: 'inherit' },
       })}

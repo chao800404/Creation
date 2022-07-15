@@ -7,4 +7,5 @@ export interface BaseProps {
 
 export interface WorkspaceItemProp extends BaseProps {
   id: string
+  order: number
 }

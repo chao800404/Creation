@@ -17,6 +17,9 @@ const theme = {
           textDecoration: 'underline',
         },
       },
+      ul: {
+        listStyle: 'none',
+      },
     },
   },
   fontSize: {

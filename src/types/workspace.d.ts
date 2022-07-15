@@ -9,6 +9,6 @@ export type WorkspaceItem = {
 export type WorkspaceSlice = {
   list: WorkspaceItem[]
   item: WorkspaceItem
-  setWorksapceItemHover: () => void
+  setWorksapceItemHover: (id: string) => void
   addToList: (payload?: string) => void
 }

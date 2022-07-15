@@ -24,26 +24,16 @@ import useStore from '../../store/store'
 import UserPopupItem from '../list-item/UserPopupItem'
 
 const UserPopup: React.FC<UserSlice['user']> = ({ image, name, email }) => {
-  const clearUser = useStore((state) => state.clearUser)
-
-  const handleOnClick = () => {
-    signOut()
-  }
+  console.log(name, image, email)
 
   return (
     <Popover>
       <PopoverTrigger>
         <Flex cursor="pointer" align="center" gap="3">
-          {image && (
-            <>
-              <Box w="1.5rem" h="1.5rem" borderRadius="5px" overflow="hidden">
-                <Image src={image} width="40" height="40" alt={email} />
-              </Box>
-              <Text fontSize="sm">
-                {name ? name : truncatedText(email, 10)}
-              </Text>
-            </>
-          )}
+          <Box w="1.5rem" h="1.5rem" borderRadius="5px" overflow="hidden">
+            <Image src={image} width="40" height="40" alt={email} />
+          </Box>
+          <Text fontSize="sm">{name ? name : truncatedText(email, 10)}</Text>
         </Flex>
       </PopoverTrigger>
       <PopoverContent fontSize=".5rem" mr="1rem" width="15rem">
@@ -58,7 +48,7 @@ const UserPopup: React.FC<UserSlice['user']> = ({ image, name, email }) => {
         <PopoverBody>
           <UserPopupItem text="用戶設定" icon={AiFillSetting} />
         </PopoverBody>
-        <PopoverFooter cursor="pointer" onClick={handleOnClick}>
+        <PopoverFooter cursor="pointer" onClick={() => signOut()}>
           <UserPopupItem text="登出" icon={IoLogOutOutline} />
         </PopoverFooter>
       </PopoverContent>

@@ -1,6 +1,7 @@
 import { StateCreator } from 'zustand'
 import { UserSlice } from '../types/user'
 import { validateEamil, validateUserName } from '../lib/validator'
+import produce from 'immer'
 
 const initialUser = {
   user: {
@@ -18,11 +19,12 @@ const initialUser = {
 
 export const createUserSlice: StateCreator<UserSlice, [], []> = (set, get) => ({
   ...initialUser,
-  addUser: (name: string, value: string) => {
-    const { user } = get()
-    user[name] = value
-    set({ user })
-  },
+  addUser: (name: string, value: string) =>
+    set(
+      produce(({ user }) => {
+        user[name] = value
+      })
+    ),
   toggle: () =>
     set(() => ({
       openPopup: !get().openPopup,

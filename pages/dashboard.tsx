@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { SIDE_OPTION } from '../src/utils/config'
 import { useSession } from 'next-auth/react'
+import { Reorder } from 'framer-motion'
 
 import { Flex, Text, Box, Spinner, Center } from '@chakra-ui/react'
 import {
@@ -24,6 +25,13 @@ const Dashboard = ({}) => {
   const { data, status } = useSession()
   const setUser = useStore((state) => state.addUser, shallow)
   const list = useStore((state) => state.list, shallow)
+  const [items, setItems] = useState(list.map((_, i) => i))
+
+  console.log(items)
+
+  useEffect(() => {
+    setItems(list.map((_, i) => i))
+  }, [list])
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -78,9 +86,17 @@ const Dashboard = ({}) => {
           </Flex>
         </Box>
         <SidebarContainer>
-          {list?.map((item, i) => (
-            <WorkspaceItem key={i} text={item.title} />
-          ))}
+          <Reorder.Group axis="y" values={items} onReorder={setItems}>
+            {list &&
+              items?.map((item) => (
+                <WorkspaceItem
+                  key={item}
+                  order={item}
+                  text={list[item].title}
+                  id={list[item].id}
+                />
+              ))}
+          </Reorder.Group>
         </SidebarContainer>
 
         <Box p="0 1rem" borderTop="1px" borderColor="brand.secondary-600">

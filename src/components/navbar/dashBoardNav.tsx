@@ -8,8 +8,7 @@ import { truncatedText } from '../../utils/truncatedText'
 import UserPopup from '../popup/userPopup'
 
 const DashBoardNav = () => {
-  const { name, email, image } = useStore((state) => state?.user, shallow)
-  console.log(name, email, image)
+  const { name, email, image } = useStore((state) => state.user, shallow)
 
   return (
     <Flex
@@ -25,7 +24,8 @@ const DashBoardNav = () => {
       right="0"
     >
       <Box />
-      <UserPopup name={name} email={email} image={image} />
+
+      {name && <UserPopup name={name} email={email} image={image} />}
     </Flex>
   )
 }

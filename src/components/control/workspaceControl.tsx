@@ -10,19 +10,18 @@ const WorkspaceControl = () => {
   const addItem = useStore((state) => state.addToList, shallow)
 
   const handleAddWorkspaceItem = () => {
-    console.log(true)
-    addItem()
+    addItem('資料結構')
   }
 
   return (
     <Flex gap="2">
-      <Box onClick={handleAddWorkspaceItem}>
+      <Box cursor="pointer" onClick={handleAddWorkspaceItem}>
         <IconContainer icon={SIDE_OPTION.workspaces.icon[0]} />
       </Box>
-      <Box>
+      <Box cursor="pointer">
         <IconContainer icon={SIDE_OPTION.workspaces.icon[1]} />
       </Box>
-      <Box>
+      <Box cursor="pointer">
         <IconContainer icon={SIDE_OPTION.workspaces.icon[2]} />
       </Box>
     </Flex>
