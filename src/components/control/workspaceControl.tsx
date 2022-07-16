@@ -3,7 +3,6 @@ import { Flex, Box } from '@chakra-ui/react'
 import IconContainer from '../iconContainer/iconContainer'
 import { SIDE_OPTION } from '../../utils/config'
 import useStore from '../../store/store'
-import { WorkspaceItem } from '../../types/workspace'
 import shallow from 'zustand/shallow'
 
 const WorkspaceControl = () => {

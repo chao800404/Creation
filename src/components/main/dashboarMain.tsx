@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Box } from '@chakra-ui/react'
+import DashboardBanner from '../banner/dashboardBanner'
 
 const DashboardMain = () => {
   return (
@@ -21,8 +22,9 @@ const DashboardMain = () => {
         },
       }}
     >
+      <Box h="3rem" />
+      <DashboardBanner />
       <Container h="100%" maxW="8xl">
-        <Box h="3rem" />
         <Box h="200vh">ewjfijwefpowjefjwe</Box>
       </Container>
     </Box>

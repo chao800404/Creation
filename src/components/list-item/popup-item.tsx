@@ -12,7 +12,7 @@ const PopupItem: React.FC<PopupType> = ({ icon, text, handleClick }) => {
       }}
       onClick={handleClick}
     >
-      <Box ml="2">
+      <Box ml="3">
         <Base fontSize=".5rem" text={text} icon={icon} />
       </Box>
     </Box>

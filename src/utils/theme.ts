@@ -48,6 +48,9 @@ const theme = {
   lineHeights: {
     '12': '4.5rem',
   },
+  sizes: {
+    xss: '16rem',
+  },
   components: {
     Button: {
       baseStyle: {
