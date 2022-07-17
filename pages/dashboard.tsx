@@ -3,6 +3,7 @@ import React, { useEffect, useCallback, useState } from 'react'
 import { SIDE_OPTION } from '../src/utils/config'
 import { useSession } from 'next-auth/react'
 import { Reorder } from 'framer-motion'
+import { SERVER } from '../src/utils/config'
 
 import { Flex, Text, Box, Spinner, Center } from '@chakra-ui/react'
 import {
@@ -20,11 +21,14 @@ import {
 
 import useStore from '../src/store/store'
 import shallow from 'zustand/shallow'
+import { GetStaticPropsResult } from 'next'
+import { DashboardProp } from '../src/types/data'
 
-const Dashboard = ({}) => {
+const Dashboard = (props: DashboardProp) => {
   const { data, status } = useSession()
   const setUser = useStore((state) => state.addUser, shallow)
   const list = useStore((state) => state.list, shallow)
+  const setCoverImage = useStore((state) => state.setCoverImageMap)
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -34,6 +38,9 @@ const Dashboard = ({}) => {
           setUser(key, value as string)
         }
       }
+    }
+    if (props) {
+      setCoverImage(props.paths.path)
     }
   }, [data, status])
 
@@ -114,6 +121,19 @@ const Dashboard = ({}) => {
       </DashBoardContainer>
     </Flex>
   )
+}
+
+export const getStaticProps = async (): Promise<
+  GetStaticPropsResult<DashboardProp>
+> => {
+  const res = await fetch(`${SERVER}/api/getImageCover`)
+  const paths = await res.json()
+
+  return {
+    props: {
+      paths,
+    },
+  }
 }
 
 export default Dashboard

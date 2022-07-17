@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Flex, Text, Box } from '@chakra-ui/react'
+import { scrollBar } from '../../utils/style'
 
 const SidebarContainer = ({ children }: { children: React.ReactNode }) => {
   const scrollElem = useRef<HTMLDivElement | null>(null)
@@ -36,18 +37,7 @@ const SidebarContainer = ({ children }: { children: React.ReactNode }) => {
       onMouseEnter={() => setHover((hover) => !hover)}
       onMouseLeave={() => setHover((hover) => !hover)}
       zIndex="300"
-      css={{
-        '&::-webkit-scrollbar': {
-          width: '4px',
-        },
-        '&::-webkit-scrollbar-track': {
-          width: '6px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          background: hover ? '#888888' : 'transparent',
-          borderRadius: hover ? '1rem' : '0px',
-        },
-      }}
+      css={scrollBar(hover)}
     >
       <Flex direction="column" gap="2">
         {children}

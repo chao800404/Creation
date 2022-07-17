@@ -38,6 +38,7 @@
     "react-icons": "^4.4.0",
     "react-is": "^18.2.0",
     "styled-components": "^5.3.5",
+    "ts-node": "^10.9.1",
     "uuid": "^8.3.2",
     "yarn": "^1.22.19",
     "zustand": "^4.0.0-rc.1"

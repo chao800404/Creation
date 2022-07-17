@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Box } from '@chakra-ui/react'
 import DashboardBanner from '../banner/dashboardBanner'
+import { scrollBar } from '../../utils/style'
 
 const DashboardMain = () => {
   return (
@@ -9,18 +10,7 @@ const DashboardMain = () => {
       h="100vh"
       w="full"
       overflow="auto"
-      css={{
-        '&::-webkit-scrollbar': {
-          width: '4px',
-        },
-        '&::-webkit-scrollbar-track': {
-          width: '6px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          background: '#888888',
-          borderRadius: '24px',
-        },
-      }}
+      css={scrollBar(true)}
     >
       <Box h="3rem" />
       <DashboardBanner />

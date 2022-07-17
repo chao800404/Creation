@@ -21,6 +21,7 @@ const DashBoardNav = () => {
       justify="space-between"
       pos="fixed"
       top="0"
+      zIndex="500"
       right="0"
     >
       <Box />

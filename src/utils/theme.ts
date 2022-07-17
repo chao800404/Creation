@@ -7,7 +7,7 @@ const theme = {
       body: {
         bg: 'gray.100',
         color: 'brand.primary-black',
-        fontWeight: '600',
+        fontWeight: '500',
         '&::-webkit-scrollbar': {
           width: '0px',
         },
@@ -66,6 +66,21 @@ const theme = {
           h: '3rem',
           fontSize: 'md',
           w: '10rem',
+        },
+      },
+    },
+
+    Tabs: {
+      baseStyle: {
+        tab: {
+          color: 'brand.secondary-700',
+          fontWeight: 900,
+          _selected: {
+            borderColor: 'brand.secondary-700',
+          },
+          _hover: {
+            bg: 'brand.secondary-400',
+          },
         },
       },
     },

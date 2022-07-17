@@ -17,8 +17,8 @@ export async function middleware(req: NextRequest) {
     return protectRouter(req, '/dashboard')
   if (pathname === '/dashboard' && !token && !isPublicFiles)
     return protectRouter(req, '/')
-  if (pathname.startsWith('/api') && !token && !isPublicFiles && !isAuthFiles)
-    return protectRouter(req, '/api/notLoggedin')
+  // if (pathname.startsWith('/api') && !token && !isPublicFiles && !isAuthFiles)
+  //   return protectRouter(req, '/api/notLoggedin')
 
   return NextResponse.next()
 }

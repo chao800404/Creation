@@ -16,6 +16,11 @@ export { SIDE_MAX_WIDTH, SIDE_MIN_WIDTH, SIDE_BASIC_WIDTH }
 
 export const BASE_ICON_SIZE = '1rem'
 
+export const SERVER =
+  process.env.NODE_ENV === 'development'
+    ? process.env.DEVELOPEMENT_SERVER
+    : process.env.PRODUCTS_SERVER
+
 export const SIDE_OPTION = {
   searchBarBtn: {
     text: 'Qucik Find In a Base',

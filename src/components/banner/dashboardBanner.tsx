@@ -3,6 +3,9 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Box, Flex } from '@chakra-ui/react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import ChageCoverPopup from '../popup/chageCoverPopup'
+import useStore from '../../store/store'
+import shallow from 'zustand/shallow'
 
 const DashboardBanner = () => {
   const [hovered, setHovered] = useState(false)
@@ -10,12 +13,19 @@ const DashboardBanner = () => {
   const elemRef = useRef<HTMLDivElement>(null)
   const [pointerDownY, setPointerDownY] = useState<number>(0)
   const [moveY, setMoveY] = useState<number>(50)
+  const popupElemRef = useRef<HTMLDivElement>(null)
+  const { togglePopup, toggle } = useStore(
+    (state) => ({
+      togglePopup: state.setToggleChangeCoverPopup,
+      toggle: state.toggleChangeCoverPopup,
+    }),
+    shallow
+  )
+  const imageCoverSrc = useStore((state) => state.coverImageSrc, shallow)
   const [controlCover, setControlCover] = useState({
     reposition: false,
     changCover: false,
   })
-
-  console.log(controlCover, start)
 
   useEffect(() => {
     if (start && controlCover.reposition) {
@@ -38,7 +48,16 @@ const DashboardBanner = () => {
 
   useEffect(() => {
     const handlePointerUp = () => setStart(false)
+    const handleTogglePopup = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest(
+        '[data-type="change-cover-popup"]'
+      )
+      if (!target) {
+        togglePopup(false)
+      }
+    }
     window.addEventListener('pointerup', handlePointerUp)
+    window.addEventListener('click', handleTogglePopup)
 
     return () => window.removeEventListener('pointerup', handlePointerUp)
   }, [])
@@ -71,18 +90,19 @@ const DashboardBanner = () => {
           p="1rem 1.5rem"
           transform="translate(-50%,-50%)"
           fontSize=".8rem"
-          zIndex="300"
+          zIndex="100"
           bg="rgba(0,0,0,0.8)"
           color="white"
           top="50%"
           fontWeight="900"
           left="50%"
+          pointerEvents="none"
         >
           拖移照片變更位子
         </Box>
       )}
       <Image
-        src="/static/jpg/tailwindcss.jpg"
+        src={imageCoverSrc}
         layout="fill"
         alt="cover"
         objectFit="cover"
@@ -91,7 +111,7 @@ const DashboardBanner = () => {
       />
 
       <AnimatePresence>
-        {(hovered || controlCover.reposition) && (
+        {(hovered || controlCover.reposition || toggle) && (
           <Flex
             borderRadius="sm"
             pos="absolute"
@@ -105,8 +125,11 @@ const DashboardBanner = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            data-type="change-cover-popup"
           >
-            <Box p=".2rem 1rem">替換封面</Box>
+            <Box p=".2rem 1rem" onClick={() => togglePopup(true)}>
+              替換封面
+            </Box>
             <Box w="1px" bg="brand.secondary-600" />
             <Box
               onClick={() =>
@@ -117,8 +140,19 @@ const DashboardBanner = () => {
               }
               p=".2rem 1rem"
             >
-              {controlCover.reposition ? '取消更改' : '移動封面'}
+              {controlCover.reposition ? '儲存設定' : '移動封面'}
             </Box>
+            {toggle && (
+              <Box ref={popupElemRef}>
+                <ChageCoverPopup
+                  pos="absolute"
+                  left="-100%"
+                  bg="white"
+                  zIndex="500"
+                  top="1rem"
+                />
+              </Box>
+            )}
           </Flex>
         )}
       </AnimatePresence>

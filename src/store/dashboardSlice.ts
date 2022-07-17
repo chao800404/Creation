@@ -7,6 +7,9 @@ import produce from 'immer'
 const initialDashboard = {
   sideLineX: SIDE_BASIC_WIDTH,
   rightClickId: '',
+  coverImageMap: [] as unknown as DashboardSlice['coverImageMap'],
+  toggleChangeCoverPopup: false,
+  coverImageSrc: '/static/jpg/tailwindcss.jpg',
 }
 
 export const createDashboardSlice: StateCreator<DashboardSlice, [], []> = (
@@ -24,6 +27,27 @@ export const createDashboardSlice: StateCreator<DashboardSlice, [], []> = (
     set(
       produce((state) => {
         state.rightClickId = id
+      })
+    ),
+
+  setCoverImageMap: (imageMap) => {
+    set(
+      produce((state) => {
+        state.coverImageMap = imageMap
+      })
+    )
+  },
+
+  setToggleChangeCoverPopup: (toggle) =>
+    set(
+      produce((state) => {
+        state.toggleChangeCoverPopup = toggle
+      })
+    ),
+  setCoverImageSrc: (src) =>
+    set(
+      produce((state) => {
+        state.coverImageSrc = src
       })
     ),
 })
