@@ -33,6 +33,7 @@ function ChangeCoverPopupGrid({
                 alt={`${GroupName}-${index}`}
                 src={path as string}
                 layout="fill"
+                objectFit="cover"
               />
             </GridItem>
           ))}

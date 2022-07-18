@@ -70,6 +70,8 @@ const DashboardBanner = () => {
     setStart(true)
   }
 
+  console.log(imageCoverSrc)
+
   return (
     <Box
       w="inherit"
@@ -101,6 +103,7 @@ const DashboardBanner = () => {
           拖移照片變更位子
         </Box>
       )}
+
       <Image
         src={imageCoverSrc}
         layout="fill"

@@ -52,7 +52,7 @@ const BasicButton = ({
 
   return (
     <Button
-      as={motion.a}
+      as={motion.button}
       bg={bg}
       borderRadius="none"
       color="white"

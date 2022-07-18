@@ -55,7 +55,9 @@ const WorkspaceItemPopup = ({ id }: { id: string }) => {
       <PopupItem
         text="加入我的最愛"
         icon={AiOutlineStar}
-        handleClick={() => {}}
+        handleClick={() => {
+          console.log()
+        }}
       />
     </Box>
   )

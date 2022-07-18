@@ -13,20 +13,24 @@ import ChangeCoverPopupGrid from '../layout/changeCoverPopupGrid'
 import useStore from '../../store/store'
 import shallow from 'zustand/shallow'
 import { scrollBar } from '../../utils/style'
+import ChangeCoverUpload from '../layout/changeCoverUpload'
 
 const tabs = ['畫廊', '上傳', '連結']
 
 const ChageCoverPopup = (props: BoxProps) => {
   const coverImageMap = useStore((state) => state.coverImageMap, shallow)
   const setCoverImage = useStore((state) => state.setCoverImageSrc, shallow)
+  const [tabIndex, setTabIndex] = React.useState(0)
 
   const handleChangeCover: React.MouseEventHandler<HTMLDivElement> = (e) => {
     const target = (e.target as HTMLElement).closest(
       '.cover_image'
     ) as HTMLElement
-    const src = target.dataset.src
-    console.log(src)
-    setCoverImage(src as string)
+    if (target) {
+      const src = target.dataset.src
+      setCoverImage(src as string)
+    }
+    return
   }
 
   return (
@@ -41,7 +45,11 @@ const ChageCoverPopup = (props: BoxProps) => {
       boxShadow="md"
       borderRadius="10"
     >
-      <Tabs size="md" variant="enclosed">
+      <Tabs
+        size="md"
+        variant="enclosed"
+        onChange={(index: number) => setTabIndex((prev) => (prev = index))}
+      >
         <TabList>
           <Flex w="full" align="center" justify="space-between">
             <Flex>
@@ -80,8 +88,11 @@ const ChageCoverPopup = (props: BoxProps) => {
                 />
               ))}
           </TabPanel>
-          <TabPanel>
-            <p>two!</p>
+          <TabPanel h="full">
+            <ChangeCoverUpload
+              tabIndex={tabIndex}
+              index={tabs.indexOf('上傳')}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>
