@@ -11,6 +11,7 @@ const DashBoardContainr = ({ children }: { children: ReactNode }) => {
   return (
     <Box flexGrow="0" flexShrink="1" w={`calc(100% - ${sideLineX}px)`}>
       <DashBoardNav />
+
       {children}
     </Box>
   )

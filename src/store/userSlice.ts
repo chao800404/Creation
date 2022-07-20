@@ -1,14 +1,14 @@
 import { StateCreator } from 'zustand'
-import { UserSlice } from '../types/user'
+import { UserSlice, User } from '../types/user'
 import { validateEamil, validateUserName } from '../lib/validator'
 import produce from 'immer'
 
 const initialUser = {
   user: {
-    username: '',
+    name: '',
     email: '',
     image: '',
-  },
+  } as User,
   validity: {
     email: false,
     name: false,
@@ -33,7 +33,7 @@ export const createUserSlice: StateCreator<UserSlice, [], []> = (set, get) => ({
     const { user } = get()
     set(() => ({
       validity: {
-        name: validateUserName((user.username as string) || '').validity,
+        name: validateUserName((user.name as string) || '').validity,
         email: validateEamil((user.email as string) || '').validity,
       },
     }))
@@ -44,16 +44,11 @@ export const createUserSlice: StateCreator<UserSlice, [], []> = (set, get) => ({
     })),
 
   clearUser: () =>
-    set(() => ({
-      user: {
-        username: '',
-        email: '',
-        photoUrl: '',
-      },
-      validity: {
-        email: false,
-        name: false,
-      },
-      showError: false,
-    })),
+    set(
+      produce(({ user }) => {
+        user.name = ''
+        user.email = ''
+        user.image = ''
+      })
+    ),
 })

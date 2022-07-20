@@ -29,6 +29,12 @@ const theme = {
       ul: {
         listStyle: 'none',
       },
+      input: {
+        outline: 'none',
+        _placeholder: {
+          color: 'brand.secondary-600',
+        },
+      },
     },
   },
   fontSize: {
@@ -41,6 +47,7 @@ const theme = {
       'secondary-400': '#EFEFEF',
       'secondary-600': '#E4E1E1',
       'secondary-700': '#888888',
+      'seconday-900': '#666666',
       'priamry-black': '#353535',
       'primary-black-300': '#8F8F8F',
     },

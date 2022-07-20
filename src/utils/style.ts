@@ -10,3 +10,15 @@ export const scrollBar = (hover: boolean) => ({
     borderRadius: hover ? '1rem' : '0px',
   },
 })
+
+export const placeholder = () => ({
+  '&::placeholder': {
+    color: '#EFEFEF',
+  },
+  '&:-ms-input-placeholder': {
+    color: '#EFEFEF',
+  },
+  '&::-ms-input-placeholder ': {
+    color: '#EFEFEF',
+  },
+})

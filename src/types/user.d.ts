@@ -1,7 +1,7 @@
-type UserDetail = username | email | image
+type User = Record<'name' | 'email' | 'image', string>
 
 export type UserSlice = {
-  user: Record<UserDetail, string>
+  user: User
   validity: {
     name: boolean
     email: boolean

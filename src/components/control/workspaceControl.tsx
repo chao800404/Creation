@@ -8,9 +8,7 @@ import shallow from 'zustand/shallow'
 const WorkspaceControl = () => {
   const addItem = useStore((state) => state.addToList, shallow)
 
-  const handleAddWorkspaceItem = () => {
-    addItem('Nextjs')
-  }
+  const handleAddWorkspaceItem = () => addItem()
 
   return (
     <Flex gap="2">

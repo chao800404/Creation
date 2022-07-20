@@ -117,7 +117,7 @@ const Dashboard = (props: DashboardProp) => {
         </Box>
       </Side>
       <DashBoardContainer>
-        <DashboardMain></DashboardMain>
+        <DashboardMain />
       </DashBoardContainer>
     </Flex>
   )

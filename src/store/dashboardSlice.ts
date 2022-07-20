@@ -1,15 +1,20 @@
 import { StateCreator } from 'zustand'
-import { DashboardSlice } from '../types/dashboard'
+import { DashboardSlice, DashboardType } from '../types/dashboard'
 import { SIDE_BASIC_WIDTH } from '../utils/config'
 import { devtools, persist } from 'zustand/middleware'
 import produce from 'immer'
 
-const initialDashboard = {
+const initialDashboard: DashboardType = {
   sideLineX: SIDE_BASIC_WIDTH,
+  controlCoverStart: {
+    reposition: false,
+    changCover: false,
+  },
   rightClickId: '',
   coverImageMap: [] as unknown as DashboardSlice['coverImageMap'],
   toggleChangeCoverPopup: false,
-  coverImageSrc: '/static/jpg/tailwindcss.jpg',
+  coverImageSrc: undefined,
+  toggleHoverdCover: false,
 }
 
 export const createDashboardSlice: StateCreator<DashboardSlice, [], []> = (
@@ -23,6 +28,21 @@ export const createDashboardSlice: StateCreator<DashboardSlice, [], []> = (
         state.sideLineX = sideX
       })
     ),
+
+  setControlCoverReposition: (toggle) => {
+    set(
+      produce((state) => {
+        state.controlCoverStart.reposition = toggle
+      })
+    )
+  },
+  setControlChangeCover: (toggle) => {
+    set(
+      produce((state) => {
+        state.controlCoverStart.changCover = toggle
+      })
+    )
+  },
   setRightClickId: (id) =>
     set(
       produce((state) => {
@@ -34,6 +54,23 @@ export const createDashboardSlice: StateCreator<DashboardSlice, [], []> = (
     set(
       produce((state) => {
         state.coverImageMap = imageMap
+      })
+    )
+  },
+
+  setToggleHoverdCover: (hovered) => {
+    set(
+      produce((state) => {
+        if (
+          state.controlCoverStart.reposition ||
+          state.controlCoverStart.changCover
+        )
+          return
+        if (typeof hovered === 'boolean') {
+          state.toggleHoverdCover = hovered
+        } else {
+          state.toggleHoverdCover = !state.toggleHoverdCover
+        }
       })
     )
   },
