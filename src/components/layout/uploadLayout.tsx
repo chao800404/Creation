@@ -3,32 +3,16 @@ import { Center, Flex, Text, Button, Box } from '@chakra-ui/react'
 import { BsImages } from 'react-icons/bs'
 import Image from 'next/image'
 import UploadFile from '../input/upload'
-import useStore from '../../store/store'
-import shallow from 'zustand/shallow'
+
 import MotionContainer from '../container/motionContainer'
-import { ImageType, UploadCoverImageType } from '../../types/base'
+import { ImageType, UploadLayoutType } from '../../types/base'
 
-const ChangeCoverUpload: React.FC<UploadCoverImageType> = () => {
-  const [file, setFile] = React.useState<ImageType>({
-    imageFilePath: null,
-    imageName: '',
-  })
-  const setHovered = useStore((state) => state.setToggleHoverdCover, shallow)
-  const setCoverImage = useStore((state) => state.setCoverImageSrc, shallow)
-  const togglePopup = useStore(
-    (state) => state.setToggleChangeCoverPopup,
-    shallow
-  )
-
+const UploadLayout: React.FC<UploadLayoutType> = ({
+  onClick,
+  file,
+  setFile,
+}) => {
   const [dragEnter, setDragEnter] = React.useState<boolean>(false)
-
-  const handleUploadCover = () => {
-    if (file.imageFilePath) {
-      setCoverImage(file.imageFilePath)
-      setHovered && setHovered(false)
-      togglePopup(false)
-    }
-  }
 
   return (
     <Center h="full" color="brand.secondary-700">
@@ -46,7 +30,7 @@ const ChangeCoverUpload: React.FC<UploadCoverImageType> = () => {
             h="full"
             justify="center"
           >
-            {file.imageFilePath ? (
+            {file?.imageFilePath ? (
               <>
                 <Box pos="absolute" w="80%" h="50%">
                   <Image
@@ -98,7 +82,7 @@ const ChangeCoverUpload: React.FC<UploadCoverImageType> = () => {
           color="brand.secondary-700"
           pos="relative"
           w="full"
-          onClick={handleUploadCover}
+          onClick={onClick}
         >
           上傳檔案
         </Button>
@@ -107,4 +91,4 @@ const ChangeCoverUpload: React.FC<UploadCoverImageType> = () => {
   )
 }
 
-export default React.memo(ChangeCoverUpload)
+export default React.memo(UploadLayout)

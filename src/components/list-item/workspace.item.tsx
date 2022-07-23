@@ -27,10 +27,10 @@ const WorkspaceItem: React.FC<WorkspaceItemProp> = ({
   id,
 }) => {
   const [isHovered, setIsHovered] = useState(false)
-  const { activeId, setActiveId } = useStore(
+  const { activeId, setActiveItem } = useStore(
     (state) => ({
-      activeId: state.status.activeItem,
-      setActiveId: state.updateActiveItem,
+      activeId: state.activeItem?.id,
+      setActiveItem: state.updateActiveItem,
     }),
     shallow
   )
@@ -48,7 +48,7 @@ const WorkspaceItem: React.FC<WorkspaceItemProp> = ({
     const elem = (e.target as HTMLElement).closest(
       '[data-type = "workspace-item"]'
     ) as HTMLElement
-    if (e.buttons === 1) setActiveId(elem.id)
+    if (e.buttons === 1) setActiveItem(elem.id)
     if (e.buttons === 2) setRightClickId(elem.id)
   }
 

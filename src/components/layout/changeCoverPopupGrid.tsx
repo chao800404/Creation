@@ -1,6 +1,5 @@
 import React from 'react'
-import { Grid, GridItem, Text, Box } from '@chakra-ui/react'
-import { DashboardProp } from '../../types/data'
+import { Grid, GridItem, Text } from '@chakra-ui/react'
 import Image from 'next/image'
 
 function ChangeCoverPopupGrid({

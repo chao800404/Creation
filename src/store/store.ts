@@ -5,7 +5,6 @@ import { createDashboardSlice } from './dashboardSlice'
 import { DashboardSlice } from '../types/dashboard'
 import { createWorkspaceSlice } from './workspace'
 import { WorkspaceSlice } from '../types/workspace'
-import { devtools, persist } from 'zustand/middleware'
 
 const useStore = create<UserSlice & DashboardSlice & WorkspaceSlice>()(
   (...a) => ({

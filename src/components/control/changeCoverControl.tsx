@@ -1,14 +1,14 @@
 import React from 'react'
 
-import { Box, Flex, BoxProps } from '@chakra-ui/react'
+import { Box, Flex, BoxProps, TabPanel, TabPanels } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import ChageCoverPopup from '../popup/chageCoverPopup'
+import ChangePopup from '../popup/chagePopup'
 import useStore from '../../store/store'
 import shallow from 'zustand/shallow'
+import ChangeCoverPopupGrid from '../layout/changeCoverPopupGrid'
+import ChangeCoverPopupLayout from '../container/changeCoverPopupLayout'
 
 const ChangeCoverControl = (props: BoxProps) => {
-  // const popupElemRef = React.useRef<HTMLDivElement>(null)
-
   const { togglePopup, toggle } = useStore(
     (state) => ({
       togglePopup: state.setToggleChangeCoverPopup,
@@ -24,10 +24,18 @@ const ChangeCoverControl = (props: BoxProps) => {
     shallow
   )
 
-  // const [controlCover, setControlCover] = React.useState({
-  //   reposition: false,
-  //   changCover: false,
-  // })
+  const coverImageMap = useStore((state) => state.coverImageMap, shallow)
+  const setCoverImage = useStore((state) => state.setCoverImageSrc, shallow)
+
+  const handleChangeCover: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    const target = (e.target as HTMLElement).closest(
+      '.cover_image'
+    ) as HTMLElement
+    if (target) {
+      const src = target.dataset.src
+      setCoverImage(src as string)
+    }
+  }
 
   return (
     <Flex
@@ -46,15 +54,18 @@ const ChangeCoverControl = (props: BoxProps) => {
         {controlCover ? '儲存設定' : '移動封面'}
       </Box>
       {toggle && (
-        <Box>
-          <ChageCoverPopup
-            pos="absolute"
-            left="-100%"
-            bg="white"
-            zIndex="500"
-            top="1rem"
-          />
-        </Box>
+        <ChangePopup
+          pos="absolute"
+          left="-100%"
+          bg="white"
+          zIndex="500"
+          top="1rem"
+          imageTab="畫廊"
+          onClick={handleChangeCover}
+          uploadImage={setCoverImage}
+        >
+          <ChangeCoverPopupLayout coverImageMap={coverImageMap} />
+        </ChangePopup>
       )}
     </Flex>
   )

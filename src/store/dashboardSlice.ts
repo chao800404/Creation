@@ -13,7 +13,6 @@ const initialDashboard: DashboardType = {
   rightClickId: '',
   coverImageMap: [] as unknown as DashboardSlice['coverImageMap'],
   toggleChangeCoverPopup: false,
-  coverImageSrc: undefined,
   toggleHoverdCover: false,
 }
 
@@ -79,12 +78,6 @@ export const createDashboardSlice: StateCreator<DashboardSlice, [], []> = (
     set(
       produce((state) => {
         state.toggleChangeCoverPopup = toggle
-      })
-    ),
-  setCoverImageSrc: (src) =>
-    set(
-      produce((state) => {
-        state.coverImageSrc = src
       })
     ),
 })

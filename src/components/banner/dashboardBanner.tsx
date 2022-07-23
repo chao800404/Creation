@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Box, Flex } from '@chakra-ui/react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import ChageCoverPopup from '../popup/chageCoverPopup'
+import ChageCoverPopup from '../popup/chagePopup'
 import useStore from '../../store/store'
 import shallow from 'zustand/shallow'
 
@@ -28,11 +28,6 @@ const DashboardBanner = ({ imageCoverSrc }: { imageCoverSrc: string }) => {
     }),
     shallow
   )
-
-  // const [controlCover, setControlCover] = useState({
-  //   reposition: false,
-  //   changCover: false,
-  // })
 
   useEffect(() => {
     if (start && controlCover) {

@@ -1,3 +1,4 @@
+import { BoxProps } from '@chakra-ui/react'
 export interface BaseProps {
   text?: string
   icon?: IconType
@@ -19,6 +20,14 @@ export type ImageType = {
   imageName: string
 }
 
-export interface UploadCoverImageType {
+export interface UploadLayoutType extends BoxProps {
   setHovered?: Dispatch<SetStateAction<boolean>>
+  onClick: MouseEventHandler<HTMLButtonElement>
+  file: ImageType
+  setFile: React.Dispatch<React.SetStateAction<ImageType>>
+}
+
+export interface ChangePopupType extends BoxProps {
+  imageTab: string
+  uploadImage: (src: string) => void
 }
