@@ -22,6 +22,7 @@ export default function Home() {
         </Title>
 
         <Description>
+          Hello wold
           Get started by editing
           <CodeTag>pages/index.tsx</CodeTag>
         </Description>
