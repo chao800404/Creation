@@ -1,6 +1,9 @@
+import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
+import Head from 'next/head'
 import { ThemeProvider, DefaultTheme } from 'styled-components'
-import GlobalStyle from '../components/globalstyles'
+import { GlobalStyle } from '../src/components/globalstyles'
+import { Session } from 'next-auth'
 
 const theme: DefaultTheme = {
   colors: {
@@ -9,12 +12,25 @@ const theme: DefaultTheme = {
   },
 }
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps,
+}: AppProps<{
+  session: Session
+}>) {
   return (
     <>
       <ThemeProvider theme={theme}>
+        <Head>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          />
+        </Head>
         <GlobalStyle />
-        <Component {...pageProps} />
+        <SessionProvider session={pageProps.session}>
+          <Component {...pageProps} />
+        </SessionProvider>
       </ThemeProvider>
     </>
   )
