@@ -36,9 +36,9 @@ const DashboardMain = () => {
   const {
     query: { page },
   } = useRouter()
-  const { data } = useSWR(`/api/page/${page}`, fetcher)
+  const { data } = useSWR(page ? `/api/page/${page}` : null, fetcher)
 
-  if (!data) {
+  if (!data.data.cover.image) {
     return <></>
   }
 
