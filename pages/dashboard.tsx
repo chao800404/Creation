@@ -22,6 +22,10 @@ const Dashboard = ({ fallback }: DashboardProp) => {
     return <div>Loading...</div>
   }
 
+  if (!data) {
+    return <></>
+  }
+
   const { data: listData, status } = data
 
   if (status === 'fail') {
