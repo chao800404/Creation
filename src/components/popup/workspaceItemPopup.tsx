@@ -13,10 +13,11 @@ import { useRouter } from 'next/router'
 const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
   const popupElem = useRef<HTMLDivElement>(null)
   const listDelete = useDeleteList()
-  const { page: id } = useRouter().query
-  const { pageDelete, toggleFavorite } = usePageStore(
+  const router = useRouter()
+  const { page } = useRouter().query
+
+  const { toggleFavorite } = usePageStore(
     (state) => ({
-      pageDelete: state.pageDelete,
       toggleFavorite: state.stateAndItemUpdateAsync,
     }),
     shallow
@@ -91,7 +92,10 @@ const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
             icon={IoTrashOutline}
             onClick={() =>
               wrapperOnClick(() => {
-                listDelete(id as string)
+                if (page === itemId) {
+                  router.push('/')
+                }
+                listDelete(itemId as string)
               })
             }
           />
