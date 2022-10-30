@@ -25,8 +25,6 @@ const DashboardPage: NextPage = () => {
     return <div>Loading...</div>
   }
 
-  console.log(data, isError)
-
   const { data: listData, status } = data
 
   if (status === 'fail') {

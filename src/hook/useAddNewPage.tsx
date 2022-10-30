@@ -1,7 +1,7 @@
 import useSWR, { useSWRConfig } from 'swr'
 import shallow from 'zustand/shallow'
 import { usePageStore } from '../store'
-import { createData } from '../utils/fetch'
+import { createData, fetcher } from '../utils/fetch'
 import { v4 as uuidv4 } from 'uuid'
 import { List } from '@prisma/client'
 
@@ -12,6 +12,7 @@ type ListResDataType = {
 
 export const useAddNewPage = () => {
   const { mutate } = useSWRConfig()
+  const { data } = useSWR('/api/query/queryList', fetcher)
 
   return () => {
     const newPage = {
@@ -21,18 +22,19 @@ export const useAddNewPage = () => {
       title: null,
     }
 
-    mutate(`/api/query/queryList`, createData('addNewPage', newPage.id), {
+    const newList = [...data.data, newPage]
+    const combineData = { ...data, data: newList }
+
+    mutate(`/api/query/queryList`, createData(`addNewPage`, newPage.id), {
       populateCache: (resPage, list: ListResDataType) => {
-        console.log(list, resPage)
-        const cloneCache = { ...list }
-        cloneCache.data.push(newPage as List)
+        const cloneList = { ...list }
+        cloneList.data.push(resPage.data)
 
-        // cloneCache.data.cover.image = uploadImage.data.image
-        // imageSet(uploadImage.data.image)
-        // return cloneCache
+        return cloneList
       },
-
       revalidate: false,
+      optimisticData: combineData,
+      rollbackOnError: true,
     })
   }
 }

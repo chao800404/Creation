@@ -6,7 +6,7 @@ import shallow from 'zustand/shallow'
 import { WorkspaceControllerWrapper } from './control.styles'
 import { useAddNewPage } from '../../hook/useAddNewPage'
 import useSWR, { useSWRConfig } from 'swr'
-import { fetcher } from '../../utils/fetch'
+import { createData, fetcher } from '../../utils/fetch'
 import { v4 as uuidv4 } from 'uuid'
 
 type WorkspaceControlType = {
@@ -15,8 +15,6 @@ type WorkspaceControlType = {
 
 const WorkspaceControl: React.FC<WorkspaceControlType> = ({ text }) => {
   const newPageAdd = useAddNewPage()
-  // const { mutate } = useSWRConfig()
-  // const { data } = useSWR('/api/query/queryList', fetcher)
 
   return (
     <WorkspaceControllerWrapper>
@@ -24,22 +22,6 @@ const WorkspaceControl: React.FC<WorkspaceControlType> = ({ text }) => {
       <div
         className="WorkspaceController_content"
         onClick={async () => {
-          // const newPage = {
-          //   editable: true,
-          //   favorite: false,
-          //   id: uuidv4(),
-          //   title: null,
-          // }
-          // mutate(
-          //   '/api/query/queryList',
-          //   ({ data }) => {
-          //     console.log(data)
-          //     data.push(newPage)
-          //     console.log(data)
-          //     return data
-          //   },
-          //   { revalidate: false }
-          // )
           newPageAdd()
         }}
       >
