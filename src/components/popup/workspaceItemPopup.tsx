@@ -7,10 +7,13 @@ import { motion } from 'framer-motion'
 import { MdOutlineDriveFileRenameOutline } from 'react-icons/md'
 import { usePageStore } from '../../store'
 import { WorkspaceItemPopupWrapper } from './popup.styles'
+import { useDeleteList } from '../../hook/useDeleteList'
+import { useRouter } from 'next/router'
 
 const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
   const popupElem = useRef<HTMLDivElement>(null)
-
+  const listDelete = useDeleteList()
+  const { page: id } = useRouter().query
   const { pageDelete, toggleFavorite } = usePageStore(
     (state) => ({
       pageDelete: state.pageDelete,
@@ -87,7 +90,9 @@ const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
             desc="Delete"
             icon={IoTrashOutline}
             onClick={() =>
-              wrapperOnClick(() => itemId && toggle && pageDelete(itemId))
+              wrapperOnClick(() => {
+                listDelete(id as string)
+              })
             }
           />
           <PopupItem

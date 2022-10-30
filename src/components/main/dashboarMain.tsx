@@ -36,6 +36,7 @@ const DashboardMain = () => {
   const {
     query: { page },
   } = useRouter()
+
   const { data } = useSWR(page ? `/api/page/${page}` : null, fetcher)
 
   // const uploadEmojiWrapper = (path: string) => {
@@ -72,20 +73,19 @@ const DashboardMain = () => {
   //   setToggleIcon(false)
   // })
 
-  console.log(data?.data.cover.image)
-
   return (
     <DashboardMainWrapper
       style={{ width: `${dashboardMainWidth}px` }}
       ref={dashboardMainElem}
-      show={!!data && data?.data.cover.image.length > 0}
+      show={!!data && data?.data?.cover?.image?.length > 0}
     >
       <WrapperScrollbar>
         <div className="DashboardMain_container">
           <div className="DashboardMain_container-banner">
-            {data?.data.cover.image && data?.data.cover.image.length > 0 && (
-              <DashboardBanner coverImage={data?.data.cover.image} />
-            )}
+            {data?.data?.cover?.image &&
+              data?.data?.cover?.image?.length > 0 && (
+                <DashboardBanner coverImage={data?.data?.cover?.image} />
+              )}
           </div>
           <div className="DashboardMain_container-content">
             <div

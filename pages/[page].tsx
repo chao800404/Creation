@@ -5,7 +5,6 @@ import { DashboardLayout, DashboardMain } from '../src/components'
 import { usePageStore } from '../src/store'
 import { List, PrismaClient } from '@prisma/client'
 import { GetStaticProps, NextPage } from 'next'
-import { URL } from '../src/utils/config'
 import { useFetch } from '../src/hook/useFetch'
 import { fetcher } from '../src/utils/fetch'
 
@@ -25,6 +24,8 @@ const DashboardPage: NextPage = () => {
   if (isLoading) {
     return <div>Loading...</div>
   }
+
+  console.log(data, isError)
 
   const { data: listData, status } = data
 

@@ -3,15 +3,17 @@ import shallow from 'zustand/shallow'
 import { usePageStore } from '../store'
 import { createData } from '../utils/fetch'
 import { v4 as uuidv4 } from 'uuid'
+import { List } from '@prisma/client'
 
-export const useUploadLocalCoverImage = () => {
+type ListResDataType = {
+  data: List[]
+  status: 'success' | 'fail'
+}
+
+export const useAddNewPage = () => {
   const { mutate } = useSWRConfig()
-  const { imageSet } = usePageStore(
-    (state) => ({ imageSet: state.imageSet }),
-    shallow
-  )
 
-  return (id: string, src: string) => {
+  return () => {
     const newPage = {
       editable: true,
       favorite: false,
@@ -20,9 +22,10 @@ export const useUploadLocalCoverImage = () => {
     }
 
     mutate(`/api/query/queryList`, createData('addNewPage', newPage.id), {
-      populateCache: (newPage, list) => {
+      populateCache: (resPage, list: ListResDataType) => {
+        console.log(list, resPage)
         const cloneCache = { ...list }
-        console.log(cloneCache, newPage)
+        cloneCache.data.push(newPage as List)
 
         // cloneCache.data.cover.image = uploadImage.data.image
         // imageSet(uploadImage.data.image)
