@@ -8,6 +8,7 @@ import { List, PrismaClient } from '@prisma/client'
 import { SWRConfig } from 'swr'
 import validateUser from '../src/utils/validate'
 import { useFetch } from '../src/hook/useFetch'
+import prisma from '../src/lib/prisma'
 
 type DashboardProp = {
   fallback: {
@@ -61,7 +62,6 @@ export const getServerSideProps = async ({
 }): Promise<GetStaticPropsResult<DashboardProp>> => {
   try {
     const list = await validateUser(req, res, (user) => {
-      const prisma = new PrismaClient()
       return prisma.list.findMany({
         where: {
           authorId: user.id,
