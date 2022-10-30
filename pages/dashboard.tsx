@@ -22,7 +22,7 @@ const Dashboard = ({ fallback }: DashboardProp) => {
     return <div>Loading...</div>
   }
 
-  if (!data) {
+  if (!data.data) {
     return <></>
   }
 
@@ -42,9 +42,12 @@ const Dashboard = ({ fallback }: DashboardProp) => {
         // href={emoji ? transferEmojiToSvg(emoji) : '/favicon.ico'}
         />
       </Head>
-      <DashboardLayout list={listData}>
-        <DashboardMain />
-      </DashboardLayout>
+
+      {listData && (
+        <DashboardLayout list={listData}>
+          <DashboardMain />
+        </DashboardLayout>
+      )}
     </SWRConfig>
   )
 }
