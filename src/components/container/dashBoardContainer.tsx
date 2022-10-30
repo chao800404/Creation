@@ -18,23 +18,7 @@ const DashBoardContainr = ({ children }: { children: ReactNode }) => {
     query: { page },
   } = useRouter()
 
-  const { imageSet, loading, list } = usePageStore(
-    (state) => ({
-      imageSet: state.imageSet,
-      loading: state.loading,
-      list: state.list,
-    }),
-    shallow
-  )
-
-  const { data } = useSWR(
-    page && list.length > 0 ? `/api/page/${page}` : null,
-    fetcher
-  )
-
-  useEffect(() => {
-    imageSet(data?.data?.cover?.image)
-  }, [data, imageSet])
+  const { data } = useSWR(`/api/page/${page}`, fetcher)
 
   return (
     <DashboardContainerWrapper
@@ -43,7 +27,7 @@ const DashBoardContainr = ({ children }: { children: ReactNode }) => {
       <div className="dashboard_nav">
         <DashBoardNav />
       </div>
-      {true ? (
+      {data ? (
         <div className="dashboardContainer_container">
           <div className="dashboardContainer_container-left">
             <div>jewofw</div>

@@ -2,7 +2,6 @@
 import prisma from '../lib/prisma'
 import DataLoader from 'dataloader'
 import { Profile, User } from '@prisma/client'
-import { getToken, JWT } from 'next-auth/jwt'
 
 type UserType = User & { profile: Profile | null }
 

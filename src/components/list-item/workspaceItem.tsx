@@ -42,7 +42,7 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
       color={isActive ? '#ffffff' : '#888888'}
       hoverColor={isActive ? '#ffffff' : '#1c1c1c'}
     >
-      <Link href={`/${id || ''}`}>
+      <Link href={`/${id}`}>
         <motion.a
           className="workspaceItem_content"
           style={{
@@ -52,7 +52,7 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
           }}
         >
           <Accordion id={icon?.id} text={title} sideWidth={sideWidth || 0}>
-            {icon?.image.length > 0 ? (
+            {icon && icon?.image?.length > 0 ? (
               <div style={{ padding: '0.2rem', fontSize: '.9rem' }}>
                 {icon?.image}
               </div>

@@ -1,4 +1,9 @@
-import { NextApiResponse, NextApiRequest } from 'next'
+import {
+  NextApiResponse,
+  NextApiRequest,
+  GetStaticProps,
+  GetStaticPropsResult,
+} from 'next'
 import { ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'

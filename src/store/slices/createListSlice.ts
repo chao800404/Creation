@@ -7,8 +7,8 @@ import { CoverSlice } from './createCoverSlice'
 import { v4 as uuidv4 } from 'uuid'
 
 export type ListItem = List & {
-  cover: Cover
-  emoji: Emoji
+  cover?: Cover
+  emoji?: Emoji
   prevId?: string
 }
 
@@ -30,8 +30,7 @@ type Action = {
     value: T
   ) => Promise<void>
 
-  newPageAdd: () => Promise<void>
-  selectItemById: (id: string) => void
+  // newPageAdd: () => Promise<void>
   pageDelete: (id: string) => Promise<void>
 }
 
@@ -89,46 +88,37 @@ export const createListSlice: StateCreator<
     )
   },
 
-  selectItemById: (id) => {
-    const update = produce<InitialList>((state) => {
-      state.id = id
-      const item = state.list.find((item) => item.id === id)
-      state.curItem = item
-    })
-    set(update)
-  },
+  // newPageAdd: async () => {
+  //   const newPage = {
+  //     editable: true,
+  //     favorite: false,
+  //     id: uuidv4(),
+  //     title: null,
+  //   }
 
-  newPageAdd: async () => {
-    const newPage = {
-      editable: true,
-      favorite: false,
-      id: uuidv4(),
-      title: null,
-    }
+  //   const insertItem = produce<InitialList>((state) => {
+  //     state.id = newPage.id
+  //     state.list.push(newPage as ListItem)
+  //     state.curItem = newPage as ListItem
+  //     state.loading = true
+  //   })
+  //   set(insertItem)
 
-    const insertItem = produce<InitialList>((state) => {
-      state.id = newPage.id
-      state.list.push(newPage as ListItem)
-      state.curItem = newPage as ListItem
-      state.loading = true
-    })
-    set(insertItem)
+  //   const resData = await createData<ResType<ListItem>>(
+  //     'addNewPage',
+  //     newPage.id
+  //   )
 
-    const resData = await createData<ResType<ListItem>>(
-      'addNewPage',
-      newPage.id
-    )
-
-    const { prevId, ...otherData } = resData.data
-    const reWriteData = produce<InitialList>((state) => {
-      const index = state.list.findIndex((item) => item.id === prevId)
-      state.list[index] = otherData
-      state.id = otherData.id
-      state.curItem = otherData
-      state.loading = false
-    })
-    set(reWriteData)
-  },
+  //   const { prevId, ...otherData } = resData.data
+  //   const reWriteData = produce<InitialList>((state) => {
+  //     const index = state.list.findIndex((item) => item.id === prevId)
+  //     state.list[index] = otherData
+  //     state.id = otherData.id
+  //     state.curItem = otherData
+  //     state.loading = false
+  //   })
+  //   set(reWriteData)
+  // },
 
   stateAndItemUpdateAsync: async (id, key, value) => {
     const curId = id || get().id

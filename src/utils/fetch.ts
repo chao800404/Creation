@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import { URL } from './config'
 
 export const fetcher = (url: string) => {
   return fetch(url).then((res) => res.json())
@@ -27,7 +27,7 @@ export const createData = async <T>(path: string, id: string): Promise<T> => {
 }
 
 export const proFetch = async <T>(path: string): Promise<T> => {
-  const res = await fetch(`api/query/${path}`)
+  const res = await fetch(`${URL}/api/query/${path}`)
   const resData = (await res.json()) as T
   return resData
 }

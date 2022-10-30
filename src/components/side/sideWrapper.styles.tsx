@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 
 type Props = {
-  maxW: number
-  minW: number
   width: number
 }
 
-export const SideWrapperLayout = styled('div')`
+export const SideWrapperLayout = styled('div').attrs<Props>((props) => ({
+  width: props.width,
+}))<Props>`
   height: inherit;
   position: sticky;
   top: 0;
@@ -25,6 +25,7 @@ export const SideWrapperLayout = styled('div')`
     border: 2px solid #1c1c1c;
     background-color: #ffffff;
     display: flex;
+    width: ${({ width }) => `${width || 350}px`};
 
     &::before {
       position: absolute;

@@ -22,16 +22,3 @@ export default withAuth(
 )
 
 export const config = { matcher: ['/'] }
-
-// export async function middleware(req: NextRequest) {
-//   const token = await getToken({ req, secret })
-//   const { pathname } = req.nextUrl
-
-//   const isPublicFiles = isPublicFilesFilter(req.nextUrl.pathname)
-//   geolocation(req)
-
-//   if (pathname === '/' && token && !isPublicFiles) {
-//     return NextResponse.rewrite(new URL('/dashboard', req.url))
-//   }
-//   return NextResponse.next()
-// }

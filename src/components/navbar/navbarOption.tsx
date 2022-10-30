@@ -8,6 +8,7 @@ import ControllDataIcon from '../iconContainer/controllDataIcon'
 import { useLayoutControllerStore, usePageStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { NavbarOptionWrapper } from './navbar.styles'
+import { useRouter } from 'next/router'
 
 const NavbarOption = () => {
   const userPopupOpen = useLayoutControllerStore(
@@ -20,14 +21,17 @@ const NavbarOption = () => {
     shallow
   )
 
-  const { favorite, editable, id } = usePageStore(
+  const { page } = useRouter().query
+
+  const { favorite, editable } = usePageStore(
     (state) => ({
       favorite: state.curItem?.favorite,
       editable: state.curItem?.editable,
-      id: state.id,
     }),
     shallow
   )
+
+  const id = page as string | undefined
 
   return (
     <NavbarOptionWrapper>

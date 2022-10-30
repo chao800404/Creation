@@ -1,11 +1,9 @@
 import React, { useRef } from 'react'
 import WorkspaceItem from '../list-item/workspaceItem'
 import { ListItem } from '../../store/slices/createListSlice'
-import { usePageStore } from '../../store'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import { SideContainerWrapper } from './container.styles'
 
-import shallow from 'zustand/shallow'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router'
 
@@ -25,8 +23,6 @@ const SideContainer: React.FC<SideContainerType> = ({
     query: { page },
   } = useRouter()
 
-  console.log(page)
-
   return (
     <motion.div
       style={{
@@ -43,7 +39,7 @@ const SideContainer: React.FC<SideContainerType> = ({
     >
       <WrapperScrollbar isSide={true}>
         <SideContainerWrapper>
-          {list.map((item) => (
+          {list?.map((item) => (
             <WorkspaceItem
               key={item.id}
               title={item.title as string}

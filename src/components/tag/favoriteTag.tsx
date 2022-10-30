@@ -4,11 +4,11 @@ import { useLayoutControllerStore } from '../../store'
 import SideContainer from '../container/sideContainer'
 import shallow from 'zustand/shallow'
 import { SIDE_OPTION } from '../../utils/config'
-import { ListItem } from '../../store/slices'
+import { List } from '@prisma/client'
 
 const { favorite } = SIDE_OPTION
 
-const FavoriteTag = ({ list }: { list: ListItem[] }) => {
+const FavoriteTag = ({ list }: { list: List[] }) => {
   const { favoriteTagOpen, favoriteTagToggle } = useLayoutControllerStore(
     (state) => ({
       favoriteTagOpen: state.favoriteTagOpen,
@@ -19,7 +19,7 @@ const FavoriteTag = ({ list }: { list: ListItem[] }) => {
 
   return (
     <>
-      <div style={{ borderBottom: favoriteTagOpen ? '1px solid' : '' }}>
+      <div style={{ borderBottom: favoriteTagOpen ? '1px solid' : 'unset' }}>
         <Accordion
           text={favorite.text}
           open={favoriteTagOpen}

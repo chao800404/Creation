@@ -5,7 +5,7 @@ import IconContainer from './iconContainer'
 import { ControllDataIconWrapper } from './icon.styles'
 
 type ControllDataIconType = {
-  id: string
+  id: string | undefined
   toggle: boolean
   openIcon: IconType
   closeIcon: IconType

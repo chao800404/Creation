@@ -10,13 +10,13 @@ type WorkspaceControlType = {
 }
 
 const WorkspaceControl: React.FC<WorkspaceControlType> = ({ text }) => {
-  const newPageAdd = usePageStore((state) => state.newPageAdd, shallow)
+  // const newPageAdd = usePageStore((state) => state.newPageAdd, shallow)
 
   return (
     <WorkspaceControllerWrapper>
       <p>{text}</p>
       <div className="WorkspaceController_content">
-        <div className="WorkspaceController_content-icon" onClick={newPageAdd}>
+        <div className="WorkspaceController_content-icon">
           <IconContainer icon={SIDE_OPTION.workspaces.icon[0]} />
         </div>
         <div className="WorkspaceController_content-icon">

@@ -1,79 +1,35 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react'
-import { SIDE_OPTION } from '../src/utils/config'
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-
-import { GetStaticProps, GetStaticPropsResult } from 'next'
-import { URL } from '../src/utils/config'
-import { useUserStore, usePageStore } from '../src/store'
-
+import { GetStaticPropsResult, NextApiRequest, NextApiResponse } from 'next'
+import { DashboardLayout, DashboardMain } from '../src/components/index'
+import { List, PrismaClient } from '@prisma/client'
+import { SWRConfig } from 'swr'
+import validateUser from '../src/utils/validate'
 import { useFetch } from '../src/hook/useFetch'
 
-import { DashboardLayout } from '../src/components/index'
-
-import shallow from 'zustand/shallow'
-
 type DashboardProp = {
-  paths: {
-    status: string
-    path: {
-      [key: string]: string[]
-    }
+  fallback: {
+    [path: string]: List[]
   }
 }
 
-const { searchBarBtn, interfaces, workspaces, importFile, trash, newPage } =
-  SIDE_OPTION
+const Dashboard = ({ fallback }: DashboardProp) => {
+  const { data, isLoading, isError } = useFetch<List[]>()
 
-const Dashboard = (props: DashboardProp) => {
-  const { data, status } = useSession()
-  const { data: listData, isLoading, isError } = useFetch()
-
-  const { list, listUpdate, coverImageMapSet } = usePageStore(
-    (state) => ({
-      list: state.list,
-      listUpdate: state.listUpdate,
-      coverImageMapSet: state.coverImageMapSet,
-    }),
-    shallow
-  )
-
-  const userSet = useUserStore((state) => state.userSet, shallow)
-
-  useEffect(() => {
-    coverImageMapSet(props.paths.path)
-  }, [])
-
-  useEffect(() => {
-    listUpdate(listData?.data || [], listData?.focusId)
-  }, [listData])
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      const { user } = data
-      if (user) {
-        for (const [key, value] of Object.entries(user)) {
-          userSet(key, value as string)
-        }
-      }
-    }
-  }, [data, status])
-
-  if (isError) {
-    return <div>Error</div>
+  if (isLoading) {
+    return <div>Loading...</div>
   }
 
-  if (status === 'loading' || isLoading) {
-    return (
-      <div style={{ height: '100vh' }}>
-        <div>Loading...</div>
-      </div>
-    )
+  const { data: listData, status } = data
+
+  if (status === 'fail') {
+    return <div>Somthing Error...</div>
   }
 
   return (
-    <div>
+    <SWRConfig value={{ fallback }}>
       <Head>
         {/* <title>{title}</title> */}
         <meta name="description" content="Creation App" />
@@ -82,21 +38,60 @@ const Dashboard = (props: DashboardProp) => {
         // href={emoji ? transferEmojiToSvg(emoji) : '/favicon.ico'}
         />
       </Head>
-      <DashboardLayout list={list}>{/* <DashboardMain /> */}</DashboardLayout>
-    </div>
+      <DashboardLayout list={listData}>
+        <DashboardMain />
+      </DashboardLayout>
+    </SWRConfig>
   )
 }
 
-export const getStaticProps: GetStaticProps = async (): Promise<
-  GetStaticPropsResult<DashboardProp>
-> => {
-  const data = await fetch(`${URL}/api/getImageCover`)
-  const paths = await data.json()
+export const getServerSideProps = async ({
+  req,
+  res,
+}: {
+  req: NextApiRequest
+  res: NextApiResponse
+}): Promise<GetStaticPropsResult<DashboardProp>> => {
+  try {
+    const list = await validateUser(req, res, (user) => {
+      const prisma = new PrismaClient()
+      return prisma.list.findMany({
+        where: {
+          authorId: user.id,
+        },
+        select: {
+          id: true,
+          title: true,
+          favorite: true,
+          editable: true,
+          emoji: {
+            select: {
+              id: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'asc',
+        },
+      })
+    })
 
-  return {
-    props: {
-      paths,
-    },
+    return {
+      props: {
+        fallback: {
+          '/api/query/queryList': list as unknown as List[],
+        },
+      },
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      redirect: {
+        destination: '/login',
+        statusCode: 307,
+      },
+    }
   }
 }
 

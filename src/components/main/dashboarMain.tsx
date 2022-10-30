@@ -8,11 +8,13 @@ import { useLayoutControllerStore } from '../../store'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import { DashboardMainWrapper } from './main.styles'
 import HeaderEditor from '../edit/headerEditor'
+import { useRouter } from 'next/router'
+import useSWR, { useSWRConfig, mutate } from 'swr'
+import { fetcher } from '../../utils/fetch'
 
 const DashboardMain = () => {
   const popupIconElem = useRef(null)
   const [originWidth, setOriginWidth] = useState(0)
-  const coverImage = usePageStore((state) => state.coverImage, shallow)
   const dashboardMainElem = useRef<HTMLDivElement | null>(null)
   const { dashboardMainWidth, dashboardMainWidthSet, dragStart } =
     useLayoutControllerStore(
@@ -30,6 +32,21 @@ const DashboardMain = () => {
       setOriginWidth(width)
     }
   }, [dragStart])
+
+  const {
+    query: { page },
+  } = useRouter()
+  const { data } = useSWR(`/api/page/${page}`, fetcher)
+
+  if (!data) {
+    return <></>
+  }
+
+  const {
+    data: {
+      cover: { image },
+    },
+  } = data
 
   // const uploadEmojiWrapper = (path: string) => {
   //   uploadEmoji(path)
@@ -65,16 +82,20 @@ const DashboardMain = () => {
   //   setToggleIcon(false)
   // })
 
+  console.log(data?.data.cover.image)
+
   return (
     <DashboardMainWrapper
       style={{ width: `${dashboardMainWidth}px` }}
       ref={dashboardMainElem}
-      show={!!coverImage && coverImage.length > 0}
+      show={!!data && data?.data.cover.image.length > 0}
     >
       <WrapperScrollbar>
         <div className="DashboardMain_container">
           <div className="DashboardMain_container-banner">
-            {coverImage && <DashboardBanner coverImage={coverImage} />}
+            {image && image.length > 0 && (
+              <DashboardBanner coverImage={image} />
+            )}
           </div>
           <div className="DashboardMain_container-content">
             <div

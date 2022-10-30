@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import shallow from 'zustand/shallow'
 import { SIDE_MAX_WIDTH, SIDE_MIN_WIDTH } from '../../utils/config'
 import BoundLine from '../line/boundLine'
@@ -32,10 +32,10 @@ const SideWrapper = ({ children }: { children: React.ReactNode }) => {
     <>
       <SideWrapperLayout
         style={{
-          maxWidth: SIDE_MAX_WIDTH,
-          minWidth: SIDE_MIN_WIDTH,
-          width: sideWidth,
+          maxWidth: `${SIDE_MAX_WIDTH}px`,
+          minWidth: `${SIDE_MIN_WIDTH}px`,
         }}
+        width={sideWidth}
         ref={elemRef}
       >
         <div className="sideWrapperContainer">{children}</div>

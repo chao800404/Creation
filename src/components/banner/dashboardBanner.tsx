@@ -104,7 +104,7 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
         style={{ cursor: toggleRePos ? 'grab' : 'unset' }}
       />
       <Image
-        src={coverImage || '/static/cover/color&&gradient/gradients_8.png'}
+        src={coverImage || ''}
         layout="fill"
         alt="cover"
         objectFit="cover"
