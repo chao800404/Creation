@@ -1,17 +1,17 @@
+import { List } from '@prisma/client'
 import useSWR from 'swr'
 import { fetcher } from '../utils/fetch'
-import { URL } from '../utils/config'
 
-type UseFetch = <T>() => {
+type UseFetch = () => {
   data: {
-    data: T
+    data: List[]
     status: 'success' | 'fail'
   }
   isLoading: boolean
   isError: boolean
 }
 
-export const useFetch: UseFetch = () => {
+export const useListSWR: UseFetch = () => {
   const { data, error } = useSWR(`/api/query/queryList`, fetcher)
 
   console

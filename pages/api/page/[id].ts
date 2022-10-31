@@ -29,15 +29,6 @@ export default async function getUserData(
         if (user.id !== resData?.authorId || !resData)
           throw new Error('You are not allowed to query these data')
 
-        await prisma.profile.update({
-          where: {
-            authorId: user.id,
-          },
-          data: {
-            focusId: params.id as string,
-          },
-        })
-
         const { authorId, ...otherData } = resData
 
         res.status(200).json({

@@ -11,7 +11,7 @@ export type LineProps = {
   left?: Value
 }
 
-export const BoundLineWrapper = styled('div').attrs<LineProps>((props) => {
+export const BoundLineWrapper = styled('span').attrs<LineProps>((props) => {
   return {
     dragStart: props.dragStart,
     right: props.right,

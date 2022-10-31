@@ -7,7 +7,7 @@ import { DashboardLayout, DashboardMain } from '../src/components/index'
 import { List, PrismaClient } from '@prisma/client'
 import { SWRConfig } from 'swr'
 import validateUser from '../src/utils/validate'
-import { useFetch } from '../src/hook/useFetch'
+import { useListSWR } from '../src/hook/useListSWR'
 import prisma from '../src/lib/prisma'
 
 type DashboardProp = {
@@ -17,14 +17,10 @@ type DashboardProp = {
 }
 
 const Dashboard = ({ fallback }: DashboardProp) => {
-  const { data, isLoading, isError } = useFetch<List[]>()
+  const { data, isLoading, isError } = useListSWR()
 
   if (isLoading) {
     return <div>Loading...</div>
-  }
-
-  if (!data.data) {
-    return <></>
   }
 
   const { data: listData, status } = data
@@ -62,6 +58,7 @@ export const getServerSideProps = async ({
 }): Promise<GetStaticPropsResult<DashboardProp>> => {
   try {
     const list = await validateUser(req, res, (user) => {
+      console.log(user)
       return prisma.list.findMany({
         where: {
           authorId: user.id,

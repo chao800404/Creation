@@ -36,7 +36,8 @@ const BoundLine: React.FC<BoundLineType> = ({
     const handleMouseMove = (e: MouseEvent) => {
       if (!dragStart) return
       const x = originWidth + (e.pageX - dragDownPos) * multiply
-      if (x > maxW || x <= minW) return
+
+      if (x >= maxW || x <= minW) return
       widthSet(x)
     }
 
@@ -55,13 +56,11 @@ const BoundLine: React.FC<BoundLineType> = ({
     ]
 
     events.forEach((event) =>
-      document.addEventListener<typeof event[0]>(event[0], event[1])
+      window.addEventListener<typeof event[0]>(event[0], event[1])
     )
 
     return () => {
-      events.forEach((event) =>
-        document.removeEventListener(event[0], event[1])
-      )
+      events.forEach((event) => window.removeEventListener(event[0], event[1]))
     }
   }, [
     dragStart,
@@ -79,6 +78,7 @@ const BoundLine: React.FC<BoundLineType> = ({
     <BoundLineWrapper
       ref={sideLineElem}
       onPointerDown={(e) => {
+        e.preventDefault()
         setDragStart(true)
         onDragSet(true)
         cursorSet('col-resize')

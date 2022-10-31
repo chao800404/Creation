@@ -25,6 +25,12 @@ export const DashboardContainerWrapper = styled('div')`
     padding: 0 1rem;
   }
 
+  .dashboardContainer_main {
+    max-width: 1200px;
+    min-width: 800px;
+    position: relative;
+  }
+
   .dashboardContainer_container {
     background-color: #ffffff;
     width: 100%;
@@ -43,6 +49,9 @@ export const DashboardContainerWrapper = styled('div')`
     width: 100%;
     height: 3.1rem;
     border-top: 2px solid;
+    bottom: 0;
+    position: fixed;
+    z-index: 1000;
   }
 `
 

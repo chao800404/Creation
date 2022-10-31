@@ -10,12 +10,14 @@ export default async function getUserData(
 ) {
   if (req.method === 'POST') {
     const { id } = req.query
+    if (!id) throw new Error('Please provide id')
     await validateUser(req, res, async (user) => {
       try {
         const { authorId, emoji, createdAt, updatedAt, ...otherData } =
           await prisma.list.create({
             data: {
               authorId: user.id,
+              id: id as string,
               emoji: {
                 create: {},
               },
@@ -32,24 +34,6 @@ export default async function getUserData(
               },
             },
           })
-
-        if (user.profile?.focusId) {
-          await prisma.profile.update({
-            where: {
-              authorId: user.id,
-            },
-            data: {
-              focusId: otherData.id,
-            },
-          })
-        } else {
-          await prisma.profile.create({
-            data: {
-              authorId: user.id,
-              focusId: otherData.id,
-            },
-          })
-        }
 
         res.status(200).json({
           status: 'success',

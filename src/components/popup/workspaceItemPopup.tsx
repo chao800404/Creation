@@ -90,14 +90,14 @@ const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
           <PopupItem
             desc="Delete"
             icon={IoTrashOutline}
-            onClick={() =>
+            onClick={() => {
+              if (itemId == page) {
+                router.push('/')
+              }
               wrapperOnClick(() => {
-                if (page === itemId) {
-                  router.push('/')
-                }
                 listDelete(itemId as string)
               })
-            }
+            }}
           />
           <PopupItem
             desc={favorite ? 'unfavorite' : 'favorite'}

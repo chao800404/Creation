@@ -51,7 +51,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   list          List[]
-  profile       Profile?
+
 
   createdAt     DateTime  @default(now())
 
@@ -68,17 +68,6 @@ model VerificationToken {
   @@map("verificationtokens")
 }
 
-model Profile {
-  id           String       @id @default(cuid())
-  focusId      String?
-  user         User         @relation(fields: [authorId], references: [id]) 
-  authorId     String       @unique
-
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @default(now())
-
-  @@map("profile")
-}
 
 
 model Cover {

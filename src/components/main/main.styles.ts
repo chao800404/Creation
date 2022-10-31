@@ -5,8 +5,7 @@ type DashboardMain = {
 }
 
 export const DashboardMainWrapper = styled('div')<DashboardMain>`
-  max-width: 72rem;
-  min-width: 45rem;
+  width: inherit;
   height: 100%;
   position: relative;
   border-right: 2px solid;

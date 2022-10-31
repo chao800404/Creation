@@ -31,18 +31,9 @@ export default async function getUserData(
           },
         })
 
-        const profile = await prisma.profile.findUnique({
-          where: {
-            authorId: user.id,
-          },
-        })
-
-        if (!profile) throw new Error('Document not yet created')
-
         res.status(200).json({
           status: 'success',
           data: resData,
-          focusId: profile.focusId,
         })
       } catch (error) {
         console.log(error)

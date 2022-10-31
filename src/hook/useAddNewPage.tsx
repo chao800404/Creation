@@ -1,6 +1,6 @@
 import useSWR, { useSWRConfig } from 'swr'
 import { createData, fetcher } from '../utils/fetch'
-import { v4 as uuidv4 } from 'uuid'
+import cuid from 'cuid'
 import { List } from '@prisma/client'
 import produce from 'immer'
 
@@ -17,23 +17,22 @@ export const useAddNewPage = () => {
     const newPage = {
       editable: true,
       favorite: false,
-      id: uuidv4(),
+      id: cuid(),
       title: null,
     }
 
-    const deleteList = produce(data, (draft) => {
+    const addList = produce(data, (draft) => {
       draft?.data.push(newPage as List)
     })
 
     mutate(`/api/query/queryList`, createData(`addNewPage`, newPage.id), {
       populateCache: (resPage, list: ListResDataType) => {
         return produce(list, (draft) => {
-          console.log(resPage)
           draft?.data.push(resPage.data)
         })
       },
       revalidate: false,
-      optimisticData: deleteList,
+      optimisticData: addList,
       rollbackOnError: true,
     })
   }

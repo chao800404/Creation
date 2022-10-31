@@ -1,13 +1,13 @@
 import { NextApiResponse, NextApiRequest } from 'next'
 import { getToken } from 'next-auth/jwt'
 import { userLoader } from './userLoader'
-import { User, Profile } from '@prisma/client'
+import { User } from '@prisma/client'
 const secret = process.env.NEXTAUTH_SECRET
 
 export default async function validateUser<T>(
   req: NextApiRequest,
   res: NextApiResponse,
-  next: (user: User & { profile: Profile | null }) => Promise<T>
+  next: (user: User) => Promise<T>
 ) {
   try {
     const user = await getToken({ req, secret })

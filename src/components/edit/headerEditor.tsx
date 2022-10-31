@@ -18,6 +18,8 @@ import {
 import { MdOutlineTitle } from 'react-icons/md'
 import { useUploadLocalCoverImage } from '../../hook/useUploadLocalCoverImage'
 import shallow from 'zustand/shallow'
+import { usePageSWR } from '../../hook/usePageSWR'
+import { useRouter } from 'next/router'
 
 type Level = 1 | 2 | 3 | 4 | 5 | 6
 type Align = 'left' | 'right' | 'center'
@@ -48,6 +50,9 @@ const HeaderEditor = () => {
     shallow
   )
 
+  const { page } = useRouter().query
+  const { uploadCoverImage } = usePageSWR(page as string)
+
   const cacheMap = useMemo(() => {
     const imageArray = []
     for (const imageGroup in coverImageMap) {
@@ -58,7 +63,6 @@ const HeaderEditor = () => {
     return imageArray
   }, [coverImageMap])
 
-  const matate = useUploadLocalCoverImage()
   const editor = useEditor({
     extensions: [
       CustomDocument,
@@ -114,7 +118,7 @@ const HeaderEditor = () => {
     const randomInt = randomPath(cacheMap.length)
     if (randomInt <= cacheMap.length) {
       const randomPath = cacheMap[randomInt]
-      matate(id, randomPath)
+      uploadCoverImage(page, randomPath)
       editor && editor.chain().focus().blur().run()
     }
   }
