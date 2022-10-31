@@ -27,7 +27,7 @@ type UseListSWRResult = {
   }
 }
 
-type UseListType = (id: string) => UseListSWRResult
+type UseListType = (id?: string) => UseListSWRResult
 
 export const useListSWR: UseListType = (id) => {
   const { mutate } = useSWRConfig()
