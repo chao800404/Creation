@@ -16,8 +16,6 @@ const ACCEPTED_IMAGE_TYPES = [
 
 const MAX_FILE_SIZE = 2048000
 
-console.log(path)
-
 const MySchema = z.object({
   image: z
     .instanceof(formidable.File)
@@ -36,20 +34,24 @@ const MySchema = z.object({
 
 const IdSchema = z.string().cuid()
 
+// console.log(process.cwd())
+
+// const filePath = path.resolve(`${process.cwd()}/public/static/custom/${listId}`)
+
 const saveFile = async (file: File, listId: string) => {
   const { filepath, newFilename } = file as unknown as File
   const imageFile = fs.readFileSync(filepath)
-  const newPath = `./public/static/custom/${listId}`
+  const newPath = `${process.cwd()}/public/static/custom/${listId}`
   try {
     if (fs.existsSync(newPath)) {
       fs.writeFileSync(`${newPath}/${newFilename}`, imageFile)
       fs.unlinkSync(filepath)
-      return `${newPath}/${newFilename}`.replace('./public', '')
+      return `${newPath}/${newFilename}`.replace(`${process.cwd()}/public`, '')
     } else {
       mkdirSync(newPath)
       fs.writeFileSync(`${newPath}/${newFilename}`, imageFile)
       fs.unlinkSync(filepath)
-      return `${newPath}/${newFilename}`.replace('./public', '')
+      return `${newPath}/${newFilename}`.replace(`${process.cwd()}/public`, '')
     }
   } catch (err) {
     console.log(err)
@@ -81,9 +83,6 @@ export default async function handler(
             throw new Error("You can't be updating this file")
 
           const path = await saveFile(file.image as unknown as File, listId)
-          if (path) {
-            console.log(path)
-          }
           const data = await prisma.cover.update({
             where: {
               listId,
@@ -92,8 +91,6 @@ export default async function handler(
               image: path,
             },
           })
-
-          console.log(data)
 
           return res.status(201).json({ message: 'success', data })
         })
