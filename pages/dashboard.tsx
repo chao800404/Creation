@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { GetStaticPropsResult, NextApiRequest, NextApiResponse } from 'next'
 import { DashboardLayout, DashboardMain } from '../src/components/index'
-import { List, PrismaClient } from '@prisma/client'
+import { List } from '@prisma/client'
 import { SWRConfig } from 'swr'
 import validateUser from '../src/utils/validate'
 import { useListSWR } from '../src/hook/useListSWR'
@@ -17,16 +17,13 @@ type DashboardProp = {
 }
 
 const Dashboard = ({ fallback }: DashboardProp) => {
-  const { data, isLoading, isError } = useListSWR()
+  const {
+    data: { list },
+    isLoading,
+  } = useListSWR()
 
   if (isLoading) {
     return <div>Loading...</div>
-  }
-
-  const { data: listData, status } = data
-
-  if (status === 'fail') {
-    return <div>Somthing Error...</div>
   }
 
   return (
@@ -40,8 +37,8 @@ const Dashboard = ({ fallback }: DashboardProp) => {
         />
       </Head>
 
-      {listData && (
-        <DashboardLayout list={listData}>
+      {list && (
+        <DashboardLayout list={list}>
           <DashboardMain />
         </DashboardLayout>
       )}

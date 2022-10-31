@@ -7,6 +7,7 @@ import { List, PrismaClient } from '@prisma/client'
 import { GetStaticProps, NextPage } from 'next'
 import { useListSWR } from '../src/hook/useListSWR'
 import { fetcher } from '../src/utils/fetch'
+import { useRouter } from 'next/router'
 
 const DashboardPage: NextPage = () => {
   const coverImageMapSet = usePageStore(
@@ -14,12 +15,13 @@ const DashboardPage: NextPage = () => {
     shallow
   )
 
-  const { data, isLoading, isError } = useListSWR()
+  const { page } = useRouter().query
+
+  const {
+    data: { list },
+    isLoading,
+  } = useListSWR(page as string)
   const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
-
-  const { cache } = useSWRConfig()
-
-  console.log(cache)
 
   useEffect(() => {
     coverImageMapSet(coverImagePath?.path)
@@ -29,17 +31,13 @@ const DashboardPage: NextPage = () => {
     return <div>Loading...</div>
   }
 
-  const { data: listData, status } = data
-
-  if (status === 'fail') {
-    return <div>Somthing Error...</div>
-  }
-
   return (
     <SWRConfig>
-      <DashboardLayout list={listData}>
-        <DashboardMain />
-      </DashboardLayout>
+      {list && (
+        <DashboardLayout list={list}>
+          <DashboardMain />
+        </DashboardLayout>
+      )}
     </SWRConfig>
   )
 }

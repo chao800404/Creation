@@ -29,6 +29,9 @@ export const DashboardContainerWrapper = styled('div')`
     max-width: 1200px;
     min-width: 800px;
     position: relative;
+    border-right: 2px solid;
+    border-left: 2px solid;
+    border-color: #1c1c1c;
   }
 
   .dashboardContainer_container {

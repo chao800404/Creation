@@ -5,12 +5,9 @@ type DashboardMain = {
 }
 
 export const DashboardMainWrapper = styled('div')<DashboardMain>`
-  width: inherit;
+  width: 100%;
   height: 100%;
   position: relative;
-  border-right: 2px solid;
-  border-left: 2px solid;
-  border-color: #1c1c1c;
 
   .DashboardMain_container {
     background: white;

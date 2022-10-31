@@ -17,9 +17,8 @@ const ACCEPTED_IMAGE_TYPES = [
 ]
 
 export type ImageType = {
-  imageFilePath: null | string
   imageName: string
-  file: FileList | null | File
+  file: File | null
   errorMessage?: string
 }
 
@@ -39,11 +38,9 @@ const UploadFile = (props: UploadProps) => {
     (imageFile: FileList | null) => {
       if (!imageFile) return
       const errorMessage: string[] = []
-      const filePath = URL.createObjectURL(imageFile[0])
       const isImage = ACCEPTED_IMAGE_TYPES.includes(imageFile[0].type)
       const isLessFile = imageFile[0].size / 1024 < 2000
       const validateFileSize = isImage && isLessFile
-      const imageFilePath = validateFileSize ? filePath : null
       const imageName = validateFileSize ? imageFile[0].name : ''
 
       if (!isImage) {
@@ -58,7 +55,6 @@ const UploadFile = (props: UploadProps) => {
         (prev) =>
           (prev = {
             ...prev,
-            imageFilePath: errorMessage.length > 0 ? '' : imageFilePath,
             imageName: errorMessage.length > 0 ? '' : imageName,
             file: errorMessage.length > 0 ? null : imageFile[0],
             errorMessage:

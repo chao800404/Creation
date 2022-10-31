@@ -1,11 +1,8 @@
-import React, { MouseEventHandler, useRef } from 'react'
+import React from 'react'
 import { SelectImageContainerWrapper } from './container.styles'
 import Image from 'next/image'
-import { usePageStore } from '../../store'
-import shallow from 'zustand/shallow'
-import { useSWRConfig } from 'swr'
-import { updateData } from '../../utils/fetch'
-import { useUploadLocalCoverImage } from '../../hook/useUploadLocalCoverImage'
+import { useRouter } from 'next/router'
+import { usePageSWR } from '../../hook/usePageSWR'
 
 const SelectImageContainer = ({
   coverGroup,
@@ -16,20 +13,15 @@ const SelectImageContainer = ({
   groupName: string
   setToggleShow: (toggle: boolean) => void
 }) => {
-  const muatate = useUploadLocalCoverImage()
-
-  const { id, imageSet } = usePageStore(
-    (state) => ({ id: state.id, imageSet: state.imageSet }),
-    shallow
-  )
+  const { page: id } = useRouter().query
+  const { mutateFution } = usePageSWR(id as string)
 
   const handleClick = (e: React.MouseEvent) => {
     const target = (e.target as HTMLElement).closest('.cover_image')
     const src = target && target.getAttribute('data-src')
     if (src) {
-      imageSet(src)
+      mutateFution.uploadCoverImage(id as string, src)
       setToggleShow(false)
-      muatate(id, src)
     }
   }
 

@@ -1,6 +1,5 @@
 import useSWR, { useSWRConfig } from 'swr'
-import { createData, fetcher, updateData } from '../utils/fetch'
-import cuid from 'cuid'
+import { createData, fetcher, updateData, uploadFile } from '../utils/fetch'
 import { Cover } from '@prisma/client'
 import produce from 'immer'
 
@@ -11,26 +10,61 @@ type PageResDataType = {
   status: 'success' | 'fail'
 }
 
-export const usePageSWR = (id?: string) => {
+type UsePageSWRResult = {
+  data: {
+    cover: Cover['image'] | undefined
+  }
+  isLoading: boolean
+  mutateFution: {
+    uploadCoverImage: (id: string, src: string) => void
+    uploadCoverImageFile: (id: string, file: File) => void
+  }
+}
+
+type UsePageSWRType = (id: string) => UsePageSWRResult
+
+export const usePageSWR: UsePageSWRType = (id) => {
   const { mutate } = useSWRConfig()
-  const { data } = useSWR<PageResDataType>(
+  const { data, error } = useSWR<PageResDataType>(
     id ? `/api/page/${id}` : null,
     fetcher
   )
 
-  const uploadCoverImage = (id: string, src: string) => {
-    const uploadCover = produce(data, (draft) => {
-      if (draft) {
-        draft.data.cover.image = src
-      }
-    })
-    mutate(
-      `/api/page/${id}`,
-      updateData('updateImage', { id, key: 'cover', src }, null),
-      {
+  const mutateFution: UsePageSWRResult['mutateFution'] = {
+    uploadCoverImage: (id: string, src: string) => {
+      const uploadCover = produce(data, (draft) => {
+        console.log(data)
+        if (draft) {
+          draft.data.cover.image = src
+        }
+      })
+      mutate(
+        `/api/page/${id}`,
+        updateData('updateImage', { id, key: 'cover', src }, null),
+        {
+          populateCache: (uploadImage, page) => {
+            return produce<PageResDataType>(page, (draft) => {
+              draft.data.cover.image = uploadImage.data.image
+            })
+          },
+
+          revalidate: false,
+          optimisticData: uploadCover,
+          rollbackOnError: true,
+        }
+      )
+    },
+
+    uploadCoverImageFile: (id, file) => {
+      const path = URL.createObjectURL(file)
+      const uploadCover = produce(data, (draft) => {
+        if (draft) {
+          draft.data.cover.image = path
+        }
+      })
+
+      mutate(`/api/page/${id}`, uploadFile('uploadImage', { id, file }), {
         populateCache: (uploadImage, page) => {
-          const cloneCache = { ...page }
-          cloneCache.data.cover.image = uploadImage.data.image
           return produce<PageResDataType>(page, (draft) => {
             draft.data.cover.image = uploadImage.data.image
           })
@@ -39,14 +73,15 @@ export const usePageSWR = (id?: string) => {
         revalidate: false,
         optimisticData: uploadCover,
         rollbackOnError: true,
-      }
-    )
+      })
+    },
   }
 
   return {
     data: {
       cover: data?.data.cover.image,
     },
-    uploadCoverImage,
+    isLoading: !error && !data,
+    mutateFution,
   }
 }

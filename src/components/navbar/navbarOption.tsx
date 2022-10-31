@@ -9,8 +9,10 @@ import { useLayoutControllerStore, usePageStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { NavbarOptionWrapper } from './navbar.styles'
 import { useRouter } from 'next/router'
+import { useListSWR } from '../../hook/useListSWR'
 
 const NavbarOption = () => {
+  const { page } = useRouter().query
   const userPopupOpen = useLayoutControllerStore(
     (state) => state.userPopupOpen,
     shallow
@@ -21,15 +23,10 @@ const NavbarOption = () => {
     shallow
   )
 
-  const { page } = useRouter().query
-
-  const { favorite, editable } = usePageStore(
-    (state) => ({
-      favorite: state.curItem?.favorite,
-      editable: state.curItem?.editable,
-    }),
-    shallow
-  )
+  const {
+    data: { favorite, editable },
+    mutateFution,
+  } = useListSWR(page as string)
 
   const id = page as string | undefined
 
@@ -43,7 +40,9 @@ const NavbarOption = () => {
         }}
       >
         <ControllDataIcon
-          onClick={() => stateAndItemUpdateAsync(id, 'editable', !editable)}
+          onClick={() =>
+            mutateFution.updateListItem(page as string, 'editable', !editable)
+          }
           toggle={editable as boolean}
           openIcon={FiUnlock}
           closeIcon={FiLock}
@@ -54,7 +53,7 @@ const NavbarOption = () => {
 
         <ControllDataIcon
           onClick={() => {
-            stateAndItemUpdateAsync(id, 'favorite', !favorite)
+            mutateFution.updateListItem(page as string, 'favorite', !favorite)
           }}
           toggle={favorite as boolean}
           openIcon={AiFillStar}

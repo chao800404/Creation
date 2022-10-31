@@ -8,10 +8,10 @@ import { ImageType } from '../input/upload'
 const UploadImageFeature = ({ file }: { file: ImageType }) => {
   return (
     <UploadImageFeatureWrapper>
-      {file?.imageFilePath ? (
+      {file?.file ? (
         <div className="uploadImageFeature-content">
           <Image
-            src={file.imageFilePath}
+            src={URL.createObjectURL(file.file)}
             layout="fill"
             objectFit="cover"
             alt="image"

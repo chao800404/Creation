@@ -40,18 +40,13 @@ const HeaderEditor = () => {
     textAlign: textAlign,
     level: 1,
   })
-
-  const { coverImageMap, id, coverImage } = usePageStore(
-    (state) => ({
-      coverImageMap: state.coverImageMap,
-      id: state.id,
-      coverImage: state.coverImage,
-    }),
-    shallow
-  )
-
   const { page } = useRouter().query
-  const { uploadCoverImage } = usePageSWR(page as string)
+  const coverImageMap = usePageStore((state) => state.coverImageMap, shallow)
+
+  const {
+    mutateFution,
+    data: { cover },
+  } = usePageSWR(page as string)
 
   const cacheMap = useMemo(() => {
     const imageArray = []
@@ -118,7 +113,7 @@ const HeaderEditor = () => {
     const randomInt = randomPath(cacheMap.length)
     if (randomInt <= cacheMap.length) {
       const randomPath = cacheMap[randomInt]
-      uploadCoverImage(page as string, randomPath)
+      mutateFution.uploadCoverImage(page as string, randomPath)
       editor && editor.chain().focus().blur().run()
     }
   }
@@ -139,7 +134,7 @@ const HeaderEditor = () => {
               <BsFillEmojiSunglassesFill fontSize="1.2rem" />
             </EditorOptionButton>
             <span className="header_editor-gap-line" />
-            {!coverImage && (
+            {!cover && (
               <>
                 <EditorOptionButton onClick={handleAddCover}>
                   <div className="header_editor-add-cover">

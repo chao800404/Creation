@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { usePageStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { DashboardBannerWrapper } from './banner.styles'
-import ChangePopup from '../popup/chagePopup'
+import ChangePopup from '../popup/changePopup'
 
 const btnTap = {
   scale: 0.98,
@@ -48,6 +48,17 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
     }
   }, [start, toggleRePos])
 
+  useEffect(() => {
+    const cancelPopup = (e: MouseEvent) => {
+      const targetPopup = (e.target as HTMLDivElement).closest(
+        '#dashboard-banner'
+      )
+      if (!targetPopup) setTogglePopup(false)
+    }
+    document.addEventListener('click', cancelPopup)
+    return () => document.removeEventListener('click', cancelPopup)
+  }, [])
+
   const handleOnPointerDown = (e: React.MouseEvent) => {
     if (toggleRePos) {
       e.preventDefault()
@@ -57,7 +68,11 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
   }
 
   return (
-    <DashboardBannerWrapper onPointerDown={handleOnPointerDown} ref={elemRef}>
+    <DashboardBannerWrapper
+      id="dashboard-banner"
+      onPointerDown={handleOnPointerDown}
+      ref={elemRef}
+    >
       {toggleRePos && (
         <div className="Dashboard_Banner-controller-cover">
           <div className="Dashboard_Banner-controller-cover-btn">

@@ -1,16 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef } from 'react'
 import DashboardBanner from '../banner/dashboardBanner'
-import { usePageStore } from '../../store'
-import shallow from 'zustand/shallow'
 
-import BoundLine from '../line/boundLine'
-import { useLayoutControllerStore } from '../../store'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import { DashboardMainWrapper } from './main.styles'
 import HeaderEditor from '../edit/headerEditor'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
-import { fetcher } from '../../utils/fetch'
 
 const DashboardMain = () => {
   const popupIconElem = useRef(null)
@@ -21,41 +16,12 @@ const DashboardMain = () => {
 
   const {
     data: { cover },
+    isLoading,
   } = usePageSWR(page as string)
 
-  // const uploadEmojiWrapper = (path: string) => {
-  //   uploadEmoji(path)
-  //   setToggleIcon(false)
-  // }
-
-  // const toggle = useStore((state) => state.toggleChangeCoverPopup, shallow)
-
-  // const handlePointerEvent = () => {
-  //   if (!toggle) setHovered()
-  // }
-
-  // const handleOnClickEmoji = (e: React.MouseEvent) => {
-  //   const target = (e.target as HTMLDivElement).closest(
-  //     '.emoji'
-  //   ) as HTMLDivElement
-  //   const emoji = target?.dataset?.emoji
-  //   if (emoji) {
-  //     uploadEmoji(emoji)
-  //     setToggleIcon(false)
-  //   }
-  // }
-
-  // const emojiExist = useCallback(() => {
-  //   return emoji && !(emoji?.length === 0)
-  // }, [emoji])
-
-  // useWindowCancelState((e) => {
-  //   const target = (e.target as HTMLDivElement).closest('.icon_container')
-  //   if (target && emojiExist()) {
-  //     return setToggleIcon(true)
-  //   }
-  //   setToggleIcon(false)
-  // })
+  if (isLoading) {
+    return <div>Loading </div>
+  }
 
   return (
     <DashboardMainWrapper show={(cover && cover.length > 0) || false}>

@@ -1,15 +1,11 @@
 import React, { useState, useCallback } from 'react'
 import UploadFile from '../input/upload'
 import { UploadImageContainerWrapper } from './container.styles'
-import { Cover } from '@prisma/client'
 import { ImageType } from '../input/upload'
 import { motion } from 'framer-motion'
 import UploadImageFeature from '../features/uploadImageFeature'
-
-import { usePageStore } from '../../store'
-import shallow from 'zustand/shallow'
-import { uploadFile } from '../../utils/fetch'
-import { useSWRConfig } from 'swr'
+import { usePageSWR } from '../../hook/usePageSWR'
+import { useRouter } from 'next/router'
 
 const variants = {
   show: {
@@ -31,39 +27,18 @@ const UploadImageContainer = ({
   setToggleShow: (toggle: boolean) => void
 }) => {
   const [file, setFile] = React.useState<ImageType>({
-    imageFilePath: null,
     imageName: '',
     file: null,
     errorMessage: undefined,
   })
   const [onDrag, setOnDrag] = useState(false)
-
-  const { id, imageSet } = usePageStore(
-    (state) => ({ id: state.id, imageSet: state.imageSet }),
-    shallow
-  )
-
-  const { mutate } = useSWRConfig()
+  const { page: id } = useRouter().query
+  const { mutateFution } = usePageSWR(id as string)
 
   const handleUpload = () => {
-    if (file.file && file.errorMessage === undefined && file.imageFilePath) {
+    if (file.file && file.errorMessage === undefined) {
       setToggleShow(false)
-      imageSet(file.imageFilePath)
-
-      mutate(
-        `/api/page/${id}`,
-        uploadFile('uploadImage', { id, file: file.file }),
-        {
-          populateCache: (uploadImage, page) => {
-            const cloneCache = { ...page }
-            cloneCache.data.cover.image = uploadImage.data.image
-            imageSet(uploadImage.data.image)
-            return cloneCache
-          },
-
-          revalidate: false,
-        }
-      )
+      mutateFution.uploadCoverImageFile(id as string, file.file as File)
     }
   }
 
