@@ -2,7 +2,7 @@ import { StateCreator } from 'zustand'
 import { proFetch } from '../../utils/fetch'
 import { produce } from 'immer'
 import { updateData, createData, deleteData } from '../../utils/fetch'
-import { List, Cover, Emoji, Profile } from '@prisma/client'
+import { List, Cover, Emoji } from '@prisma/client'
 import { CoverSlice } from './createCoverSlice'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -23,7 +23,7 @@ type ListItemKeys = keyof ListItem
 
 type Action = {
   fetch: () => Promise<void>
-  listUpdate: (list: ListItem[], id: Profile['focusId'] | undefined) => void
+  listUpdate: (list: ListItem[], id: string | undefined) => void
   stateAndItemUpdateAsync: <T>(
     id: string | undefined,
     key: ListItemKeys,
