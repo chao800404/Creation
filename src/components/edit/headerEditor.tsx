@@ -16,7 +16,6 @@ import {
   AiOutlineAlignLeft,
 } from 'react-icons/ai'
 import { MdOutlineTitle } from 'react-icons/md'
-import { useUploadLocalCoverImage } from '../../hook/useUploadLocalCoverImage'
 import shallow from 'zustand/shallow'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { useRouter } from 'next/router'
