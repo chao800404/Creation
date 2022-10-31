@@ -3,10 +3,9 @@ import { json } from 'stream/consumers'
 import { z, ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
-import formidable, { PersistentFile, FileJSON, File } from 'formidable'
+import formidable, { File } from 'formidable'
 import fs, { mkdirSync } from 'fs'
 import path from 'path'
-import { mkdir } from 'fs/promises'
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -16,6 +15,8 @@ const ACCEPTED_IMAGE_TYPES = [
 ]
 
 const MAX_FILE_SIZE = 2048000
+
+console.log(path)
 
 const MySchema = z.object({
   image: z

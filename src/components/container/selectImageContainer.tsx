@@ -41,7 +41,8 @@ const SelectImageContainer = ({
             <Image
               alt={`${groupName}-${index}`}
               src={path as string}
-              layout="fill"
+              width="80"
+              height="55"
               objectFit="cover"
               priority={true}
             />
