@@ -118,7 +118,7 @@ const HeaderEditor = () => {
     const randomInt = randomPath(cacheMap.length)
     if (randomInt <= cacheMap.length) {
       const randomPath = cacheMap[randomInt]
-      uploadCoverImage(page, randomPath)
+      uploadCoverImage(page as string, randomPath)
       editor && editor.chain().focus().blur().run()
     }
   }

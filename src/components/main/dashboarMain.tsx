@@ -9,17 +9,19 @@ import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import { DashboardMainWrapper } from './main.styles'
 import HeaderEditor from '../edit/headerEditor'
 import { useRouter } from 'next/router'
-import useSWR, { useSWRConfig, mutate } from 'swr'
+import { usePageSWR } from '../../hook/usePageSWR'
 import { fetcher } from '../../utils/fetch'
 
-const DashboardMain = ({ id }: { id?: string }) => {
+const DashboardMain = () => {
   const popupIconElem = useRef(null)
 
   const {
     query: { page },
   } = useRouter()
 
-  const { data } = useSWR(page ? `/api/page/${id || page}` : null, fetcher)
+  const {
+    data: { cover },
+  } = usePageSWR(page as string)
 
   // const uploadEmojiWrapper = (path: string) => {
   //   uploadEmoji(path)
@@ -56,14 +58,13 @@ const DashboardMain = ({ id }: { id?: string }) => {
   // })
 
   return (
-    <DashboardMainWrapper show={!!data && data?.data?.cover?.image?.length > 0}>
+    <DashboardMainWrapper show={(cover && cover.length > 0) || false}>
       <WrapperScrollbar>
         <div className="DashboardMain_container">
           <div className="DashboardMain_container-banner">
-            {data?.data?.cover?.image &&
-              data?.data?.cover?.image?.length > 0 && (
-                <DashboardBanner coverImage={data?.data?.cover?.image} />
-              )}
+            {cover && cover.length > 0 && (
+              <DashboardBanner coverImage={cover} />
+            )}
           </div>
           <div className="DashboardMain_container-content">
             <div

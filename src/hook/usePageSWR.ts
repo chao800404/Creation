@@ -11,9 +11,12 @@ type PageResDataType = {
   status: 'success' | 'fail'
 }
 
-export const usePageSWR = (id: string) => {
+export const usePageSWR = (id?: string) => {
   const { mutate } = useSWRConfig()
-  const { data } = useSWR<PageResDataType>(`/api/page/${id}`, fetcher)
+  const { data } = useSWR<PageResDataType>(
+    id ? `/api/page/${id}` : null,
+    fetcher
+  )
 
   const uploadCoverImage = (id: string, src: string) => {
     const uploadCover = produce(data, (draft) => {
@@ -41,7 +44,9 @@ export const usePageSWR = (id: string) => {
   }
 
   return {
-    data: data ? data.data : {},
+    data: {
+      cover: data?.data.cover.image,
+    },
     uploadCoverImage,
   }
 }

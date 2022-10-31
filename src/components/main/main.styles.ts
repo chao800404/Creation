@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 type DashboardMain = {
-  show: boolean
+  show: boolean | undefined | null
 }
 
 export const DashboardMainWrapper = styled('div')<DashboardMain>`
