@@ -25,28 +25,25 @@ const DashboardMain = () => {
 
   return (
     <DashboardMainWrapper show={(cover && cover.length > 0) || false}>
-      <WrapperScrollbar>
-        <div className="DashboardMain_container">
-          <div className="DashboardMain_container-banner">
-            {cover && cover.length > 0 && (
-              <DashboardBanner coverImage={cover} />
-            )}
-          </div>
-          <div className="DashboardMain_container-content">
-            <div
-              style={{
-                width: '5rem',
-                height: '5rem',
-                position: 'relative',
-                zIndex: 2000,
-                transform: 'translateY(-2.8rem)',
-              }}
-              ref={popupIconElem}
-              className="icon_container"
-            >
-              {/* {emoji?.length > 0 && ( */}
-              <>
-                {/* {emoji && emoji.toString().startsWith('blob') ? (
+      <div className="DashboardMain_container">
+        <div className="DashboardMain_container-banner">
+          {cover && cover.length > 0 && <DashboardBanner coverImage={cover} />}
+        </div>
+        <div className="DashboardMain_container-content">
+          <div
+            style={{
+              width: '5rem',
+              height: '5rem',
+              position: 'relative',
+              zIndex: 2000,
+              transform: 'translateY(-2.8rem)',
+            }}
+            ref={popupIconElem}
+            className="icon_container"
+          >
+            {/* {emoji?.length > 0 && ( */}
+            <>
+              {/* {emoji && emoji.toString().startsWith('blob') ? (
                   <Image
                     src={emoji}
                     layout="fill"
@@ -56,15 +53,14 @@ const DashboardMain = () => {
                 ) : (
                   <Box fontSize="4rem">{emoji}</Box>
                 )} */}
-              </>
-            </div>
+            </>
           </div>
-          <HeaderEditor />
-          <div style={{ height: '200vh', background: '#3c3c3c' }}></div>
-          <div style={{ height: '20vh', background: '#ffffff' }}></div>
-          {/* {title === null && <InitialContainer />} */}
         </div>
-      </WrapperScrollbar>
+        <HeaderEditor />
+        <div style={{ height: '200vh', background: '#3c3c3c' }}></div>
+        <div style={{ height: '20vh', background: '#ffffff' }}></div>
+        {/* {title === null && <InitialContainer />} */}
+      </div>
     </DashboardMainWrapper>
   )
 }

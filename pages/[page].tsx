@@ -2,18 +2,21 @@ import React, { useEffect } from 'react'
 import useSWR, { SWRConfig, useSWRConfig } from 'swr'
 import shallow from 'zustand/shallow'
 import { DashboardLayout, DashboardMain } from '../src/components'
-import { usePageStore } from '../src/store'
+import { useCoverStore } from '../src/store'
 import { List, PrismaClient } from '@prisma/client'
 import { GetStaticProps, NextPage } from 'next'
 import { useListSWR } from '../src/hook/useListSWR'
 import { fetcher } from '../src/utils/fetch'
 import { useRouter } from 'next/router'
+import { multiFetcher } from '../src/utils/fetch'
+import PreLoad from '../src/components/pre/preLoad'
 
 const DashboardPage: NextPage = () => {
-  const coverImageMapSet = usePageStore(
+  const coverImageMapSet = useCoverStore(
     (state) => state.coverImageMapSet,
     shallow
   )
+  const { cache } = useSWRConfig()
 
   const { page } = useRouter().query
 
@@ -21,6 +24,8 @@ const DashboardPage: NextPage = () => {
     data: { list },
     isLoading,
   } = useListSWR(page as string)
+
+  console.log(cache)
 
   const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
 
@@ -36,6 +41,7 @@ const DashboardPage: NextPage = () => {
     <SWRConfig>
       {list && (
         <DashboardLayout list={list}>
+          <PreLoad list={list} />
           <DashboardMain />
         </DashboardLayout>
       )}

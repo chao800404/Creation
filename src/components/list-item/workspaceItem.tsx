@@ -2,21 +2,21 @@ import React, { useRef } from 'react'
 import { SIDE_OPTION } from '../../utils/config'
 import IconContainer from '../iconContainer/iconContainer'
 import Accordion from '../accordion/accordion'
-import { useLayoutControllerStore, usePageStore } from '../../store'
+import { useLayoutControllerStore } from '../../store'
 import shallow from 'zustand/shallow'
-import { ListItem } from '../../store/slices'
 
 import { WorkspaceItemWrapper } from './item.styles'
 import { motion } from 'framer-motion'
 
 import Link from 'next/link'
+import { Emoji } from '@prisma/client'
 
 const baseIcon = SIDE_OPTION.workspaceItem.icon
 
 type WorkspaceItemType = {
-  title: ListItem['title']
-  id: ListItem['id']
-  icon: ListItem['emoji']
+  title: string
+  id: string
+  icon: Emoji
   isActive: boolean
 }
 
@@ -41,16 +41,10 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
       id={id}
       color={isActive ? '#ffffff' : '#888888'}
       hoverColor={isActive ? '#ffffff' : '#1c1c1c'}
+      backgroundColor={isActive ? '#1c1c1c' : '#ffffff'}
     >
       <Link href={`/${id}`}>
-        <motion.a
-          className="workspaceItem_content"
-          style={{
-            fontWeight: 'bold',
-            background: isActive ? '#1c1c1c' : '#ffffff',
-            fontSize: '.9rem',
-          }}
-        >
+        <motion.a className="workspaceItem_content">
           <Accordion id={icon?.id} text={title} sideWidth={sideWidth || 0}>
             {icon && icon?.image?.length > 0 ? (
               <div style={{ padding: '0.2rem', fontSize: '.9rem' }}>

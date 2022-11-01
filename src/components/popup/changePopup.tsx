@@ -6,7 +6,7 @@ import shallow from 'zustand/shallow'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import UploadImagContainer from '../container/uploadImageContainer'
 import { ChangePopupWrapper } from './popup.styles'
-import { usePageStore } from '../../store'
+import { useCoverStore } from '../../store'
 import SelectImageContainer from '../container/selectImageContainer'
 
 const tabs = ['cover', 'upload', 'link']
@@ -25,7 +25,7 @@ const ChangePopup = ({
   setToggleShow: (toggle: boolean) => void
 }) => {
   const [tabIndex, setTabIndex] = useState(0)
-  const coverImageMap = usePageStore((state) => state.coverImageMap, shallow)
+  const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
 
   const validateDataSet = (targetIndex: string) => {
     if (targetIndex?.startsWith('tab-')) {

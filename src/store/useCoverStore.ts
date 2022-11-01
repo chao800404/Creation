@@ -1,11 +1,9 @@
-import { StateCreator } from 'zustand'
+import create, { StateCreator } from 'zustand'
 import produce from 'immer'
-import { ListSlice } from './createListSlice'
-import { updateData, createData, uploadFile } from '../../utils/fetch'
 
 type InitialCover = {
   layoutY: number
-  coverImage: undefined | string
+
   controlCoverStart: {
     reposition: boolean
     changCover: boolean
@@ -22,14 +20,12 @@ type Action = {
   controlCoverRepositionSet: (toggle: boolean) => void
   controlChangeCoverSet: (toggle: boolean) => void
   coverImageMapSet: (map: InitialCover['coverImageMap']) => void
-  imageSet: (src: string) => void
 }
 
-export type CoverSlice = InitialCover & Action
+export type CoverStore = InitialCover & Action
 
 const initialCover = {
   layoutY: 50,
-  coverImage: undefined,
   controlCoverStart: {
     reposition: false,
     changCover: false,
@@ -39,25 +35,12 @@ const initialCover = {
   isHovered: false,
 }
 
-export const createCoverSlice: StateCreator<
-  CoverSlice & ListSlice,
-  [],
-  [],
-  CoverSlice
-> = (set, get) => ({
+export const useCoverStore = create<InitialCover & Action>((set, get) => ({
   ...initialCover,
   layoutYSet: (y) =>
     set(() => ({
       layoutY: y,
     })),
-
-  imageSet: async (src) => {
-    set(
-      produce((state: InitialCover) => {
-        state.coverImage = src
-      })
-    )
-  },
 
   controlCoverRepositionSet: (toggle) => {
     set(
@@ -82,4 +65,4 @@ export const createCoverSlice: StateCreator<
       })
     )
   },
-})
+}))

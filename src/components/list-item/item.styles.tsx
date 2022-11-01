@@ -88,8 +88,9 @@ export const PopupItemWrapper = styled('div')`
 `
 
 type WorkspaceItemWrapper = {
-  isActive?: boolean
-  hoverColor?: string
+  hoverColor: string
+  color: string
+  backgroundColor: string
 }
 
 export const WorkspaceItemWrapper = styled('div').attrs<WorkspaceItemWrapper>(
@@ -97,12 +98,21 @@ export const WorkspaceItemWrapper = styled('div').attrs<WorkspaceItemWrapper>(
     return {
       color: props.color,
       hoverColor: props.hoverColor,
+      backgroundColor: props.backgroundColor,
     }
   }
 )<WorkspaceItemWrapper>`
   width: 100%;
   position: relative;
   height: 1.8rem;
+
+  &:hover {
+    .workspaceItem_content {
+      color: ${({ hoverColor = '#1c1c1c' }) => hoverColor};
+      background-color: ${({ backgroundColor }) =>
+        backgroundColor === '#1c1c1c' ? '#1c1c1c' : '#c3c3c3'};
+    }
+  }
 
   .workspaceItem_content {
     display: flex;
@@ -114,10 +124,9 @@ export const WorkspaceItemWrapper = styled('div').attrs<WorkspaceItemWrapper>(
     z-index: 300;
     color: ${({ color }) => color};
     cursor: pointer;
-
-    &:hover {
-      color: ${({ hoverColor = '#1c1c1c' }) => hoverColor};
-    }
+    font-weight: bold;
+    font-size: 0.9rem;
+    background-color: ${({ backgroundColor }) => backgroundColor};
   }
 
   .WorkspaceItem_feature {

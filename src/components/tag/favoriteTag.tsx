@@ -4,11 +4,11 @@ import { useLayoutControllerStore } from '../../store'
 import SideContainer from '../container/sideContainer'
 import shallow from 'zustand/shallow'
 import { SIDE_OPTION } from '../../utils/config'
-import { List } from '@prisma/client'
+import { Emoji, List } from '@prisma/client'
 
 const { favorite } = SIDE_OPTION
 
-const FavoriteTag = ({ list }: { list: List[] }) => {
+const FavoriteTag = ({ list }: { list: (List & { emoji: Emoji })[] }) => {
   const { favoriteTagOpen, favoriteTagToggle } = useLayoutControllerStore(
     (state) => ({
       favoriteTagOpen: state.favoriteTagOpen,

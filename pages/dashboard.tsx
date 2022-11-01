@@ -4,24 +4,18 @@ import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { GetStaticPropsResult, NextApiRequest, NextApiResponse } from 'next'
 import { DashboardLayout, DashboardMain } from '../src/components/index'
-import { List } from '@prisma/client'
+import { Emoji, List } from '@prisma/client'
 import useSWR, { SWRConfig } from 'swr'
 import validateUser from '../src/utils/validate'
 import { useListSWR } from '../src/hook/useListSWR'
 import prisma from '../src/lib/prisma'
-import { usePageStore } from '../src/store'
+import { useCoverStore } from '../src/store'
 import { useRouter } from 'next/router'
 import shallow from 'zustand/shallow'
 import { fetcher } from '../src/utils/fetch'
 
-type DashboardProp = {
-  fallback: {
-    [path: string]: List[]
-  }
-}
-
 const Dashboard = () => {
-  const coverImageMapSet = usePageStore(
+  const coverImageMapSet = useCoverStore(
     (state) => state.coverImageMapSet,
     shallow
   )

@@ -1,7 +1,18 @@
+import { Emoji, List } from '@prisma/client'
 import { URL } from './config'
 
 export const fetcher = (url: string) => {
   return fetch(url).then((res) => res.json())
+}
+
+export const multiFetcher = ({
+  url,
+  list,
+}: {
+  url: string
+  list: (List & { emoji: Emoji })[]
+}) => {
+  return Promise.all(list.map((item) => fetcher(`${url}/${item.id}`)))
 }
 
 export const uploadFile = async (

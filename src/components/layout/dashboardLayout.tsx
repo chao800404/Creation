@@ -11,7 +11,7 @@ import { SIDE_OPTION } from '../../utils/config'
 import { DashboardLayoutWrapper } from './dashboard.styles'
 import dynamic from 'next/dynamic'
 
-import { List } from '@prisma/client'
+import { Emoji, List } from '@prisma/client'
 
 const DynamicSideWrapper = dynamic(() => import('../side/sideWrapper'), {
   ssr: false,
@@ -26,7 +26,7 @@ const DynamicDashBoardContainer = dynamic(
 
 type DashboardLayoutType = {
   children: JSX.Element | JSX.Element[]
-  list: List[]
+  list: (List & { emoji: Emoji })[]
 }
 
 const { searchBarBtn, interfaces, workspaces, importFile, trash, newPage } =

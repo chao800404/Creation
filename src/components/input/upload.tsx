@@ -1,9 +1,5 @@
 import React from 'react'
 import { MouseEvent } from 'react'
-import useSWR, { useSWRConfig } from 'swr'
-import shallow from 'zustand/shallow'
-import { usePageStore } from '../../store'
-import { uploadFile } from '../../utils/fetch'
 
 interface Event<T> extends MouseEvent<T> {
   target: EventTarget & T

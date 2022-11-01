@@ -1,14 +1,14 @@
 import React, { useRef } from 'react'
 import WorkspaceItem from '../list-item/workspaceItem'
-import { ListItem } from '../../store/slices/createListSlice'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import { SideContainerWrapper } from './container.styles'
 
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router'
+import { List, Emoji } from '@prisma/client'
 
 type SideContainerType = {
-  list: ListItem[]
+  list: (List & { emoji: Emoji })[]
   height?: string
   maxH?: string
 }

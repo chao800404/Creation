@@ -1,9 +1,10 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import DashBoardNav from '../navbar/dashBoardNav'
 import shallow from 'zustand/shallow'
-import { useLayoutControllerStore, usePageStore } from '../../store'
+import { useLayoutControllerStore } from '../../store'
 import { DashboardContainerWrapper } from './container.styles'
 import BoundLine from '../line/boundLine'
+import WrapperScrollbar from '../scroll/wrapperScrollbar'
 
 const DashBoardContainr = ({ children }: { children: ReactNode }) => {
   const sideWidth = useLayoutControllerStore(
@@ -46,7 +47,7 @@ const DashBoardContainr = ({ children }: { children: ReactNode }) => {
           style={{ width: `${dashboardMainWidth}px` }}
           ref={dashboardMainElem}
         >
-          {children}
+          <WrapperScrollbar>{children}</WrapperScrollbar>
           <BoundLine
             widthSet={dashboardMainWidthSet}
             left="-2px"

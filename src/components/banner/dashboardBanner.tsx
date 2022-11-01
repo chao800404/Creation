@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { usePageStore } from '../../store'
+import { useCoverStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { DashboardBannerWrapper } from './banner.styles'
 import ChangePopup from '../popup/changePopup'
@@ -15,7 +15,7 @@ const btnTap = {
 const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
   const [start, setStart] = useState(false)
   const elemRef = useRef<HTMLDivElement>(null)
-  const { layoutY, layoutYSet } = usePageStore(
+  const { layoutY, layoutYSet } = useCoverStore(
     (state) => ({
       layoutY: state.layoutY,
       layoutYSet: state.layoutYSet,

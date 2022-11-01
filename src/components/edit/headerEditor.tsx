@@ -7,7 +7,7 @@ import { HeaderEditorWrapper } from './editor.styles'
 import EditorOptionButton from '../button/editorOptionButton'
 import { FaImage } from 'react-icons/fa'
 import { BsFillEmojiSunglassesFill } from 'react-icons/bs'
-import { usePageStore } from '../../store'
+import { useCoverStore } from '../../store'
 import { randomPath } from '../../utils/randomPath'
 import Document from '@tiptap/extension-document'
 import {
@@ -40,7 +40,7 @@ const HeaderEditor = () => {
     level: 1,
   })
   const { page } = useRouter().query
-  const coverImageMap = usePageStore((state) => state.coverImageMap, shallow)
+  const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
 
   const {
     mutateFution,

@@ -1,17 +1,17 @@
-import { List } from '@prisma/client'
+import { Emoji, List } from '@prisma/client'
 import useSWR, { useSWRConfig } from 'swr'
 import { createData, deleteData, fetcher, updateData } from '../utils/fetch'
 import cuid from 'cuid'
 import produce from 'immer'
 
 type ListResDataType = {
-  data: List[]
+  data: (List & { emoji: Emoji })[]
   status: 'success' | 'fail'
 }
 
 type UseListSWRResult = {
   data: {
-    list: List[] | undefined
+    list: (List & { emoji: Emoji })[] | undefined
     favorite: boolean | undefined
     editable: boolean | undefined
   }
@@ -47,7 +47,7 @@ export const useListSWR: UseListType = (id) => {
 
       const addList = produce(data, (draft) => {
         if (draft) {
-          draft?.data.push(newPage as List)
+          draft?.data.push(newPage as List & { emoji: Emoji })
         }
       })
 

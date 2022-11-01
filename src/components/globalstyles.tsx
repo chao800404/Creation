@@ -19,34 +19,22 @@ export const GlobalStyle = createGlobalStyle`
         padding-bottom: env(safe-area-inset-bottom);
         padding-left: env(safe-area-inset-left);
       } */
-     
-     
-      position:relative;
-   
-      
   }
 
   div:focus-visible{
     outline: none;
   }
 
-  
-  
-  ::-webkit-scrollbar {
-    width: 0;
-    height: 0;  
-  } 
   a,a:active,a:focus {
   
     text-decoration: none;
     outline:none;
-  }
+  } 
 
   img,h1,h2,h3,h4,h5,h6,p,button {
     user-select: none;
   }
 
- 
   svg {
     display: block;
   }
