@@ -60,6 +60,8 @@ const DashboardMain = () => {
             </div>
           </div>
           <HeaderEditor />
+          <div style={{ height: '200vh', background: '#3c3c3c' }}></div>
+          <div style={{ height: '20vh', background: '#ffffff' }}></div>
           {/* {title === null && <InitialContainer />} */}
         </div>
       </WrapperScrollbar>

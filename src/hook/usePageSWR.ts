@@ -1,5 +1,5 @@
 import useSWR, { useSWRConfig } from 'swr'
-import { createData, fetcher, updateData, uploadFile } from '../utils/fetch'
+import { fetcher, updateData, uploadFile } from '../utils/fetch'
 import { Cover } from '@prisma/client'
 import produce from 'immer'
 
@@ -33,7 +33,6 @@ export const usePageSWR: UsePageSWRType = (id) => {
   const mutateFution: UsePageSWRResult['mutateFution'] = {
     uploadCoverImage: (id: string, src: string) => {
       const uploadCover = produce(data, (draft) => {
-        console.log(data)
         if (draft) {
           draft.data.cover.image = src
         }
@@ -66,6 +65,7 @@ export const usePageSWR: UsePageSWRType = (id) => {
       mutate(`/api/page/${id}`, uploadFile('uploadImage', { id, file }), {
         populateCache: (uploadImage, page) => {
           return produce<PageResDataType>(page, (draft) => {
+            console.log(uploadImage)
             draft.data.cover.image = uploadImage.data.image
           })
         },
@@ -79,7 +79,7 @@ export const usePageSWR: UsePageSWRType = (id) => {
 
   return {
     data: {
-      cover: data?.data.cover.image,
+      cover: data?.data?.cover.image || '',
     },
     isLoading: !error && !data,
     mutateFution,

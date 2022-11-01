@@ -21,6 +21,7 @@ const DashboardPage: NextPage = () => {
     data: { list },
     isLoading,
   } = useListSWR(page as string)
+
   const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
 
   useEffect(() => {

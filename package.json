@@ -26,6 +26,7 @@
     "@types/react-scrollbar": "^0.5.3",
     "@typescript-eslint/parser": "^5.30.5",
     "@vercel/edge": "^0.0.4",
+    "cloudinary": "^1.32.0",
     "cuid": "^2.1.8",
     "dataloader": "^2.1.0",
     "formidable": "^2.0.1",

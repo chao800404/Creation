@@ -9,7 +9,7 @@ export const SideContainerWrapper = styled('div')`
 `
 
 export const DashboardContainerWrapper = styled('div')`
-  height: calc(100vh - 6.2rem);
+  height: 100vh;
   margin-left: 14px;
 
   .dashboard_nav {
@@ -37,8 +37,8 @@ export const DashboardContainerWrapper = styled('div')`
   .dashboardContainer_container {
     background-color: #ffffff;
     width: 100%;
-    margin-top: 3.1rem;
-    height: inherit;
+    padding: 3.1rem 0;
+    height: 100%;
     display: flex;
 
     &-right,
@@ -54,7 +54,8 @@ export const DashboardContainerWrapper = styled('div')`
     border-top: 2px solid;
     bottom: 0;
     position: fixed;
-    z-index: 1000;
+    z-index: 3000;
+    background-color: #ffffff;
   }
 `
 

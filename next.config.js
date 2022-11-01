@@ -9,7 +9,7 @@ const nextConfig = {
     // dangerouslyAllowSVG: true,
     // contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     // minimumCacheTTL: 60 * 60 * 24 * 30,
-    domains: ['lh3.googleusercontent.com'],
+    domains: ['lh3.googleusercontent.com', 'res.cloudinary.com'],
   },
 }
 
