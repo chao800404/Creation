@@ -5,7 +5,7 @@ import UserPopup from '../popup/userPopup'
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import { FiLock, FiUnlock } from 'react-icons/fi'
 import ControllDataIcon from '../iconContainer/controllDataIcon'
-import { useLayoutControllerStore } from '../../store'
+import { usePageControllerStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { NavbarOptionWrapper } from './navbar.styles'
 import { useRouter } from 'next/router'
@@ -13,7 +13,7 @@ import { useListSWR } from '../../hook/useListSWR'
 
 const NavbarOption = () => {
   const { page } = useRouter().query
-  const userPopupOpen = useLayoutControllerStore(
+  const userPopupOpen = usePageControllerStore(
     (state) => state.userPopupOpen,
     shallow
   )

@@ -1,8 +1,8 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { SIDE_OPTION } from '../../utils/config'
 import IconContainer from '../iconContainer/iconContainer'
 import Accordion from '../accordion/accordion'
-import { useLayoutControllerStore } from '../../store'
+import { usePageControllerStore } from '../../store'
 import shallow from 'zustand/shallow'
 
 import { WorkspaceItemWrapper } from './item.styles'
@@ -26,8 +26,8 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
   id,
   isActive,
 }) => {
-  const sideWidth = useLayoutControllerStore(
-    (state) => state.sideWidth,
+  const { sideWidth, focusIdSet } = usePageControllerStore(
+    (state) => ({ sideWidth: state.sideWidth, focusIdSet: state.focusIdSet }),
     shallow
   )
 
@@ -42,6 +42,7 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
       color={isActive ? '#ffffff' : '#888888'}
       hoverColor={isActive ? '#ffffff' : '#1c1c1c'}
       backgroundColor={isActive ? '#1c1c1c' : '#ffffff'}
+      onClick={() => focusIdSet(id)}
     >
       <Link href={`/${id}`}>
         <motion.a className="workspaceItem_content">

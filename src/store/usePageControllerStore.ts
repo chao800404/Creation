@@ -2,12 +2,13 @@ import produce from 'immer'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-type InitialLayoutController = {
+type InitialPageController = {
   sideWidth: number
   dragStart: boolean
   favoriteTagOpen: boolean
   userPopupOpen: boolean
   dashboardMainWidth: number
+  focusId: string | undefined
 }
 
 type Action = {
@@ -16,62 +17,69 @@ type Action = {
   userPopupToggle: (toggle: boolean) => void
   dashboardMainWidthSet: (width: number) => void
   onDragSet: (toggle: boolean) => void
+  focusIdSet: (id: string) => void
 }
 
-const initialLayoutController = {
+const initialPageController = {
   sideWidth: 350,
   dashboardMainWidth: 1135,
   favoriteTagOpen: false,
   userPopupOpen: false,
   dragStart: false,
+  focusId: undefined,
 }
 
-export const useLayoutControllerStore = create<
-  InitialLayoutController & Action
->()(
+export const usePageControllerStore = create<InitialPageController & Action>()(
   persist(
     (set) => ({
-      ...initialLayoutController,
+      ...initialPageController,
       sideWidthSet: (x) =>
         set(
-          produce<InitialLayoutController>((state) => {
+          produce<InitialPageController>((state) => {
             state.sideWidth = x
             state.dragStart = true
           })
         ),
       favoriteTagToggle: (toggle) =>
         set(
-          produce<InitialLayoutController>((state) => {
+          produce<InitialPageController>((state) => {
             state.favoriteTagOpen = toggle
           })
         ),
 
       userPopupToggle: (toggle) =>
         set(
-          produce<InitialLayoutController>((state) => {
+          produce<InitialPageController>((state) => {
             state.userPopupOpen = toggle
           })
         ),
 
       dashboardMainWidthSet: (width) =>
         set(
-          produce<InitialLayoutController>((state) => {
+          produce<InitialPageController>((state) => {
             state.dashboardMainWidth = width
             state.dragStart = true
           })
         ),
       onDragSet: (toggle) =>
         set(
-          produce<InitialLayoutController>((state) => {
+          produce<InitialPageController>((state) => {
             state.dragStart = toggle
           })
         ),
+      focusIdSet: (id) => {
+        set(
+          produce<InitialPageController>((state) => {
+            state.focusId = id
+          })
+        )
+      },
     }),
     {
-      name: 'layout-controller',
+      name: 'page-controller',
     }
   )
 )
 
 process.env.NODE_ENV !== 'production' &&
-  useLayoutControllerStore.subscribe(console.log)
+  usePageControllerStore.subscribe(console.log)

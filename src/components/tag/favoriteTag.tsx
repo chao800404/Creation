@@ -1,6 +1,6 @@
 import React from 'react'
 import Accordion from '../accordion/accordion'
-import { useLayoutControllerStore } from '../../store'
+import { usePageControllerStore } from '../../store'
 import SideContainer from '../container/sideContainer'
 import shallow from 'zustand/shallow'
 import { SIDE_OPTION } from '../../utils/config'
@@ -9,7 +9,7 @@ import { Emoji, List } from '@prisma/client'
 const { favorite } = SIDE_OPTION
 
 const FavoriteTag = ({ list }: { list: (List & { emoji: Emoji })[] }) => {
-  const { favoriteTagOpen, favoriteTagToggle } = useLayoutControllerStore(
+  const { favoriteTagOpen, favoriteTagToggle } = usePageControllerStore(
     (state) => ({
       favoriteTagOpen: state.favoriteTagOpen,
       favoriteTagToggle: state.favoriteTagToggle,

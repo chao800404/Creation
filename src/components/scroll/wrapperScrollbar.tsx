@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { motion } from 'framer-motion'
-import { useLayoutControllerStore } from '../../store'
+import { usePageControllerStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { SrollWrappr } from './scroll.styles'
 
@@ -33,10 +33,7 @@ const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
   children,
   isSide = false,
 }) => {
-  const dragStart = useLayoutControllerStore(
-    (state) => state.dragStart,
-    shallow
-  )
+  const dragStart = usePageControllerStore((state) => state.dragStart, shallow)
 
   const [isCeiling, setCeiling] = useState(true)
 

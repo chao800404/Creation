@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import shallow from 'zustand/shallow'
-import { useLayoutControllerStore } from '../../store'
+import { usePageControllerStore } from '../../store'
 import { BoundLineWrapper, LineProps } from './line.styles'
 
 type BoundLineType = LineProps & {
@@ -24,10 +24,7 @@ const BoundLine: React.FC<BoundLineType> = ({
   multiply,
 }) => {
   const [dragStart, setDragStart] = useState(false)
-  const onDragSet = useLayoutControllerStore(
-    (state) => state.onDragSet,
-    shallow
-  )
+  const onDragSet = usePageControllerStore((state) => state.onDragSet, shallow)
   const [dragDownPos, setDragDwonPos] = useState(0)
 
   const sideLineElem = useRef(null)

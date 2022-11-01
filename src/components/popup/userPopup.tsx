@@ -9,7 +9,7 @@ import { signOut, useSession } from 'next-auth/react'
 import UserPopupItem from '../list-item/UserPopupItem'
 import { useUserStore } from '../../store'
 import shallow from 'zustand/shallow'
-import { useLayoutControllerStore } from '../../store'
+import { usePageControllerStore } from '../../store'
 import { UserPopupWrapper } from './popup.styles'
 import { motion } from 'framer-motion'
 
@@ -28,7 +28,7 @@ const variants = {
 const UserPopup: React.FC = () => {
   const { data, status } = useSession()
   const { name, email, image } = useUserStore((state) => state.user, shallow)
-  const { userPopupOpen, userPopupToggle } = useLayoutControllerStore(
+  const { userPopupOpen, userPopupToggle } = usePageControllerStore(
     (state) => ({
       userPopupToggle: state.userPopupToggle,
       userPopupOpen: state.userPopupOpen,

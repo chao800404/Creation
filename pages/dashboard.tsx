@@ -1,16 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react'
-import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-import { GetStaticPropsResult, NextApiRequest, NextApiResponse } from 'next'
 import { DashboardLayout, DashboardMain } from '../src/components/index'
-import { Emoji, List } from '@prisma/client'
 import useSWR, { SWRConfig } from 'swr'
-import validateUser from '../src/utils/validate'
 import { useListSWR } from '../src/hook/useListSWR'
-import prisma from '../src/lib/prisma'
-import { useCoverStore } from '../src/store'
-import { useRouter } from 'next/router'
+import { useCoverStore, usePageControllerStore } from '../src/store'
 import shallow from 'zustand/shallow'
 import { fetcher } from '../src/utils/fetch'
 

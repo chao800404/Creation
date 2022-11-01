@@ -1,20 +1,17 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import DashBoardNav from '../navbar/dashBoardNav'
 import shallow from 'zustand/shallow'
-import { useLayoutControllerStore } from '../../store'
+import { usePageControllerStore } from '../../store'
 import { DashboardContainerWrapper } from './container.styles'
 import BoundLine from '../line/boundLine'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 
 const DashBoardContainr = ({ children }: { children: ReactNode }) => {
-  const sideWidth = useLayoutControllerStore(
-    (state) => state.sideWidth,
-    shallow
-  )
+  const sideWidth = usePageControllerStore((state) => state.sideWidth, shallow)
   const [originWidth, setOriginWidth] = useState(0)
   const dashboardMainElem = useRef<HTMLDivElement | null>(null)
   const { dashboardMainWidth, dashboardMainWidthSet, dragStart } =
-    useLayoutControllerStore(
+    usePageControllerStore(
       (state) => ({
         dashboardMainWidth: state.dashboardMainWidth,
         dashboardMainWidthSet: state.dashboardMainWidthSet,

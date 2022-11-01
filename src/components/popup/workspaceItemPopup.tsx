@@ -25,6 +25,10 @@ const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
 
   const [itemId, setItemId] = useState<null | string>(null)
 
+  const {
+    data: { list },
+  } = useListSWR()
+
   useEffect(() => {
     const handlePointerDown = (e: MouseEvent) => {
       const popupElem = (e.target as HTMLElement).closest(
@@ -75,10 +79,11 @@ const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
             desc="Delete"
             icon={IoTrashOutline}
             onClick={() => {
-              if (itemId == page) {
-                router.push('/')
-              }
               wrapperOnClick(() => {
+                const index = list?.findIndex((item) => item.id === itemId)
+                index && list
+                  ? router.push(list[index - 1].id)
+                  : router.push('/')
                 mutateFution.deleteList(itemId as string)
               })
             }}
