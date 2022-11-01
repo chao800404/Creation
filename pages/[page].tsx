@@ -8,7 +8,6 @@ import { GetStaticProps, NextPage } from 'next'
 import { useListSWR } from '../src/hook/useListSWR'
 import { fetcher } from '../src/utils/fetch'
 import { useRouter } from 'next/router'
-import { multiFetcher } from '../src/utils/fetch'
 
 const DashboardPage: NextPage = () => {
   const coverImageMapSet = useCoverStore(

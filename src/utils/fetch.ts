@@ -12,7 +12,7 @@ export const multiFetcher = ({
   url: string
   list: (List & { emoji: Emoji })[]
 }) => {
-  return Promise.all(list.map((item) => fetcher(`${url}/${item.id}`)))
+  return Promise.all(list?.map((item) => fetcher(`${url}/${item.id}`)))
 }
 
 export const uploadFile = async (

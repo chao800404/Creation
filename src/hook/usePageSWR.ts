@@ -1,6 +1,6 @@
 import useSWR, { useSWRConfig } from 'swr'
-import { fetcher, updateData, uploadFile } from '../utils/fetch'
-import { Cover } from '@prisma/client'
+import { fetcher, updateData, uploadFile, multiFetcher } from '../utils/fetch'
+import { Cover, Emoji, List } from '@prisma/client'
 import produce from 'immer'
 
 type PageResDataType = {

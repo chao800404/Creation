@@ -6,6 +6,7 @@ import { DashboardMainWrapper } from './main.styles'
 import HeaderEditor from '../edit/headerEditor'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
+import Spinner from '../spinner/spinner'
 
 const DashboardMain = () => {
   const popupIconElem = useRef(null)
@@ -20,7 +21,7 @@ const DashboardMain = () => {
   } = usePageSWR(page as string)
 
   if (isLoading) {
-    return <div>Loading </div>
+    return <Spinner />
   }
 
   return (
