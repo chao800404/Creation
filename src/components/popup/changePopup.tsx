@@ -2,14 +2,9 @@ import React, { useState, useCallback } from 'react'
 
 import { motion } from 'framer-motion'
 
-import shallow from 'zustand/shallow'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
-import UploadImagContainer from '../container/uploadImageContainer'
-import { ChangePopupWrapper } from './popup.styles'
-import { useCoverStore } from '../../store'
-import SelectImageContainer from '../container/selectImageContainer'
 
-const tabs = ['cover', 'upload', 'link']
+import { ChangePopupWrapper } from './popup.styles'
 
 const style = (backgroundColor: string, color: string, borderRight: string) => {
   return {
@@ -19,13 +14,13 @@ const style = (backgroundColor: string, color: string, borderRight: string) => {
   }
 }
 
-const ChangePopup = ({
-  setToggleShow,
-}: {
-  setToggleShow: (toggle: boolean) => void
-}) => {
+type ChangePopupType = {
+  children: JSX.Element[] | JSX.Element
+  tabs: string[]
+}
+
+const ChangePopup: React.FC<ChangePopupType> = ({ children, tabs }) => {
   const [tabIndex, setTabIndex] = useState(0)
-  const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
 
   const validateDataSet = (targetIndex: string) => {
     if (targetIndex?.startsWith('tab-')) {
@@ -38,7 +33,7 @@ const ChangePopup = ({
     <ChangePopupWrapper>
       <div className="change_popup-tabs">
         <div className="change_popup-tabs-list">
-          {tabs.map((tab, index) => (
+          {tabs?.map((tab, index) => (
             <motion.div
               onClick={(e) => {
                 const targetIndex = (e.target as HTMLElement).dataset.tab
@@ -70,25 +65,11 @@ const ChangePopup = ({
         initial="rest"
         animate="rest"
       >
-        {tabIndex === 0 && (
-          <WrapperScrollbar>
-            <div className="change_popup-padding">
-              {coverImageMap &&
-                Object.entries(coverImageMap).map((cover, index) => (
-                  <SelectImageContainer
-                    key={index}
-                    groupName={cover[0]}
-                    coverGroup={cover[1]}
-                    setToggleShow={setToggleShow}
-                  />
-                ))}
-            </div>
-          </WrapperScrollbar>
-        )}
-
-        {tabIndex === 1 && (
-          <UploadImagContainer setToggleShow={setToggleShow} />
-        )}
+        <WrapperScrollbar>
+          {React.Children?.map(children, (child, i) => {
+            return i === tabIndex && React.cloneElement(child)
+          })}
+        </WrapperScrollbar>
       </motion.div>
     </ChangePopupWrapper>
   )

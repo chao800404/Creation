@@ -1,31 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react'
+import React from 'react'
 import Head from 'next/head'
 import { DashboardLayout, DashboardMain } from '../src/components/index'
-import useSWR, { SWRConfig } from 'swr'
+import { SWRConfig } from 'swr'
 import { useListSWR } from '../src/hook/useListSWR'
-import { useCoverStore, usePageControllerStore } from '../src/store'
-import shallow from 'zustand/shallow'
-import { fetcher } from '../src/utils/fetch'
+import { useRouter } from 'next/router'
+import Spinner from '../src/components/spinner/spinner'
 
 const Dashboard = () => {
-  const coverImageMapSet = useCoverStore(
-    (state) => state.coverImageMapSet,
-    shallow
-  )
+  const { page } = useRouter().query
 
   const {
     data: { list },
     isLoading,
-  } = useListSWR()
-  const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
-
-  useEffect(() => {
-    coverImageMapSet(coverImagePath?.path)
-  }, [coverImagePath, coverImageMapSet])
+  } = useListSWR(page as string)
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Spinner />
   }
 
   return (

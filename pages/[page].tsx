@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import useSWR, { SWRConfig, useSWRConfig } from 'swr'
 import shallow from 'zustand/shallow'
 import { DashboardLayout, DashboardMain } from '../src/components'
-import { useCoverStore, usePageControllerStore } from '../src/store'
-import { List, PrismaClient } from '@prisma/client'
-import { GetStaticProps, NextPage } from 'next'
+import { useCoverStore, usePageStore } from '../src/store'
+import Spinner from '../src/components/spinner/spinner'
+
+import { NextPage } from 'next'
 import { useListSWR } from '../src/hook/useListSWR'
 import { fetcher } from '../src/utils/fetch'
 import { useRouter } from 'next/router'
@@ -14,9 +15,7 @@ const DashboardPage: NextPage = () => {
     (state) => state.coverImageMapSet,
     shallow
   )
-
   const { page } = useRouter().query
-
   const {
     data: { list },
     isLoading,
@@ -28,13 +27,8 @@ const DashboardPage: NextPage = () => {
     coverImageMapSet(coverImagePath?.path)
   }, [coverImagePath, coverImageMapSet])
 
-  useEffect(() => {
-    const { focusIdSet } = usePageControllerStore.getState()
-    focusIdSet(page as string)
-  }, [page])
-
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Spinner />
   }
 
   return (
@@ -48,19 +42,19 @@ const DashboardPage: NextPage = () => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  return {
-    props: {},
-  }
-}
+// export const getStaticProps: GetStaticProps = async () => {
+//   return {
+//     props: {},
+//   }
+// }
 
-export const getStaticPaths = async () => {
-  const prisma = new PrismaClient()
-  const list = (await prisma.list.findMany()) as List[]
-  return {
-    paths: list?.map((listItem) => ({ params: { page: listItem.id } })),
-    fallback: true,
-  }
-}
+// export const getStaticPaths = async () => {
+//   const prisma = new PrismaClient()
+//   const list = (await prisma.list.findMany()) as List[]
+//   return {
+//     paths: list?.map((listItem) => ({ params: { page: listItem.id } })),
+//     fallback: true,
+//   }
+// }
 
 export default DashboardPage

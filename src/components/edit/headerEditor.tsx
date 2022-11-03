@@ -3,13 +3,15 @@ import { EditorContent, useEditor, FloatingMenu } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import TextAlign from '@tiptap/extension-text-align'
 import React, { useEffect, useState, useMemo } from 'react'
-import { HeaderEditorWrapper } from './editor.styles'
+// import { HeaderEditorWrapper } from './editor.styles'
 import EditorOptionButton from '../button/editorOptionButton'
 import { FaImage } from 'react-icons/fa'
 import { BsFillEmojiSunglassesFill } from 'react-icons/bs'
 import { useCoverStore } from '../../store'
 import { randomPath } from '../../utils/randomPath'
 import Document from '@tiptap/extension-document'
+import Image from 'next/image'
+
 import {
   AiOutlinePicCenter,
   AiOutlineAlignRight,
@@ -39,6 +41,7 @@ const HeaderEditor = () => {
     textAlign: textAlign,
     level: 1,
   })
+
   const { page } = useRouter().query
   const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
 
@@ -65,7 +68,7 @@ const HeaderEditor = () => {
       }),
       TextAlign.configure({
         alignments: ['left', 'right', 'center'],
-        types: ['heading', 'paragraph'],
+        types: ['heading'],
       }),
       Placeholder.configure({
         placeholder: ({ hasAnchor }) => {
@@ -117,85 +120,63 @@ const HeaderEditor = () => {
     }
   }
 
-  return (
-    <HeaderEditorWrapper>
-      {editor && (
-        <FloatingMenu
-          shouldShow={({ editor }) => editor.isFocused}
-          editor={editor}
-          tippyOptions={{
-            duration: 200,
-            placement: 'top',
-          }}
-        >
-          <div className="header_editor-content">
-            <EditorOptionButton onClick={handleAddCover}>
-              <BsFillEmojiSunglassesFill fontSize="1.2rem" />
-            </EditorOptionButton>
-            <span className="header_editor-gap-line" />
-            {!cover && (
-              <>
-                <EditorOptionButton onClick={handleAddCover}>
-                  <div className="header_editor-add-cover">
-                    <FaImage fontSize="1.25rem" />
-                    <span>Add cover</span>
-                  </div>
-                </EditorOptionButton>
-                <span className="header_editor-gap-line" />
-              </>
-            )}
+  const handleAddEmoji = () => {
+    if (!editor) return
+  }
 
-            <EditorOptionButton
-              onClick={() => handleChangeHeadingTag(1)}
-              className={
-                editor.isActive('heading', { level: 1 }) ? 'is-active' : ''
-              }
-              active={attrs.level === 1}
-            >
-              <MdOutlineTitle fontSize="1.5rem" />
-            </EditorOptionButton>
-            <EditorOptionButton
-              onClick={() => handleChangeHeadingTag(2)}
-              className={
-                editor.isActive('heading', { level: 2 }) ? 'is-active' : ''
-              }
-              active={attrs.level === 2}
-            >
-              <MdOutlineTitle fontSize="1.25rem" />
-            </EditorOptionButton>
-            <span className="header_editor-gap-line" />
-            <EditorOptionButton
-              onClick={() => handleChangeAlign('left')}
-              className={
-                editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''
-              }
-              active={attrs.textAlign === 'left'}
-            >
-              <AiOutlineAlignLeft fontSize="1.25rem" />
-            </EditorOptionButton>
-            <EditorOptionButton
-              onClick={() => handleChangeAlign('center')}
-              className={
-                editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''
-              }
-              active={attrs.textAlign === 'center'}
-            >
-              <AiOutlinePicCenter fontSize="1.25rem" />
-            </EditorOptionButton>
-            <EditorOptionButton
-              onClick={() => handleChangeAlign('right')}
-              className={
-                editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''
-              }
-              active={attrs.textAlign === 'right'}
-            >
-              <AiOutlineAlignRight fontSize="1.25rem" />
-            </EditorOptionButton>
-          </div>
-        </FloatingMenu>
-      )}
-      <EditorContent editor={editor} />
-    </HeaderEditorWrapper>
+  return (
+    // <HeaderEditorWrapper>
+    //   {editor && (
+    //     <FloatingMenu
+    //       shouldShow={({ editor }) => editor.isFocused}
+    //       editor={editor}
+    //       tippyOptions={{
+    //         duration: 200,
+    //         placement: 'top',
+    //       }}
+    //     >
+    //       <div className="header_editor-content">
+    //         <EditorOptionButton onClick={handleAddEmoji}>
+    //           <BsFillEmojiSunglassesFill fontSize="1.2rem" />
+    //         </EditorOptionButton>
+    //         <span className="header_editor-gap-line" />
+    //         {!cover && (
+    //           <>
+    //             <EditorOptionButton onClick={handleAddCover}>
+    //               <div className="header_editor-add-cover">
+    //                 <FaImage fontSize="1.25rem" />
+    //                 <span>Add cover</span>
+    //               </div>
+    //             </EditorOptionButton>
+    //             <span className="header_editor-gap-line" />
+    //           </>
+    //         )}
+
+    //         <EditorOptionButton
+    //           onClick={() => handleChangeHeadingTag(1)}
+    //           className={
+    //             editor.isActive('heading', { level: 1 }) ? 'is-active' : ''
+    //           }
+    //           active={attrs.level === 1}
+    //         >
+    //           <MdOutlineTitle fontSize="1.5rem" />
+    //         </EditorOptionButton>
+    //         <EditorOptionButton
+    //           onClick={() => handleChangeHeadingTag(2)}
+    //           className={
+    //             editor.isActive('heading', { level: 2 }) ? 'is-active' : ''
+    //           }
+    //           active={attrs.level === 2}
+    //         >
+    //           <MdOutlineTitle fontSize="1.25rem" />
+    //         </EditorOptionButton>
+    //       </div>
+    //     </FloatingMenu>
+    //   )}
+
+    //   <EditorContent className="header_editor-context" editor={editor} />
+    // </HeaderEditorWrapper>
+    <div></div>
   )
 }
 

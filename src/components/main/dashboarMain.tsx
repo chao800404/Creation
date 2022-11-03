@@ -1,16 +1,13 @@
 import React, { useRef } from 'react'
 import DashboardBanner from '../banner/dashboardBanner'
 
-import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import { DashboardMainWrapper } from './main.styles'
-import HeaderEditor from '../edit/headerEditor'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import Spinner from '../spinner/spinner'
+import HeaderEditorS from '../edit/headerEditorS'
 
 const DashboardMain = () => {
-  const popupIconElem = useRef(null)
-
   const {
     query: { page },
   } = useRouter()
@@ -31,35 +28,19 @@ const DashboardMain = () => {
           {cover && cover.length > 0 && <DashboardBanner coverImage={cover} />}
         </div>
         <div className="DashboardMain_container-content">
+          <div className="DashboardMain_container-content-gap" />
+          <div className="DashboardMain_container-content-header">
+            <HeaderEditorS />
+          </div>
           <div
             style={{
-              width: '5rem',
-              height: '5rem',
-              position: 'relative',
-              zIndex: 2000,
-              transform: 'translateY(-2.8rem)',
+              height: '200vh',
+              background: '#c3c3c3',
             }}
-            ref={popupIconElem}
-            className="icon_container"
-          >
-            {/* {emoji?.length > 0 && ( */}
-            <>
-              {/* {emoji && emoji.toString().startsWith('blob') ? (
-                  <Image
-                    src={emoji}
-                    layout="fill"
-                    alt="icon"
-                    objectFit="cover"
-                  />
-                ) : (
-                  <Box fontSize="4rem">{emoji}</Box>
-                )} */}
-            </>
-          </div>
+          ></div>
+          <div style={{ height: '20vh', background: '#ffffff' }}></div>
         </div>
-        <HeaderEditor />
-        <div style={{ height: '200vh', background: '#3c3c3c' }}></div>
-        <div style={{ height: '20vh', background: '#ffffff' }}></div>
+
         {/* {title === null && <InitialContainer />} */}
       </div>
     </DashboardMainWrapper>

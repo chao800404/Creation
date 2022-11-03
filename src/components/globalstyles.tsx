@@ -45,13 +45,11 @@ export const GlobalStyle = createGlobalStyle`
 
   h1 {
     font-weight: bold;
-    font-size:3.5rem;
+    font-size:2.5rem;
     pointer-events: none;
   }
   h2 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
-  h3 {
-    font-size: 2rem;
-  }
+
 `

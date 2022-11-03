@@ -2,7 +2,7 @@ import React from 'react'
 import { SIDE_OPTION } from '../../utils/config'
 import IconContainer from '../iconContainer/iconContainer'
 import Accordion from '../accordion/accordion'
-import { usePageControllerStore } from '../../store'
+import { usePageControllerStore, usePageStore } from '../../store'
 import shallow from 'zustand/shallow'
 
 import { WorkspaceItemWrapper } from './item.styles'
@@ -26,10 +26,7 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
   id,
   isActive,
 }) => {
-  const { sideWidth, focusIdSet } = usePageControllerStore(
-    (state) => ({ sideWidth: state.sideWidth, focusIdSet: state.focusIdSet }),
-    shallow
-  )
+  const sideWidth = usePageControllerStore((state) => state.sideWidth, shallow)
 
   if (title === undefined || title === null || title.length <= 0)
     title = '未命名檔案'
@@ -42,7 +39,6 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
       color={isActive ? '#ffffff' : '#888888'}
       hoverColor={isActive ? '#ffffff' : '#1c1c1c'}
       backgroundColor={isActive ? '#1c1c1c' : '#ffffff'}
-      onClick={() => focusIdSet(id)}
     >
       <Link href={`/${id}`}>
         <motion.a className="workspaceItem_content">

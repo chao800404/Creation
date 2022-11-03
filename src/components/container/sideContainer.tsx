@@ -2,11 +2,12 @@ import React, { useRef } from 'react'
 import WorkspaceItem from '../list-item/workspaceItem'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import { SideContainerWrapper } from './container.styles'
-import { usePageControllerStore } from '../../../src/store'
+import { usePageStore } from '../../../src/store'
 import { motion } from 'framer-motion'
-import { useRouter } from 'next/router'
+
 import { List, Emoji } from '@prisma/client'
 import shallow from 'zustand/shallow'
+import { useRouter } from 'next/router'
 
 type SideContainerType = {
   list: (List & { emoji: Emoji })[]
@@ -20,7 +21,7 @@ const SideContainer: React.FC<SideContainerType> = ({
   height = 'full',
 }) => {
   const scrollElem = useRef<HTMLDivElement | null>(null)
-  const focusId = usePageControllerStore((state) => state.focusId, shallow)
+  const { page } = useRouter().query
 
   return (
     <motion.div
@@ -44,7 +45,7 @@ const SideContainer: React.FC<SideContainerType> = ({
               title={item.title as string}
               id={item.id}
               icon={item.emoji}
-              isActive={focusId === item.id}
+              isActive={page === item.id}
             />
           ))}
         </SideContainerWrapper>

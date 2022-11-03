@@ -6,6 +6,8 @@ import { useCoverStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { DashboardBannerWrapper } from './banner.styles'
 import ChangePopup from '../popup/changePopup'
+import SelectImageContainer from '../container/selectImageContainer'
+import UploadImagContainer from '../container/uploadImageContainer'
 
 const btnTap = {
   scale: 0.98,
@@ -22,6 +24,7 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
     }),
     shallow
   )
+  const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
   const [toggleRePos, setToggleRePos] = useState(false)
   const [togglePopup, setTogglePopup] = useState(false)
   const [originPosY, setOriginPosY] = useState<number>(0)
@@ -111,7 +114,22 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
           <p>{toggleRePos ? 'save postion' : 'repostion'}</p>
         </motion.div>
         <motion.div className="Dashboard_Banner-controller-btn-popup">
-          {togglePopup && <ChangePopup setToggleShow={togglePopupMemorize} />}
+          {togglePopup && (
+            <ChangePopup tabs={['cover', 'upload', 'link']}>
+              <div className="change_popup-padding">
+                {coverImageMap &&
+                  Object.entries(coverImageMap).map((cover, index) => (
+                    <SelectImageContainer
+                      key={index}
+                      groupName={cover[0]}
+                      coverGroup={cover[1]}
+                      setToggleShow={togglePopupMemorize}
+                    />
+                  ))}
+              </div>
+              <UploadImagContainer setToggleShow={togglePopupMemorize} />
+            </ChangePopup>
+          )}
         </motion.div>
       </motion.div>
       <div
@@ -124,7 +142,7 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
         alt="cover"
         objectFit="cover"
         objectPosition={`center ${layoutY}%`}
-        priority={true}
+        priority
       />
     </DashboardBannerWrapper>
   )

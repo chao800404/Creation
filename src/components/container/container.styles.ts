@@ -131,3 +131,29 @@ export const SelectImageContainerWrapper = styled('div')`
     cursor: pointer;
   }
 `
+export const EmojiContainerWrapper = styled('div')`
+  width: 100%;
+  padding: 0.5rem;
+
+  .emoji-preload {
+    width: 100%;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`
+
+export const EmojiComponentWrapper = styled('div')`
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.8rem;
+  position: relative;
+  margin-top: 1rem;
+
+  .emoji-content {
+    grid-column: span 1;
+    position: relative;
+    height: 2rem;
+  }
+`

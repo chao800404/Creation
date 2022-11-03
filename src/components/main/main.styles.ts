@@ -13,9 +13,11 @@ export const DashboardMainWrapper = styled('div')<DashboardMain>`
     background: white;
     height: 100%;
     padding: 1rem;
+    width: 100%;
 
     &-banner {
       width: inherit;
+
       height: ${({ show }) => (show ? '18rem' : '0')};
       position: relative;
       border-bottom: ${({ show }) => (show ? '1px solid' : '0')};
@@ -24,9 +26,26 @@ export const DashboardMainWrapper = styled('div')<DashboardMain>`
     &-content {
       display: flex;
       flex-direction: column;
-      width: initial;
+      width: 100%;
+      padding: 0 2rem;
 
-      &-block {
+      &-gap {
+        height: 1.5rem;
+      }
+
+      &-header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 1.6rem 0;
+        width: 100%;
+      }
+
+      &-emoji {
+        width: 3rem;
+        height: 3rem;
+        position: relative;
+        margin-right: 1rem;
       }
     }
   }
