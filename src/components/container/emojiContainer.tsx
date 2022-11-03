@@ -8,18 +8,27 @@ import {
 import Image from 'next/image'
 import { useInView } from 'react-intersection-observer'
 import PulseLoader from 'react-spinners/PulseLoader'
+import { EmojiBaseMap } from '@prisma/client'
 
-const EmojiComponent = ({ paths }: { paths: string[] }) => (
+type ResEmojiMapType = {
+  status: 'success' | 'fail'
+  data: {
+    emoji: EmojiBaseMap[]
+  }
+  isEnd: boolean
+}
+
+const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
   <EmojiComponentWrapper>
-    {paths &&
-      paths.map((path, index) => (
-        <div className="emoji-content" key={path + index}>
+    {emojis &&
+      emojis.map(({ name, id, image }) => (
+        <div className="emoji-content" key={id}>
           <Image
             loading="lazy"
-            src={path}
+            src={image}
             objectFit="cover"
             layout="fill"
-            alt="emoji"
+            alt={name || 'emoji'}
           />
         </div>
       ))}
@@ -32,15 +41,15 @@ const EmojiContainer = () => {
     threshold: 0,
   })
   const [isEnd, setIsEnd] = useState(false)
-  const [emjiData, setEmojiData] = useState<string[][]>([])
-  const { data } = useSWR(
+  const [emjiData, setEmojiData] = useState<EmojiBaseMap[][]>([])
+  const { data } = useSWR<ResEmojiMapType>(
     pageIndex ? `api/getImageEmoji?pageIndex=${pageIndex}&limit=96` : null,
     fetcher
   )
 
   useEffect(() => {
     if (data && !isEnd) {
-      setEmojiData((prev) => (prev = [...prev, data.data.emojiMap]))
+      setEmojiData((prev) => (prev = [...prev, data.data.emoji]))
       setIsEnd(data.isEnd)
     }
   }, [data, isEnd])
@@ -55,7 +64,7 @@ const EmojiContainer = () => {
     <EmojiContainerWrapper>
       {emjiData &&
         emjiData.map((emojiMap, index) => (
-          <EmojiComponent key={index} paths={emojiMap} />
+          <EmojiComponent key={index} emojis={emojiMap} />
         ))}
       {!isEnd && (
         <div className="emoji-preload" ref={ref}>

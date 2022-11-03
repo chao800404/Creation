@@ -93,6 +93,16 @@ model Emoji {
   @@map("emoji")
 }
 
+model EmojiBaseMap {
+  id           String       @id @default(cuid())
+  name         String?
+  image        String       @default("")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
+
+  @@map("emojiBaseMap")
+}
+
 model List  {
   id           String       @id @default(cuid())
   title        String?       
