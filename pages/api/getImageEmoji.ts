@@ -5,47 +5,36 @@ import { NextApiResponse, NextApiRequest } from 'next'
 
 const filePath = path.resolve(`${process.cwd()}/public/static/emoji`)
 
-async function readFilePath(filePath: string): Promise<string[] | undefined> {
-  try {
-    const dirs = await fsPromises.readdir(filePath)
-    return await Promise.all(
-      dirs.map(async (filename) => {
-        const filedir = path.join(filePath, filename)
-        const stats = await fsPromises.stat(filedir)
-        const isFile = stats.isFile()
+// async function readFilePath(filePath: string): Promise<string[] | undefined> {
+//   try {
+//     const dirs = await fsPromises.readdir(filePath)
+//     return await Promise.all(
+//       dirs.map(async (filename) => {
+//         const filedir = path.join(filePath, filename)
+//         const stats = await fsPromises.stat(filedir)
+//         const isFile = stats.isFile()
 
-        if (isFile) {
-          return Promise.resolve(filedir)
-        }
-        return (await readFilePath(filedir)) as unknown as string
-      })
-    )
-  } catch (err) {
-    console.error('獲取檔案失敗!', err)
-  }
-}
+//         if (isFile) {
+//           return Promise.resolve(filedir)
+//         }
+//         return (await readFilePath(filedir)) as unknown as string
+//       })
+//     )
+//   } catch (err) {
+//     console.error('獲取檔案失敗!', err)
+//   }
+// }
 
-const tranferPath = (fullPath: string[]) => {
-  const splitPaths = fullPath.map((path) => {
-    const splitSymbol = path.includes('\\') ? '\\' : '/'
-    const splitName = path.split(splitSymbol)
-    const coverIndex = splitName.indexOf('emoji')
-    return splitName.slice(coverIndex + 1, splitName.length)
-  })
+// const tranferPath = (fullPath: string[]) => {
+//   const splitPaths = fullPath.map((path) => {
+//     const splitSymbol = path.includes('\\') ? '\\' : '/'
+//     const splitName = path.split(splitSymbol)
+//     const coverIndex = splitName.indexOf('emoji')
+//     return splitName.slice(coverIndex + 1, splitName.length)
+//   })
 
-  return splitPaths.map((path) => `/static/emoji/${path[0]}`)
-
-  // splitPaths.forEach((arr) => {
-  //   const path = `/static/cover/${arr[0]}/${arr[1]}`
-
-  //   if (arr[0] in pathObject) {
-  //     pathObject[arr[0]].push(path)
-  //   } else {
-  //     pathObject[arr[0]] = [path]
-  //   }
-  // })
-  // return pathObject
-}
+//   return splitPaths.map((path) => `/static/emoji/${path[0]}`)
+// }
 
 // export default async function handler(
 //   req: NextApiRequest,
