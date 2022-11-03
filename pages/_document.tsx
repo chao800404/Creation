@@ -45,7 +45,7 @@ export default class MyDocument extends Document {
           ></link>
           <link
             rel="preload"
-            href="api/getImageCover"
+            href="api/getImageCover?pageIndex=1&limit=96"
             as="fetch"
             crossOrigin="anoymous"
           ></link>

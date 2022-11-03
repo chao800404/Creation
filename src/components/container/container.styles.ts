@@ -137,7 +137,7 @@ export const EmojiContainerWrapper = styled('div')`
 
   .emoji-preload {
     width: 100%;
-    height: 5rem;
+    height: 4rem;
     display: flex;
     align-items: center;
     justify-content: center;

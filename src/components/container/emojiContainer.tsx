@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import useSWR from 'swr'
 import { fetcher } from '../../utils/fetch'
 import {
@@ -9,6 +9,8 @@ import Image from 'next/image'
 import { useInView } from 'react-intersection-observer'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { EmojiBaseMap } from '@prisma/client'
+import { useEmojiStore } from '../../store/index'
+import shallow from 'zustand/shallow'
 
 type ResEmojiMapType = {
   status: 'success' | 'fail'
@@ -24,7 +26,7 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
       emojis.map(({ name, id, image }) => (
         <div className="emoji-content" key={id}>
           <Image
-            loading="lazy"
+            priority
             src={image}
             objectFit="cover"
             layout="fill"
@@ -40,19 +42,30 @@ const EmojiContainer = () => {
   const { ref, inView } = useInView({
     threshold: 0,
   })
-  const [isEnd, setIsEnd] = useState(false)
-  const [emjiData, setEmojiData] = useState<EmojiBaseMap[][]>([])
+  // const [isEnd, setIsEnd] = useState(false)
+  const { isEnd, isEndSet, emojiMap, emojiMapSet } = useEmojiStore(
+    (state) => ({
+      isEnd: state.isEnd,
+      isEndSet: state.isEndSet,
+      emojiMap: state.emojiMap,
+      emojiMapSet: state.emojiMapSet,
+    }),
+    shallow
+  )
+  // const [emjiData, setEmojiData] = useState<EmojiBaseMap[][]>([])
   const { data } = useSWR<ResEmojiMapType>(
     pageIndex ? `api/getImageEmoji?pageIndex=${pageIndex}&limit=96` : null,
     fetcher
   )
 
   useEffect(() => {
-    if (data && !isEnd) {
-      setEmojiData((prev) => (prev = [...prev, data.data.emoji]))
-      setIsEnd(data.isEnd)
+    if (data && !isEnd && emojiMapSet) {
+      // setEmojiData((prev) => (prev = [...prev, data.data.emoji]))
+      // setIsEnd(data.isEnd)
+      emojiMapSet(data.data.emoji)
+      isEndSet(data.isEnd)
     }
-  }, [data, isEnd])
+  }, [data, isEnd, emojiMapSet, isEndSet, pageIndex])
 
   useEffect(() => {
     if (inView && !isEnd) {
@@ -62,9 +75,9 @@ const EmojiContainer = () => {
 
   return (
     <EmojiContainerWrapper>
-      {emjiData &&
-        emjiData.map((emojiMap, index) => (
-          <EmojiComponent key={index} emojis={emojiMap} />
+      {emojiMap &&
+        emojiMap.map((emojis, index) => (
+          <EmojiComponent key={index} emojis={emojis} />
         ))}
       {!isEnd && (
         <div className="emoji-preload" ref={ref}>

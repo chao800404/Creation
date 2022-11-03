@@ -36,7 +36,7 @@ const initialUser = {
 
 export const useUserStore = create<InitialUser & Action>((set, get) => ({
   ...initialUser,
-  userSet: (name: string, value: string) =>
+  userSet: (name, value) =>
     set(
       produce(({ user }) => {
         user[name] = value

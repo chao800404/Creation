@@ -1,4 +1,4 @@
-import create, { StateCreator } from 'zustand'
+import create from 'zustand'
 import produce from 'immer'
 
 type InitialCover = {

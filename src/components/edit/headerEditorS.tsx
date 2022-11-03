@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import ReactTextareaAutosize from 'react-textarea-autosize'
 import { HeaderEditorSWrapper } from './editor.styles'
 import Image from 'next/image'
@@ -63,10 +63,24 @@ const HeaderEditorS = () => {
     console.log(e)
   }
 
+  useEffect(() => {
+    const handleOnClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLDivElement).closest(
+        '#headerEditor_icon-popup'
+      )
+      const emojiContent = (e.target as HTMLDivElement).closest('#emoji_image')
+      if (!target && !emojiContent) setToggleEomjiPopup(false)
+      if (emojiContent) setToggleEomjiPopup(true)
+    }
+
+    document.addEventListener('click', handleOnClick)
+    return () => document.removeEventListener('click', handleOnClick)
+  }, [])
+
   return (
     <HeaderEditorSWrapper
       animate={shouldeShow ? 'show' : 'hidden'}
-      whileHover="show"
+      whileHover={!toggleEmojiPopup ? 'show' : 'hidden'}
       initial="hidden"
     >
       <motion.div variants={variants} className="headierEditor_popup">
@@ -102,11 +116,10 @@ const HeaderEditorS = () => {
           width: headerLevel === 1 ? '3.5rem' : '2rem',
           height: headerLevel === 1 ? '3.5rem' : '2rem',
         }}
-        onClick={() => setToggleEomjiPopup((prev) => !prev)}
       >
-        <div className="headerEditor_icon-popup">
+        <div id="headerEditor_icon-popup" className="headerEditor_icon-popup">
           {toggleEmojiPopup && (
-            <ChangePopup tabs={['emoji']}>
+            <ChangePopup tabs={['emoji', 'upload']}>
               <EmojiContainer />
             </ChangePopup>
           )}
@@ -115,6 +128,7 @@ const HeaderEditorS = () => {
           alt="emoji"
           layout="fill"
           objectFit="cover"
+          id="emoji_image"
           src="/static/icon/grinning-squinting-face_1f606.png"
         />
       </div>
