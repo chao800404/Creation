@@ -155,5 +155,11 @@ export const EmojiComponentWrapper = styled('div')`
     grid-column: span 1;
     position: relative;
     height: 2rem;
+    cursor: pointer;
+    padding: 0.1rem;
+
+    &:hover {
+      background-color: #efefef;
+    }
   }
 `

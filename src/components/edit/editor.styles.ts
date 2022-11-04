@@ -56,12 +56,30 @@ import { motion } from 'framer-motion'
 //     left: 0;
 //   }
 // `
-export const HeaderEditorSWrapper = styled(motion.div)`
+
+type HeaderEditorType = {
+  opacity: number
+  popupOpen: boolean
+}
+
+export const HeaderEditorSWrapper = styled('div').attrs<HeaderEditorType>(
+  (props) => ({
+    opacity: props.opacity,
+    popupOpen: props.popupOpen,
+  })
+)<HeaderEditorType>`
   width: 100%;
   display: grid;
   grid-template-columns: auto 1fr;
   height: fit-content;
   position: relative;
+
+  &:hover {
+    .headierEditor_popup {
+      opacity: ${({ popupOpen }) => (popupOpen ? 0 : 1)};
+      transition: 0.5s ease-out;
+    }
+  }
 
   .headierEditor_popup {
     position: absolute;
@@ -77,6 +95,7 @@ export const HeaderEditorSWrapper = styled(motion.div)`
     align-items: center;
     z-index: 500;
     top: -3.5rem;
+    opacity: ${({ opacity }) => opacity};
 
     div {
       span.remove_cover {
@@ -109,6 +128,7 @@ export const HeaderEditorSWrapper = styled(motion.div)`
     align-self: center;
     justify-self: center;
     margin-right: 1.5rem;
+    cursor: pointer;
 
     &-popup {
       position: absolute;

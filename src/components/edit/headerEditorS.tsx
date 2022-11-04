@@ -17,15 +17,6 @@ import EmojiContainer from '../container/emojiContainer'
 import { useListSWR } from '../../hook/useListSWR'
 import { debounce } from 'lodash'
 
-const variants = {
-  show: {
-    opacity: 1,
-  },
-  hidden: {
-    opacity: 0,
-  },
-}
-
 type Level = 1 | 2
 
 const fontColor = (image: string) =>
@@ -115,11 +106,10 @@ const HeaderEditorS = () => {
 
   return (
     <HeaderEditorSWrapper
-      // animate={shouldeShow && toggleEmojiPopup ? 'show' : 'hidden'}
-      whileHover={!toggleEmojiPopup ? 'show' : 'hidden'}
-      initial="hidden"
+      opacity={shouldeShow ? 1 : 0}
+      popupOpen={toggleEmojiPopup}
     >
-      <motion.div variants={variants} className="headierEditor_popup">
+      <div className="headierEditor_popup">
         <EditorOptionButton
           color={fontColor(emoji || '')}
           onClick={handleAddEmoji}
@@ -155,7 +145,7 @@ const HeaderEditorS = () => {
         >
           <MdOutlineTitle fontSize="1.25rem" />
         </EditorOptionButton>
-      </motion.div>
+      </div>
 
       {emoji && (
         <div
