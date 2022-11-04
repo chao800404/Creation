@@ -178,6 +178,7 @@ const HeaderEditorS = () => {
             objectFit="cover"
             id="emoji_image"
             src={emoji}
+            unoptimized
           />
         </div>
       )}

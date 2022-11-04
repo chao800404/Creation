@@ -60,6 +60,7 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
                   objectFit="cover"
                   width={25}
                   height={25}
+                  unoptimized
                 />
               </div>
             ) : (
