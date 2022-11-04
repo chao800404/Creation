@@ -76,7 +76,29 @@ export const HeaderEditorSWrapper = styled(motion.div)`
     gap: 0.5rem;
     align-items: center;
     z-index: 500;
-    top: -3rem;
+    top: -3.5rem;
+
+    div {
+      span.remove_cover {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+
+        &::after {
+          content: '';
+          width: 100%;
+          height: 2px;
+          position: absolute;
+          top: 50%;
+          left: 0;
+          background-color: red;
+          transform: translateY(-50%) rotate(45deg);
+        }
+      }
+    }
   }
 
   .headerEditor_icon {

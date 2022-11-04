@@ -15,6 +15,7 @@ import { MdOutlineTitle } from 'react-icons/md'
 import ChangePopup from '../popup/changePopup'
 import EmojiContainer from '../container/emojiContainer'
 import { useListSWR } from '../../hook/useListSWR'
+import { debounce } from 'lodash'
 
 const variants = {
   show: {
@@ -27,6 +28,9 @@ const variants = {
 
 type Level = 1 | 2
 
+const fontColor = (image: string) =>
+  (image && image.length > 0 && '#EFEFEF') || ''
+
 const HeaderEditorS = () => {
   const { page } = useRouter().query
   const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
@@ -35,8 +39,8 @@ const HeaderEditorS = () => {
   const [toggleEmojiPopup, setToggleEomjiPopup] = useState(false)
 
   const {
-    mutateFution: { updateListEmoji },
-    data: { emoji },
+    mutateFution: { updateListEmoji, updateListItem },
+    data: { emoji, title },
   } = useListSWR(page as string)
 
   const {
@@ -60,9 +64,10 @@ const HeaderEditorS = () => {
       const randomInt = randomPath(cacheMap.length)
       if (randomInt <= cacheMap.length) {
         const randomPath = cacheMap[randomInt]
-        mutateFution.uploadCoverImage(page as string, randomPath)
+        return mutateFution.uploadCoverImage(page as string, randomPath)
       }
     }
+    return mutateFution.uploadCoverImage(page as string, '')
   }
 
   const handleChangeHeaderLevel = (level: Level) => {
@@ -75,10 +80,16 @@ const HeaderEditorS = () => {
       const randomInt = randomPath(compareEmoji.length)
       if (randomInt <= compareEmoji.length) {
         const randomPath = compareEmoji[randomInt]
-        updateListEmoji(page as string, randomPath.image)
+        return updateListEmoji(page as string, randomPath.image)
       }
     }
+    return updateListEmoji(page as string, '')
   }
+
+  const handleOnChange = debounce((e) => {
+    const value = e.target.value
+    updateListItem(page as string, 'title', value)
+  }, 1000)
 
   useEffect(() => {
     const handleOnClick = (e: MouseEvent) => {
@@ -94,6 +105,7 @@ const HeaderEditorS = () => {
       if (emojiContent) {
         const emoji = emojiContent.getAttribute('data-src')
         emoji && updateListEmoji(page as string, emoji)
+        setToggleEomjiPopup(false)
       }
     }
 
@@ -103,37 +115,44 @@ const HeaderEditorS = () => {
 
   return (
     <HeaderEditorSWrapper
-      animate={shouldeShow ? 'show' : 'hidden'}
+      // animate={shouldeShow && toggleEmojiPopup ? 'show' : 'hidden'}
       whileHover={!toggleEmojiPopup ? 'show' : 'hidden'}
       initial="hidden"
     >
       <motion.div variants={variants} className="headierEditor_popup">
-        {!emoji && (
-          <>
-            <EditorOptionButton onClick={handleAddEmoji}>
-              <BsFillEmojiSunglassesFill fontSize="1.2rem" />
-            </EditorOptionButton>
-            <span className="header_editor-gap-line" />
-          </>
-        )}
+        <EditorOptionButton
+          color={fontColor(emoji || '')}
+          onClick={handleAddEmoji}
+        >
+          <div style={{ position: 'relative' }}>
+            {emoji && <span className="remove_cover" />}
+            <BsFillEmojiSunglassesFill fontSize="1.2rem" />
+          </div>
+        </EditorOptionButton>
+        <span className="header_editor-gap-line" />
 
-        {!cover && (
-          <>
-            <EditorOptionButton onClick={handleAddCover}>
-              <div className="header_editor-add-cover">
-                <FaImage fontSize="1.25rem" />
-                <span>Add cover</span>
-              </div>
-            </EditorOptionButton>
-            <span className="header_editor-gap-line" />
-          </>
-        )}
+        <EditorOptionButton
+          onClick={handleAddCover}
+          color={fontColor(cover || '')}
+        >
+          <div className="header_editor-add-cover">
+            <FaImage fontSize="1.25rem" />
+            <span>{cover ? 'Remove' : 'Add cover'}</span>
+          </div>
+        </EditorOptionButton>
+        <span className="header_editor-gap-line" />
 
-        <EditorOptionButton onClick={() => handleChangeHeaderLevel(1)}>
+        <EditorOptionButton
+          color={(headerLevel === 1 && '#EFEFEF') || ''}
+          onClick={() => handleChangeHeaderLevel(1)}
+        >
           <MdOutlineTitle fontSize="1.5rem" />
         </EditorOptionButton>
 
-        <EditorOptionButton onClick={() => handleChangeHeaderLevel(2)}>
+        <EditorOptionButton
+          color={(headerLevel === 2 && '#EFEFEF') || ''}
+          onClick={() => handleChangeHeaderLevel(2)}
+        >
           <MdOutlineTitle fontSize="1.25rem" />
         </EditorOptionButton>
       </motion.div>
@@ -168,9 +187,12 @@ const HeaderEditorS = () => {
         className="headerEditor_content"
         onFocus={() => setShouldShow(true)}
         onBlur={() => setShouldShow(false)}
+        onCompositionEnd={(e) => console.log(e)}
         style={{
           fontSize: headerLevel === 1 ? '2.3rem' : '1.8rem' || '2.3rem',
         }}
+        defaultValue={title || ''}
+        onChange={handleOnChange}
       />
     </HeaderEditorSWrapper>
   )

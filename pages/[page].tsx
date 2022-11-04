@@ -24,7 +24,7 @@ const DashboardPage: NextPage = () => {
 
   const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
   const {
-    data: { emoji },
+    data: { emoji, title },
   } = useListSWR(page as string)
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const DashboardPage: NextPage = () => {
   return (
     <SWRConfig>
       <Head>
-        {/* <title>{title}</title> */}
+        <title>{title || 'Dashboard'}</title>
         <meta name="description" content="Creation App" />
         <link rel="icon" href={emoji ? emoji : '/favicon.ico'} />
       </Head>

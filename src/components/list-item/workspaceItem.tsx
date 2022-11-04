@@ -58,7 +58,8 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
                   src={icon?.image}
                   alt="icon"
                   objectFit="cover"
-                  layout="fill"
+                  width={25}
+                  height={25}
                 />
               </div>
             ) : (

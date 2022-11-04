@@ -34,9 +34,11 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
           <Image
             src={image}
             objectFit="cover"
-            layout="fill"
+            width={30}
+            height={30}
             alt={name || 'emoji'}
             priority={true}
+            loading="eager"
           />
         </div>
       ))}

@@ -43,7 +43,7 @@ export const usePageSWR: UsePageSWRType = (id) => {
         {
           populateCache: (uploadImage, page) => {
             return produce<PageResDataType>(page, (draft) => {
-              draft.data.cover.image = uploadImage.data.image
+              draft.data.cover.image = uploadImage.data?.image
             })
           },
 
@@ -66,7 +66,7 @@ export const usePageSWR: UsePageSWRType = (id) => {
         populateCache: (uploadImage, page) => {
           return produce<PageResDataType>(page, (draft) => {
             console.log(uploadImage)
-            draft.data.cover.image = uploadImage.data.image
+            draft.data.cover.image = uploadImage.data?.image
           })
         },
 

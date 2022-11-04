@@ -49,7 +49,7 @@ export const EditorOptionButtonWrapper = styled('button')`
   justify-content: center;
   color: inherit;
   position: relative;
-
+  cursor: pointer;
   border: none;
   background-color: transparent;
 `

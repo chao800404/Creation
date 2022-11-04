@@ -4,20 +4,17 @@ import { EditorOptionButtonWrapper } from './button.styles'
 type EditorOptionButtonType = {
   children: JSX.Element
   className?: string
-  active?: boolean
+  color?: string
   onClick: (e: React.MouseEvent) => void
 }
 
 const EditorOptionButton: React.FC<EditorOptionButtonType> = ({
   children,
-  active,
+  color,
   ...otherProps
 }) => {
   return (
-    <EditorOptionButtonWrapper
-      style={active ? { color: '#e8e8e8' } : {}}
-      {...otherProps}
-    >
+    <EditorOptionButtonWrapper style={{ color: color }} {...otherProps}>
       {children}
     </EditorOptionButtonWrapper>
   )

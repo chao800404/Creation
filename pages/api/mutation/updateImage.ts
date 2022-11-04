@@ -10,7 +10,7 @@ const keyEnum = ['emoji', 'cover'] as const
 const MySchema = z.object({
   id: z.string().cuid({ message: 'Please provide correct ID' }),
   key: z.enum(keyEnum),
-  src: z.string().startsWith('/static'),
+  src: z.union([z.string().startsWith('/static'), z.string().length(0)]),
 })
 
 export default async function handler(
