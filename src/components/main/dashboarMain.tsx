@@ -1,11 +1,11 @@
-import React, { useRef } from 'react'
 import DashboardBanner from '../banner/dashboardBanner'
 
-import { DashboardMainWrapper } from './main.styles'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
-import Spinner from '../spinner/spinner'
 import HeaderEditorS from '../edit/headerEditorS'
+import Spinner from '../spinner/spinner'
+import { DashboardMainWrapper } from './main.styles'
+import AddBlockInput from '../input/addBlockInput'
 
 const DashboardMain = () => {
   const {
@@ -32,12 +32,10 @@ const DashboardMain = () => {
           <div className="DashboardMain_container-content-header">
             <HeaderEditorS />
           </div>
-          <div
-            style={{
-              height: '200vh',
-              background: '#c3c3c3',
-            }}
-          ></div>
+          <div className="DashboardMain_container-content-add">
+            <AddBlockInput />
+          </div>
+
           <div style={{ height: '20vh', background: '#ffffff' }}></div>
         </div>
 

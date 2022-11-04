@@ -21,6 +21,20 @@ export const GlobalStyle = createGlobalStyle`
       } */
   }
 
+  
+  textarea {
+    border: none;
+    outline: none;
+    resize: none;
+    font-weight: 700;
+    font-family: Roboto;
+
+    
+    &::placeholder {
+      color: #EFEFEF;
+    }
+  }
+
   div:focus-visible{
     outline: none;
   }

@@ -73,6 +73,7 @@ export const HeaderEditorSWrapper = styled('div').attrs<HeaderEditorType>(
   grid-template-columns: auto 1fr;
   height: fit-content;
   position: relative;
+  padding: 0.5rem 0 0 0;
 
   &:hover {
     .headierEditor_popup {
@@ -94,7 +95,7 @@ export const HeaderEditorSWrapper = styled('div').attrs<HeaderEditorType>(
     gap: 0.5rem;
     align-items: center;
     z-index: 500;
-    top: -3.5rem;
+    top: -2.5rem;
     opacity: ${({ opacity }) => opacity};
 
     div {
@@ -133,6 +134,7 @@ export const HeaderEditorSWrapper = styled('div').attrs<HeaderEditorType>(
     &-popup {
       position: absolute;
       top: 4rem;
+      z-index: 100;
     }
   }
 
@@ -141,16 +143,7 @@ export const HeaderEditorSWrapper = styled('div').attrs<HeaderEditorType>(
     grid-column: 2 / -1;
     font-size: 2rem;
     align-self: center;
-    border: none;
-    outline: none;
-    font-weight: 700;
-    font-family: Roboto;
-    resize: none;
     font-size: 2.3rem;
-
-    &::placeholder {
-      color: #c3c3c3;
-    }
   }
 
   .header_editor-gap-line {

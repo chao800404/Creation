@@ -27,7 +27,8 @@ export const DashboardMainWrapper = styled('div')<DashboardMain>`
       display: flex;
       flex-direction: column;
       width: 100%;
-      padding: 0 2rem;
+      padding: 0 3rem;
+      gap: 0.5rem;
 
       &-gap {
         height: 1.5rem;
@@ -37,15 +38,11 @@ export const DashboardMainWrapper = styled('div')<DashboardMain>`
         display: flex;
         align-items: center;
         width: 100%;
-        padding: 1.6rem 0;
-        width: 100%;
       }
 
-      &-emoji {
-        width: 3rem;
-        height: 3rem;
-        position: relative;
-        margin-right: 1rem;
+      &-add {
+        width: 100%;
+        margin-top: 1rem;
       }
     }
   }
