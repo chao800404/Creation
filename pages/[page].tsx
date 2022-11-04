@@ -9,6 +9,7 @@ import { NextPage } from 'next'
 import { useListSWR } from '../src/hook/useListSWR'
 import { fetcher } from '../src/utils/fetch'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 const DashboardPage: NextPage = () => {
   const coverImageMapSet = useCoverStore(
@@ -22,6 +23,9 @@ const DashboardPage: NextPage = () => {
   } = useListSWR(page as string)
 
   const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
+  const {
+    data: { emoji },
+  } = useListSWR(page as string)
 
   useEffect(() => {
     coverImageMapSet(coverImagePath?.path)
@@ -33,6 +37,11 @@ const DashboardPage: NextPage = () => {
 
   return (
     <SWRConfig>
+      <Head>
+        {/* <title>{title}</title> */}
+        <meta name="description" content="Creation App" />
+        <link rel="icon" href={emoji ? emoji : '/favicon.ico'} />
+      </Head>
       {list && (
         <DashboardLayout list={list}>
           <DashboardMain />

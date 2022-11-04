@@ -7,7 +7,7 @@ import shallow from 'zustand/shallow'
 
 import { WorkspaceItemWrapper } from './item.styles'
 import { motion } from 'framer-motion'
-
+import Image from 'next/image'
 import Link from 'next/link'
 import { Emoji } from '@prisma/client'
 
@@ -44,8 +44,22 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
         <motion.a className="workspaceItem_content">
           <Accordion id={icon?.id} text={title} sideWidth={sideWidth || 0}>
             {icon && icon?.image?.length > 0 ? (
-              <div style={{ padding: '0.2rem', fontSize: '.9rem' }}>
-                {icon?.image}
+              <div
+                style={{
+                  fontSize: '.9rem',
+                  position: 'relative',
+                  width: '1rem',
+                  height: '1rem',
+                  marginLeft: '0.3rem',
+                  marginRight: '0.3rem',
+                }}
+              >
+                <Image
+                  src={icon?.image}
+                  alt="icon"
+                  objectFit="cover"
+                  layout="fill"
+                />
               </div>
             ) : (
               <IconContainer size="1.2rem" icon={baseIcon[0]} />

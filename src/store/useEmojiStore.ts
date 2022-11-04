@@ -1,6 +1,7 @@
 import create from 'zustand'
 import produce from 'immer'
 import { EmojiBaseMap } from '@prisma/client'
+import { persist } from 'zustand/middleware'
 
 type InitialEmoji = {
   emojiMap: EmojiBaseMap[][]
@@ -17,22 +18,30 @@ const initialEmoji = {
   isEnd: false,
 }
 
-export const useEmojiStore = create<InitialEmoji & Action>((set, get) => ({
-  ...initialEmoji,
-  emojiMapSet: (emojiMap) => {
-    const { isEnd } = get()
-    if (isEnd) return
-    set(
-      produce<InitialEmoji>((state) => {
-        state.emojiMap?.push(emojiMap)
-      })
-    )
-  },
-  isEndSet: (end) => {
-    set(
-      produce<InitialEmoji>((state) => {
-        state.isEnd = end
-      })
-    )
-  },
-}))
+export const useEmojiStore = create<InitialEmoji & Action>()(
+  persist(
+    (set, get) => ({
+      ...initialEmoji,
+      emojiMapSet: (emojiMap) => {
+        const { isEnd } = get()
+        if (isEnd) return
+        set(
+          produce<InitialEmoji>((state) => {
+            state.emojiMap?.push(emojiMap)
+          })
+        )
+      },
+
+      isEndSet: (end) => {
+        set(
+          produce<InitialEmoji>((state) => {
+            state.isEnd = end
+          })
+        )
+      },
+    }),
+    {
+      name: 'emoji-map',
+    }
+  )
+)

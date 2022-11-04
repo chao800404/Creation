@@ -60,7 +60,6 @@ export const HeaderEditorSWrapper = styled(motion.div)`
   width: 100%;
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 1.2rem;
   height: fit-content;
   position: relative;
 
@@ -87,6 +86,7 @@ export const HeaderEditorSWrapper = styled(motion.div)`
     height: 3.5rem;
     align-self: center;
     justify-self: center;
+    margin-right: 1.5rem;
 
     &-popup {
       position: absolute;

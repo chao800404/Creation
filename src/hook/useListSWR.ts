@@ -14,6 +14,8 @@ type UseListSWRResult = {
     list: (List & { emoji: Emoji })[] | undefined
     favorite: boolean | undefined
     editable: boolean | undefined
+    emoji: Emoji['image'] | undefined
+    title: List['title'] | undefined
   }
   isLoading: boolean
   mutateFution: {
@@ -24,6 +26,7 @@ type UseListSWRResult = {
       key: keyof List,
       value: boolean | string
     ) => void
+    updateListEmoji: (id: string, src: string) => void
   }
 }
 
@@ -109,15 +112,47 @@ export const useListSWR: UseListType = (id) => {
         }
       )
     },
+
+    updateListEmoji: (id, src) => {
+      const preUpdateEmoji = produce<ListResDataType>(({ data }) => {
+        if (data) {
+          const index = data.findIndex((item) => item.id === id)
+          if (index !== -1 && index !== undefined) {
+            data[index].emoji.image = src
+          }
+        }
+      })
+
+      mutate(
+        '/api/query/queryList',
+        updateData('updateImage', { id, key: 'emoji', src }, null),
+        {
+          populateCache: (updateEmoji, list: ListResDataType) => {
+            return produce(list, ({ data }) => {
+              const index = data.findIndex((item) => item.id === id)
+              if (index !== -1 && index !== undefined) {
+                console.log(updateEmoji)
+                data[index].emoji.image = updateEmoji.data.image
+              }
+            })
+          },
+          revalidate: false,
+          optimisticData: preUpdateEmoji,
+          rollbackOnError: true,
+        }
+      )
+    },
   }
 
-  const listItem = data?.data.find((item) => item.id === id)
+  const listItem = data?.data?.find((item) => item.id === id)
 
   return {
     data: {
       list: data?.data,
       favorite: listItem?.favorite,
       editable: listItem?.editable,
+      emoji: listItem?.emoji?.image,
+      title: listItem?.title,
     },
     isLoading: !error && !data,
     mutateFution,

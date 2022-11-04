@@ -15,7 +15,7 @@ const Dashboard = () => {
     isLoading,
   } = useListSWR(page as string)
 
-  if (isLoading) {
+  if (isLoading || !list) {
     return <Spinner />
   }
 

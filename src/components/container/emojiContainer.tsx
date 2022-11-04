@@ -24,13 +24,19 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
   <EmojiComponentWrapper>
     {emojis &&
       emojis.map(({ name, id, image }) => (
-        <div className="emoji-content" key={id}>
+        <div
+          id={id}
+          data-type="emoji-content"
+          className="emoji-content"
+          data-src={image}
+          key={id}
+        >
           <Image
-            priority
             src={image}
             objectFit="cover"
             layout="fill"
             alt={name || 'emoji'}
+            priority={true}
           />
         </div>
       ))}
@@ -42,7 +48,6 @@ const EmojiContainer = () => {
   const { ref, inView } = useInView({
     threshold: 0,
   })
-  // const [isEnd, setIsEnd] = useState(false)
   const { isEnd, isEndSet, emojiMap, emojiMapSet } = useEmojiStore(
     (state) => ({
       isEnd: state.isEnd,
@@ -52,16 +57,16 @@ const EmojiContainer = () => {
     }),
     shallow
   )
-  // const [emjiData, setEmojiData] = useState<EmojiBaseMap[][]>([])
+
   const { data } = useSWR<ResEmojiMapType>(
-    pageIndex ? `api/getImageEmoji?pageIndex=${pageIndex}&limit=96` : null,
+    pageIndex && !isEnd
+      ? `api/getImageEmoji?pageIndex=${pageIndex}&limit=96`
+      : null,
     fetcher
   )
 
   useEffect(() => {
     if (data && !isEnd && emojiMapSet) {
-      // setEmojiData((prev) => (prev = [...prev, data.data.emoji]))
-      // setIsEnd(data.isEnd)
       emojiMapSet(data.data.emoji)
       isEndSet(data.isEnd)
     }

@@ -1,9 +1,6 @@
-import React, { useState, useCallback } from 'react'
-
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
-
 import { ChangePopupWrapper } from './popup.styles'
 
 const style = (backgroundColor: string, color: string, borderRight: string) => {

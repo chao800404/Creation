@@ -45,6 +45,19 @@ export default async function handler(
           })
         }
 
+        if (key === 'emoji') {
+          updateData = await prisma.emoji.update({
+            where: {
+              listId: resData.id,
+            },
+            data: {
+              image: src,
+            },
+          })
+        }
+
+        console.log(updateData)
+
         if (!updateData) throw new Error('Please provide correct key')
 
         res.status(200).json({
