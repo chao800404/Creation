@@ -12,6 +12,8 @@ import { DashboardLayoutWrapper } from './dashboard.styles'
 import dynamic from 'next/dynamic'
 
 import { Emoji, List } from '@prisma/client'
+import { useListSWR } from '../../hook/useListSWR'
+import { useRouter } from 'next/router'
 
 const DynamicSideWrapper = dynamic(() => import('../side/sideWrapper'), {
   ssr: false,
@@ -26,20 +28,26 @@ const DynamicDashBoardContainer = dynamic(
 
 type DashboardLayoutType = {
   children: JSX.Element | JSX.Element[]
-  list: (List & { emoji: Emoji })[]
 }
 
 const { searchBarBtn, interfaces, workspaces, importFile, trash, newPage } =
   SIDE_OPTION
 
-const DashboardLayout: React.FC<DashboardLayoutType> = ({ children, list }) => {
+const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
+  const { page } = useRouter().query
+  const {
+    data: { list },
+    isLoading,
+  } = useListSWR(page as string)
   return (
     <DashboardLayoutWrapper>
       <DynamicSideWrapper>
         <div>
           <SearchBarBtn desc={searchBarBtn.text} />
           <div className="dashboard_side-feature">
-            <FavoriteTag list={list?.filter((item) => item.favorite)} />
+            {list && (
+              <FavoriteTag list={list?.filter((item) => item.favorite)} />
+            )}
             <Accordion text={interfaces.text} />
           </div>
 
@@ -48,7 +56,7 @@ const DashboardLayout: React.FC<DashboardLayoutType> = ({ children, list }) => {
           </div>
         </div>
 
-        <SideContainer list={list} height="100%" />
+        {list && <SideContainer list={list} height="100%" />}
 
         <div className="dashboard_side-option">
           <FeaturesBtn icon={importFile.icon} text={importFile.text} />

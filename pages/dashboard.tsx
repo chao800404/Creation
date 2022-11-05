@@ -37,20 +37,11 @@ const Dashboard = () => {
         // href={emoji ? transferEmojiToSvg(emoji) : '/favicon.ico'}
         />
       </Head>
-
-      {list && (
-        <DashboardLayout list={list}>
-          <DashboardMain />
-        </DashboardLayout>
-      )}
+      <DashboardLayout>
+        <DashboardMain />
+      </DashboardLayout>
     </SWRConfig>
   )
-}
-
-type ResType<T, K> = {
-  status: 'success' | 'fail'
-  data?: T
-  path?: K
 }
 
 // export const getStaticProps: GetStaticProps = async () => {

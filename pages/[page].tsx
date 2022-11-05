@@ -48,11 +48,9 @@ const DashboardPage: NextPage = () => {
         <meta name="description" content="Creation App" />
         <link rel="icon" href={emoji ? emoji : '/favicon.ico'} />
       </Head>
-      {list && (
-        <DashboardLayout list={list}>
-          <DashboardMain />
-        </DashboardLayout>
-      )}
+      <DashboardLayout>
+        <DashboardMain />
+      </DashboardLayout>
     </SWRConfig>
   )
 }

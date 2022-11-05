@@ -4,7 +4,7 @@ import {
   EmojiContainerWrapper,
   EmojiComponentWrapper,
 } from './container.styles'
-import Image from 'next/image'
+import Image, { ImageLoader } from 'next/image'
 import { useInView } from 'react-intersection-observer'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { EmojiBaseMap } from '@prisma/client'
@@ -28,8 +28,6 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
             width={30}
             height={30}
             alt={name || 'emoji'}
-            placeholder="blur"
-            blurDataURL={image}
           />
         </div>
       ))}
