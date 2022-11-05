@@ -12,14 +12,6 @@ import { EmojiBaseMap } from '@prisma/client'
 import { useEmojiStore } from '../../store/index'
 import shallow from 'zustand/shallow'
 
-type ResEmojiMapType = {
-  status: 'success' | 'fail'
-  data: {
-    emoji: EmojiBaseMap[]
-  }
-  isEnd: boolean
-}
-
 const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
   <EmojiComponentWrapper>
     {emojis &&
@@ -37,7 +29,7 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
             width={30}
             height={30}
             alt={name || 'emoji'}
-            unoptimized
+            priority
           />
         </div>
       ))}
@@ -65,6 +57,21 @@ const EmojiContainer = () => {
   //     : null,
   //   fetcher
   // )
+
+  useEffect(() => {
+    if (pageIndex && !isEnd) {
+      const fetcher = async () => {
+        const res = await fetch(
+          `api/getImageEmoji?pageIndex=${pageIndex}&limit=96`
+        )
+        const data = await res.json()
+        emojiMapSet(data.data.emoji)
+        isEndSet(data.isEnd)
+      }
+
+      fetcher()
+    }
+  }, [pageIndex, isEnd, emojiMapSet, isEndSet])
 
   // useEffect(() => {
   //   if (data && !isEnd && emojiMapSet) {

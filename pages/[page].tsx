@@ -22,14 +22,20 @@ const DashboardPage: NextPage = () => {
     isLoading,
   } = useListSWR(page as string)
 
-  const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
   const {
     data: { emoji, title },
   } = useListSWR(page as string)
 
   useEffect(() => {
-    coverImageMapSet(coverImagePath?.path)
-  }, [coverImagePath, coverImageMapSet])
+    const fetcher = async () => {
+      const res = await fetch('api/getImageCover')
+      const coverImagePath = await res.json()
+      coverImageMapSet(coverImagePath?.path)
+    }
+
+    fetcher()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (isLoading) {
     return <Spinner />

@@ -16,6 +16,7 @@ import ChangePopup from '../popup/changePopup'
 import EmojiContainer from '../container/emojiContainer'
 import { useListSWR } from '../../hook/useListSWR'
 import { debounce } from 'lodash'
+import { EmojiBaseMap } from '@prisma/client'
 
 type Level = 1 | 2
 
@@ -157,13 +158,9 @@ const HeaderEditorS = () => {
         >
           <div id="headerEditor_icon-popup" className="headerEditor_icon-popup">
             {toggleEmojiPopup && (
-              <div style={{ width: '20rem' }}>
+              <ChangePopup tabs={['emoji', 'upload']}>
                 <EmojiContainer />
-              </div>
-
-              // <ChangePopup tabs={['emoji', 'upload']}>
-              //   <EmojiContainer />
-              // </ChangePopup>
+              </ChangePopup>
             )}
           </div>
           <Image

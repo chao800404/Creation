@@ -15,14 +15,8 @@ import shallow from 'zustand/shallow'
 import { useEmojiStore } from '../src/store'
 import prisma from '../src/lib/prisma'
 
-const Dashboard = ({ emojiMap }: { emojiMap: EmojiBaseMap[] }) => {
+const Dashboard = () => {
   const { page } = useRouter().query
-
-  const emojiMapSet = useEmojiStore((state) => state.emojiMapSet, shallow)
-
-  useEffect(() => {
-    emojiMapSet(emojiMap)
-  }, [emojiMap])
 
   const {
     data: { list },
@@ -59,20 +53,20 @@ type ResType<T, K> = {
   path?: K
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const emojiMap = await prisma.emojiBaseMap.findMany({
-    select: {
-      image: true,
-      name: true,
-      id: true,
-    },
-  })
+// export const getStaticProps: GetStaticProps = async () => {
+//   const emojiMap = await prisma.emojiBaseMap.findMany({
+//     select: {
+//       image: true,
+//       name: true,
+//       id: true,
+//     },
+//   })
 
-  return {
-    props: {
-      emojiMap,
-    },
-  }
-}
+//   return {
+//     props: {
+//       emojiMap,
+//     },
+//   }
+// }
 
 export default Dashboard
