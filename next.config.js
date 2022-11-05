@@ -11,17 +11,8 @@ const nextConfig = {
   },
   async headers() {
     return [
-      // {
-      //   source: '/(.*).png',
-      //   headers: [
-      //     {
-      //       key: 'Cache-Control',
-      //       value: 'public, max-age=2592000, immutable',
-      //     },
-      //   ],
-      // },
       {
-        source: '/_next/image(.*)',
+        source: '/(.*).png',
         headers: [
           {
             key: 'Cache-Control',
@@ -29,6 +20,15 @@ const nextConfig = {
           },
         ],
       },
+      // {
+      //   source: '/_next/image(.*)',
+      //   headers: [
+      //     {
+      //       key: 'Cache-Control',
+      //       value: 'public, max-age=2592000, immutable',
+      //     },
+      //   ],
+      // },
     ]
   },
 }
