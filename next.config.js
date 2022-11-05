@@ -7,7 +7,6 @@ const nextConfig = {
   },
   images: {
     dangerouslyAllowSVG: true,
-    minimumCacheTTL: 60 * 60 * 24,
     domains: ['lh3.googleusercontent.com', 'res.cloudinary.com'],
   },
   async headers() {
