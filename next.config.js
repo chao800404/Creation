@@ -7,7 +7,6 @@ const nextConfig = {
   },
   images: {
     dangerouslyAllowSVG: true,
-    minimumCacheTTL: 60 * 60 * 24,
     domains: ['lh3.googleusercontent.com', 'res.cloudinary.com'],
   },
   async headers() {
@@ -17,8 +16,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value:
-              'public, max-age=180, s-maxage=180, stale-while-revalidate=180',
+            value: 'public, s-maxage=86400, stale-while-revalidate=30',
           },
         ],
       },
@@ -27,8 +25,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value:
-              'public, max-age=180, s-maxage=180, stale-while-revalidate=180',
+            value: 'public, s-maxage=86400, stale-while-revalidate=60',
           },
         ],
       },

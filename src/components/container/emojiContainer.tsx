@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import useSWR from 'swr'
-import { fetcher } from '../../utils/fetch'
+
 import {
   EmojiContainerWrapper,
   EmojiComponentWrapper,
@@ -29,7 +28,8 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
             width={30}
             height={30}
             alt={name || 'emoji'}
-            priority={true}
+            placeholder="blur"
+            blurDataURL={image}
           />
         </div>
       ))}
@@ -51,13 +51,6 @@ const EmojiContainer = () => {
     shallow
   )
 
-  // const { data } = useSWR<ResEmojiMapType>(
-  //   pageIndex && !isEnd
-  //     ? `api/getImageEmoji?pageIndex=${pageIndex}&limit=96`
-  //     : null,
-  //   fetcher
-  // )
-
   useEffect(() => {
     if (pageIndex && !isEnd) {
       const fetcher = async () => {
@@ -72,13 +65,6 @@ const EmojiContainer = () => {
       fetcher()
     }
   }, [pageIndex, isEnd, emojiMapSet, isEndSet])
-
-  // useEffect(() => {
-  //   if (data && !isEnd && emojiMapSet) {
-  //     emojiMapSet(data.data.emoji)
-  //     isEndSet(data.isEnd)
-  //   }
-  // }, [data, isEnd, emojiMapSet, isEndSet, pageIndex])
 
   useEffect(() => {
     if (inView && !isEnd) {
