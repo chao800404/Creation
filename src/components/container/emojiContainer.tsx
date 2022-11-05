@@ -39,7 +39,6 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
             alt={name || 'emoji'}
             priority={true}
             loading="eager"
-            unoptimized
           />
         </div>
       ))}

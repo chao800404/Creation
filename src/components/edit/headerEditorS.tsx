@@ -95,8 +95,8 @@ const HeaderEditorS = () => {
       if (emojiImage) setToggleEomjiPopup(true)
       if (emojiContent) {
         const emoji = emojiContent.getAttribute('data-src')
-        emoji && updateListEmoji(page as string, emoji)
         setToggleEomjiPopup(false)
+        emoji && updateListEmoji(page as string, emoji)
       }
     }
 
