@@ -1,6 +1,6 @@
-import fs from 'fs'
-import path from 'path'
-const fsPromises = fs.promises
+// import fs from 'fs'
+// import path from 'path'
+// const fsPromises = fs.promises
 import { NextApiResponse, NextApiRequest } from 'next'
 import prisma from '../../src/lib/prisma'
 

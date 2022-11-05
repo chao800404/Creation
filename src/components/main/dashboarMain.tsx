@@ -14,7 +14,6 @@ const DashboardMain = () => {
 
   const {
     data: { cover },
-    mutateFution,
     isLoading,
   } = usePageSWR(page as string)
 

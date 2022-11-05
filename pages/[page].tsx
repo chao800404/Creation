@@ -12,24 +12,24 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 
 const DashboardPage: NextPage = () => {
-  const coverImageMapSet = useCoverStore(
-    (state) => state.coverImageMapSet,
-    shallow
-  )
+  // const coverImageMapSet = useCoverStore(
+  //   (state) => state.coverImageMapSet,
+  //   shallow
+  // )
   const { page } = useRouter().query
   const {
     data: { list },
     isLoading,
   } = useListSWR(page as string)
 
-  const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
+  // const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
   const {
     data: { emoji, title },
   } = useListSWR(page as string)
 
-  useEffect(() => {
-    coverImageMapSet(coverImagePath?.path)
-  }, [coverImagePath, coverImageMapSet])
+  // useEffect(() => {
+  //   coverImageMapSet(coverImagePath?.path)
+  // }, [coverImagePath, coverImageMapSet])
 
   if (isLoading) {
     return <Spinner />

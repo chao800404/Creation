@@ -39,6 +39,7 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
             alt={name || 'emoji'}
             priority={true}
             loading="eager"
+            unoptimized
           />
         </div>
       ))}
@@ -60,19 +61,19 @@ const EmojiContainer = () => {
     shallow
   )
 
-  const { data } = useSWR<ResEmojiMapType>(
-    pageIndex && !isEnd
-      ? `api/getImageEmoji?pageIndex=${pageIndex}&limit=96`
-      : null,
-    fetcher
-  )
+  // const { data } = useSWR<ResEmojiMapType>(
+  //   pageIndex && !isEnd
+  //     ? `api/getImageEmoji?pageIndex=${pageIndex}&limit=96`
+  //     : null,
+  //   fetcher
+  // )
 
-  useEffect(() => {
-    if (data && !isEnd && emojiMapSet) {
-      emojiMapSet(data.data.emoji)
-      isEndSet(data.isEnd)
-    }
-  }, [data, isEnd, emojiMapSet, isEndSet, pageIndex])
+  // useEffect(() => {
+  //   if (data && !isEnd && emojiMapSet) {
+  //     emojiMapSet(data.data.emoji)
+  //     isEndSet(data.isEnd)
+  //   }
+  // }, [data, isEnd, emojiMapSet, isEndSet, pageIndex])
 
   useEffect(() => {
     if (inView && !isEnd) {
