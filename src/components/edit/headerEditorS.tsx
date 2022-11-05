@@ -157,9 +157,13 @@ const HeaderEditorS = () => {
         >
           <div id="headerEditor_icon-popup" className="headerEditor_icon-popup">
             {toggleEmojiPopup && (
-              <ChangePopup tabs={['emoji', 'upload']}>
+              <div style={{ width: '20rem' }}>
                 <EmojiContainer />
-              </ChangePopup>
+              </div>
+
+              // <ChangePopup tabs={['emoji', 'upload']}>
+              //   <EmojiContainer />
+              // </ChangePopup>
             )}
           </div>
           <Image
