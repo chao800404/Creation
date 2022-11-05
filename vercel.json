@@ -1,0 +1,22 @@
+{
+  "headers": [
+    {
+      "source": "/public/static/cover/*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=89640, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/public/static/emoji/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=89640, immutable"
+        }
+      ]
+    }
+  ]
+}
