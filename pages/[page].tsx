@@ -12,24 +12,24 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 
 const DashboardPage: NextPage = () => {
-  // const coverImageMapSet = useCoverStore(
-  //   (state) => state.coverImageMapSet,
-  //   shallow
-  // )
+  const coverImageMapSet = useCoverStore(
+    (state) => state.coverImageMapSet,
+    shallow
+  )
   const { page } = useRouter().query
   const {
     data: { list },
     isLoading,
   } = useListSWR(page as string)
 
-  // const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
+  const { data: coverImagePath } = useSWR('api/getImageCover', fetcher)
   const {
     data: { emoji, title },
   } = useListSWR(page as string)
 
-  // useEffect(() => {
-  //   coverImageMapSet(coverImagePath?.path)
-  // }, [coverImagePath, coverImageMapSet])
+  useEffect(() => {
+    coverImageMapSet(coverImagePath?.path)
+  }, [coverImagePath, coverImageMapSet])
 
   if (isLoading) {
     return <Spinner />
@@ -50,20 +50,5 @@ const DashboardPage: NextPage = () => {
     </SWRConfig>
   )
 }
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   return {
-//     props: {},
-//   }
-// }
-
-// export const getStaticPaths = async () => {
-//   const prisma = new PrismaClient()
-//   const list = (await prisma.list.findMany()) as List[]
-//   return {
-//     paths: list?.map((listItem) => ({ params: { page: listItem.id } })),
-//     fallback: true,
-//   }
-// }
 
 export default DashboardPage

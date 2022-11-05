@@ -13,27 +13,16 @@ import { GetStaticProps } from 'next'
 import { useCoverStore } from '../src/store'
 import shallow from 'zustand/shallow'
 import { useEmojiStore } from '../src/store'
+import prisma from '../src/lib/prisma'
 
-const Dashboard = ({
-  emojiMap,
-  coverMap,
-}: {
-  emojiMap: EmojiBaseMap[]
-  coverMap: { [key: string]: string[] }
-}) => {
+const Dashboard = ({ emojiMap }: { emojiMap: EmojiBaseMap[] }) => {
   const { page } = useRouter().query
-
-  const coverImageMapSet = useCoverStore(
-    (state) => state.coverImageMapSet,
-    shallow
-  )
 
   const emojiMapSet = useEmojiStore((state) => state.emojiMapSet, shallow)
 
   useEffect(() => {
-    coverImageMapSet(coverMap)
     emojiMapSet(emojiMap)
-  }, [emojiMap, coverMap])
+  }, [emojiMap])
 
   const {
     data: { list },
@@ -71,20 +60,17 @@ type ResType<T, K> = {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const emojiMap: ResType<{ emoji: EmojiBaseMap[] }, unknown> = await fetch(
-    `${URL}/api/getImageEmojis`
-  ).then((res) => res.json())
-
-  const coverMap: ResType<unknown, { [key: string]: string[] }> = await fetch(
-    `${URL}/api/getImageCover`
-  ).then((res) => res.json())
-
-  const res = await Promise.all([emojiMap, coverMap])
+  const emojiMap = await prisma.emojiBaseMap.findMany({
+    select: {
+      image: true,
+      name: true,
+      id: true,
+    },
+  })
 
   return {
     props: {
-      emojiMap: res[0].data?.emoji,
-      coverMap: res[1].path,
+      emojiMap,
     },
   }
 }

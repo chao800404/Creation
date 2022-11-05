@@ -60,7 +60,6 @@ export default async function handler(
       })
 
       const isEnd = result.length < Number(limit)
-
       res
         .status(200)
         .json({ status: 'success', data: { emoji: result }, isEnd })
