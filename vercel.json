@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=89640, immutable"
+          "value": "public, max-age=896400, immutable"
         }
       ]
     },
@@ -14,7 +14,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=89640, immutable"
+          "value": "public, max-age=896400, immutable"
         }
       ]
     }
