@@ -13,20 +13,22 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/public/static/emoji',
+        source: '/(.*).png',
         headers: [
           {
             key: 'Cache-Control',
-            value: 's-maxage=1, stale-while-revalidate=59',
+            value:
+              'public, max-age=180, s-maxage=180, stale-while-revalidate=180',
           },
         ],
       },
       {
-        source: '/public/static/cover',
+        source: '/_next/image(.*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 's-maxage=1, stale-while-revalidate=59',
+            value:
+              'public, max-age=180, s-maxage=180, stale-while-revalidate=180',
           },
         ],
       },
