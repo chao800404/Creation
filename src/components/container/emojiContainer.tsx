@@ -29,7 +29,7 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
             width={30}
             height={30}
             alt={name || 'emoji'}
-            priority
+            priority={true}
           />
         </div>
       ))}
