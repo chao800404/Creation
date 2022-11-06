@@ -43,6 +43,7 @@ export const DashboardMainWrapper = styled('div')<DashboardMain>`
       &-add {
         width: 100%;
         margin-top: 1rem;
+        position: relative;
       }
     }
   }

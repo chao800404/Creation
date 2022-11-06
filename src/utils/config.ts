@@ -60,3 +60,46 @@ export const SIDE_OPTION = {
     icon: [HiDocumentText, AiOutlinePlus, TbGridDots],
   },
 }
+
+export const BLOCK_SELECTOR = [
+  {
+    name: 'Heading_1',
+    desc: 'Big section heading.',
+    image: '/static/blocks/header.png',
+  },
+  {
+    name: 'Heading_2',
+    desc: 'Medium section heading.',
+    image: '/static/blocks/subheader.png',
+  },
+  {
+    name: 'Heading_3',
+    desc: 'Small section heading.',
+    image: '/static/blocks/subsubheader.png',
+  },
+  {
+    name: 'Paragraph',
+    desc: 'Just start writing with plain text.',
+    image: '/static/blocks/en-US.png',
+  },
+  {
+    name: 'Table',
+    desc: 'Add simple a tabular content.',
+    image: '/static/blocks/simple-table.png',
+  },
+  {
+    name: 'To-do_list',
+    desc: 'Embed a sub-page inside the page.',
+    image: '/static/blocks/to-do-list.png',
+  },
+  {
+    name: 'Bullested_list',
+    desc: 'Create a simple bulleted list.',
+    image: '/static/blocks/en-US.png',
+  },
+  {
+    name: 'Numbered_list',
+    desc: 'Create a list with numbering.',
+    image: '/static/blocks/numbered-list.png',
+  },
+]

@@ -39,6 +39,7 @@ const EmojiContainer = () => {
   const { ref, inView } = useInView({
     threshold: 0,
   })
+
   const { isEnd, isEndSet, emojiMap, emojiMapSet } = useEmojiStore(
     (state) => ({
       isEnd: state.isEnd,

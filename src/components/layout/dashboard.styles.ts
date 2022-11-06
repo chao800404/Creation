@@ -14,9 +14,12 @@ export const DashboardLayoutWrapper = styled('main')`
   .dashboard_side-option {
     border-top: 2px solid;
     border-color: '#1c1c1c';
-    height: fit-content;
+    height: 12rem;
     flex-direction: column;
     display: flex;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    overflow: hidden;
   }
 
   .dashboard_side_controller {

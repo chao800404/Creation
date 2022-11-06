@@ -188,23 +188,40 @@ export const ChangePopupWrapper = styled('div')`
     height: 2rem;
     border-bottom: 2px solid;
     justify-content: space-between;
-    /* border-top: 1px solid #1c1c1c; */
 
     &-list {
       display: flex;
       width: 100%;
+      position: relative;
 
       &-item {
         height: 100%;
-        width: 3.5rem;
+        width: 3.2rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-right: 1px solid;
         cursor: pointer;
 
         &:hover {
           color: #1c1c1c;
+        }
+      }
+
+      &-slide {
+        position: absolute;
+        width: 3.2rem;
+        height: 0.2rem;
+        z-index: 300;
+        bottom: 0rem;
+        padding: 0 0.5rem;
+
+        span {
+          width: 100%;
+          display: block;
+          height: 100%;
+          background: #1c1c1c;
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
         }
       }
     }

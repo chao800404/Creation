@@ -1,5 +1,4 @@
 import DashboardBanner from '../banner/dashboardBanner'
-
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import HeaderEditorS from '../edit/headerEditorS'
@@ -22,7 +21,10 @@ const DashboardMain = () => {
   }
 
   return (
-    <DashboardMainWrapper show={(cover && cover.length > 0) || false}>
+    <DashboardMainWrapper
+      tabIndex={1}
+      show={(cover && cover.length > 0) || false}
+    >
       <div className="DashboardMain_container">
         <div className="DashboardMain_container-banner">
           {cover && cover.length > 0 && <DashboardBanner coverImage={cover} />}

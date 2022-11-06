@@ -3,11 +3,9 @@ import { motion } from 'framer-motion'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import { ChangePopupWrapper } from './popup.styles'
 
-const style = (backgroundColor: string, color: string, borderRight: string) => {
+const style = (color: string) => {
   return {
-    backgroundColor,
     color,
-    borderRight,
   }
 }
 
@@ -40,16 +38,18 @@ const ChangePopup: React.FC<ChangePopupType> = ({ children, tabs }) => {
               className="change_popup-tabs-list-item"
               data-tab={`tab-${index}`}
               key={index}
-              animate={
-                index === tabIndex
-                  ? style('#1c1c1c', '#ffffff', '1px solid #1c1c1c')
-                  : style('#f3f3f3', '#cfcfcf', '1px solid #cfcfcf')
-              }
+              animate={index === tabIndex ? style('#1c1c1c') : style('#c3c3c3')}
               transition={{ ease: 'easeOut' }}
             >
               {tab}
             </motion.div>
           ))}
+          <motion.div
+            animate={{ x: `${tabIndex * 3.2}rem` }}
+            className="change_popup-tabs-list-slide"
+          >
+            <span />
+          </motion.div>
         </div>
         <div className="change_popup-tabs-list-item change_popup-tabs-delete">
           delete

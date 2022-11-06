@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
 export const InputWrapper = styled('div')`
@@ -21,7 +22,7 @@ export const InputWrapper = styled('div')`
   }
 `
 
-export const AddBlocknputWrapper = styled('div')`
+export const BlockInputBaseWrapper = styled(motion.div)`
   width: 100%;
   position: relative;
 
@@ -42,5 +43,20 @@ export const AddBlocknputWrapper = styled('div')`
       font-size: 1.5rem;
       color: #1c1c1c;
     }
+  }
+
+  .add_block-popup {
+    position: absolute;
+    left: 0;
+    bottom: fit-content;
+    width: fit-content;
+  }
+`
+
+export const AddBlocknputWrapper = styled('div')`
+  position: relative;
+
+  .add_block-input {
+    font-size: 1.25rem;
   }
 `
