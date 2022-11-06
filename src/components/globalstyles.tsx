@@ -35,15 +35,17 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  div:focus-visible{
-    outline: none;
-  }
+ 
 
   a,a:active,a:focus {
   
     text-decoration: none;
     outline:none;
-  } 
+  }
+  
+  button,li,Ul:focus,div:focus-visible {
+    outline: none;
+  }
 
   img,h1,h2,h3,h4,h5,h6,p,button {
     user-select: none;

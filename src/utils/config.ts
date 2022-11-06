@@ -95,7 +95,7 @@ export const BLOCK_SELECTOR = [
   {
     name: 'Bullested_list',
     desc: 'Create a simple bulleted list.',
-    image: '/static/blocks/en-US.png',
+    image: '/static/blocks/bulleted-list.png',
   },
   {
     name: 'Numbered_list',

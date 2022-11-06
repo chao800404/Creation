@@ -13,7 +13,6 @@ const AddBlockInput = () => {
     const isFocus = document.activeElement === textareaRef.current
     if (isFocus && targetEnter) {
       e.preventDefault()
-      console.log(true)
     }
   }
 

@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BlockInputBaseWrapper } from './input.styles'
 import { BsFillPlusCircleFill } from 'react-icons/bs'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import ChangePopup from '../popup/changePopup'
 import SelectBlockContainer from '../container/selectBlockContainer'
 
@@ -43,18 +43,21 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
       </motion.div>
 
       {children}
-      <motion.div
-        animate={{
-          visibility: visible ? 'visible' : 'hidden',
-          opacity: visible ? 1 : 0,
-        }}
-        className="add_block-popup"
-        data-type="block-add-popup"
-      >
-        <ChangePopup tabs={['All', 'Basic', 'Table']}>
-          <SelectBlockContainer />
-        </ChangePopup>
-      </motion.div>
+      <AnimatePresence>
+        {visible && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="add_block-popup"
+            data-type="block-add-popup"
+          >
+            <ChangePopup tabs={['All', 'Basic', 'Table']}>
+              <SelectBlockContainer />
+            </ChangePopup>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </BlockInputBaseWrapper>
   )
 }
