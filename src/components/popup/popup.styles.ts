@@ -169,7 +169,7 @@ export const UserPopupWrapper = styled(motion.div)`
   }
 `
 
-export const ChangePopupWrapper = styled('div')`
+export const ChangePopupWrapper = styled(motion.div)`
   width: 16.5rem;
   height: 20rem;
   border-radius: 5px;

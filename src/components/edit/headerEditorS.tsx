@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react'
 import ReactTextareaAutosize from 'react-textarea-autosize'
 import { HeaderEditorSWrapper } from './editor.styles'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import EditorOptionButton from '../button/editorOptionButton'
 import { useCoverStore, useEmojiStore } from '../../store'
 import { useRouter } from 'next/router'
@@ -16,7 +16,7 @@ import ChangePopup from '../popup/changePopup'
 import EmojiContainer from '../container/emojiContainer'
 import { useListSWR } from '../../hook/useListSWR'
 import { debounce } from 'lodash'
-import { EmojiBaseMap } from '@prisma/client'
+import useOnClickOutside from '../../utils/useOnClickOutside'
 
 type Level = 1 | 2
 
@@ -66,7 +66,7 @@ const HeaderEditorS = () => {
     setHeaderLevel(level)
   }
 
-  const handleAddEmoji = (e: React.MouseEvent) => {
+  const handleAddEmoji = () => {
     if (!emoji) {
       const compareEmoji = emojiMap.flatMap((emojis) => emojis)
       const randomInt = randomPath(compareEmoji.length)
@@ -83,27 +83,22 @@ const HeaderEditorS = () => {
     updateListItem(page as string, 'title', value)
   }, 1000)
 
-  useEffect(() => {
-    const handleOnClick = (e: MouseEvent) => {
-      const target = (e.target as HTMLDivElement).closest(
-        '#headerEditor_icon-popup'
-      )
-      const emojiImage = (e.target as HTMLDivElement).closest('#emoji_image')
-      const emojiContent = (e.target as HTMLDivElement).closest(
-        '[data-type="emoji-content"]'
-      )
-      if (!target && !emojiContent) setToggleEomjiPopup(false)
-      if (emojiImage) setToggleEomjiPopup(true)
-      if (emojiContent) {
-        const emoji = emojiContent.getAttribute('data-src')
-        setToggleEomjiPopup(false)
-        emoji && updateListEmoji(page as string, emoji)
-      }
+  useOnClickOutside((e) => {
+    const target = (e.target as HTMLDivElement).closest(
+      '#headerEditor_icon-popup'
+    )
+    const emojiImage = (e.target as HTMLDivElement).closest('#emoji_image')
+    const emojiContent = (e.target as HTMLDivElement).closest(
+      '[data-type="emoji-content"]'
+    )
+    if (!target && !emojiContent) setToggleEomjiPopup(false)
+    if (emojiImage) setToggleEomjiPopup(true)
+    if (emojiContent) {
+      const emoji = emojiContent.getAttribute('data-src')
+      setToggleEomjiPopup(false)
+      emoji && updateListEmoji(page as string, emoji)
     }
-
-    document.addEventListener('click', handleOnClick)
-    return () => document.removeEventListener('click', handleOnClick)
-  }, [page, updateListEmoji])
+  })
 
   return (
     <HeaderEditorSWrapper
@@ -156,13 +151,18 @@ const HeaderEditorS = () => {
             height: headerLevel === 1 ? '3.5rem' : '2rem',
           }}
         >
-          <div id="headerEditor_icon-popup" className="headerEditor_icon-popup">
+          <AnimatePresence>
             {toggleEmojiPopup && (
-              <ChangePopup tabs={['emoji', 'upload']}>
-                <EmojiContainer />
-              </ChangePopup>
+              <motion.div
+                id="headerEditor_icon-popup"
+                className="headerEditor_icon-popup"
+              >
+                <ChangePopup tabs={['emoji', 'upload']}>
+                  <EmojiContainer />
+                </ChangePopup>
+              </motion.div>
             )}
-          </div>
+          </AnimatePresence>
           <Image
             alt="emoji"
             layout="fill"

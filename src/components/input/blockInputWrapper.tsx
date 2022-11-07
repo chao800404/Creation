@@ -4,6 +4,10 @@ import { BsFillPlusCircleFill } from 'react-icons/bs'
 import { motion, AnimatePresence } from 'framer-motion'
 import ChangePopup from '../popup/changePopup'
 import SelectBlockContainer from '../container/selectBlockContainer'
+import useOnClickOutside from '../../utils/useOnClickOutside'
+import { useBlocksStore } from '../../store/useBlocksStore'
+import shallow from 'zustand/shallow'
+import { BLOCK_SELECTOR } from '../../utils/config'
 
 type BlockInputWrapperType = {
   children: React.ReactNode
@@ -11,21 +15,26 @@ type BlockInputWrapperType = {
 
 const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
   const [isFocus, setIsFocus] = useState(false)
-  const [visible, setVisible] = useState(false)
+  const { blocksMapSet, show, showSet, focusIndex } = useBlocksStore(
+    (state) => ({
+      blocksMapSet: state.blocksMapSet,
+      show: state.show,
+      showSet: state.showSet,
+      focusIndex: state.focusIndex,
+    }),
+    shallow
+  )
+
+  useOnClickOutside((e) => {
+    const target = (e.target as HTMLElement).closest(
+      '[data-type = "block-add-popup"]'
+    )
+    !target && showSet(false)
+  })
 
   useEffect(() => {
-    const handleOnShow = (e: MouseEvent) => {
-      const popupTarget = (e.target as HTMLElement).closest(
-        '[data-type="block-add-popup"]'
-      )
-      if (!popupTarget) {
-        return setVisible(false)
-      }
-    }
-
-    document.addEventListener('click', handleOnShow)
-    return () => document.removeEventListener('click', handleOnShow)
-  }, [])
+    blocksMapSet(BLOCK_SELECTOR)
+  }, [blocksMapSet])
 
   return (
     <BlockInputBaseWrapper
@@ -36,7 +45,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
       <motion.div
         animate={{ opacity: isFocus ? 1 : 0 }}
         className="add_block-icon"
-        onClick={() => setVisible(true)}
+        onClick={() => showSet(true)}
         data-type="block-add-popup"
       >
         <BsFillPlusCircleFill className="add_block-icon-content" />
@@ -44,7 +53,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
 
       {children}
       <AnimatePresence>
-        {visible && (
+        {show && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -52,7 +61,10 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
             className="add_block-popup"
             data-type="block-add-popup"
           >
-            <ChangePopup tabs={['All', 'Basic', 'Table']}>
+            <ChangePopup
+              tabs={['All', 'Basic', 'Table']}
+              scrollTop={40 * focusIndex}
+            >
               <SelectBlockContainer />
             </ChangePopup>
           </motion.div>

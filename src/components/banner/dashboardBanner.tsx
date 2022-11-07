@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useCoverStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { DashboardBannerWrapper } from './banner.styles'
 import ChangePopup from '../popup/changePopup'
 import SelectImageContainer from '../container/selectImageContainer'
 import UploadImagContainer from '../container/uploadImageContainer'
+import useOnClickOutside from '../../utils/useOnClickOutside'
 
 const btnTap = {
   scale: 0.98,
@@ -51,16 +52,12 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
     }
   }, [start, toggleRePos])
 
-  useEffect(() => {
-    const cancelPopup = (e: MouseEvent) => {
-      const targetPopup = (e.target as HTMLDivElement).closest(
-        '#dashboard-banner'
-      )
-      if (!targetPopup) setTogglePopup(false)
-    }
-    document.addEventListener('click', cancelPopup)
-    return () => document.removeEventListener('click', cancelPopup)
-  }, [])
+  useOnClickOutside((e) => {
+    const targetPopup = (e.target as HTMLDivElement).closest(
+      '#dashboard-banner'
+    )
+    if (!targetPopup) setTogglePopup(false)
+  })
 
   const handleOnPointerDown = (e: React.MouseEvent) => {
     if (toggleRePos) {
@@ -113,24 +110,26 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
         >
           <p>{toggleRePos ? 'save postion' : 'repostion'}</p>
         </motion.div>
-        <motion.div className="Dashboard_Banner-controller-btn-popup">
+        <AnimatePresence>
           {togglePopup && (
-            <ChangePopup tabs={['cover', 'upload', 'link']}>
-              <div className="change_popup-padding">
-                {coverImageMap &&
-                  Object.entries(coverImageMap).map((cover, index) => (
-                    <SelectImageContainer
-                      key={index}
-                      groupName={cover[0]}
-                      coverGroup={cover[1]}
-                      setToggleShow={togglePopupMemorize}
-                    />
-                  ))}
-              </div>
-              <UploadImagContainer setToggleShow={togglePopupMemorize} />
-            </ChangePopup>
+            <motion.div className="Dashboard_Banner-controller-btn-popup">
+              <ChangePopup tabs={['cover', 'upload', 'link']}>
+                <div className="change_popup-padding">
+                  {coverImageMap &&
+                    Object.entries(coverImageMap).map((cover, index) => (
+                      <SelectImageContainer
+                        key={index}
+                        groupName={cover[0]}
+                        coverGroup={cover[1]}
+                        setToggleShow={togglePopupMemorize}
+                      />
+                    ))}
+                </div>
+                <UploadImagContainer setToggleShow={togglePopupMemorize} />
+              </ChangePopup>
+            </motion.div>
           )}
-        </motion.div>
+        </AnimatePresence>
       </motion.div>
       <div
         className="Dashboard_Banner-controller-p"

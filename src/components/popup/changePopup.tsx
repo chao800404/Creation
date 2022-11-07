@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
+import { AnimatePresence } from 'framer-motion'
 import { ChangePopupWrapper } from './popup.styles'
 
 const style = (color: string) => {
@@ -12,9 +13,14 @@ const style = (color: string) => {
 type ChangePopupType = {
   children: JSX.Element[] | JSX.Element
   tabs: string[]
+  scrollTop?: number
 }
 
-const ChangePopup: React.FC<ChangePopupType> = ({ children, tabs }) => {
+const ChangePopup: React.FC<ChangePopupType> = ({
+  children,
+  tabs,
+  scrollTop,
+}) => {
   const [tabIndex, setTabIndex] = useState(0)
 
   const validateDataSet = (targetIndex: string) => {
@@ -25,7 +31,12 @@ const ChangePopup: React.FC<ChangePopupType> = ({ children, tabs }) => {
   }
 
   return (
-    <ChangePopupWrapper>
+    <ChangePopupWrapper
+      id="change_popup"
+      exit={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+    >
       <div className="change_popup-tabs">
         <div className="change_popup-tabs-list">
           {tabs?.map((tab, index) => (
@@ -62,7 +73,7 @@ const ChangePopup: React.FC<ChangePopupType> = ({ children, tabs }) => {
         initial="rest"
         animate="rest"
       >
-        <WrapperScrollbar>
+        <WrapperScrollbar scrollTop={scrollTop}>
           {React.Children?.map(children, (child, i) => {
             return i === tabIndex && React.cloneElement(child)
           })}

@@ -1,9 +1,10 @@
-import React, { ReactNode, useState } from 'react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import { ScrollbarProps, Scrollbars } from 'react-custom-scrollbars-2'
 import { motion } from 'framer-motion'
 import { usePageControllerStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { SrollWrappr } from './scroll.styles'
+import { isNumber } from 'lodash'
 
 const opacityMotion = {
   rest: {
@@ -27,21 +28,30 @@ const opacityMotion = {
 type WrapperScrollbarType = {
   children: ReactNode
   isSide?: boolean
+  scrollTop?: number
 }
 
 const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
   children,
   isSide = false,
+  scrollTop,
 }) => {
   const dragStart = usePageControllerStore((state) => state.dragStart, shallow)
-
   const [isCeiling, setCeiling] = useState(true)
+  const scrollElem = useRef<null | Scrollbars>(null)
+
+  useEffect(() => {
+    if (scrollElem && scrollElem.current && isNumber(scrollTop)) {
+      scrollElem.current.scrollTop(scrollTop)
+    }
+  }, [scrollTop])
 
   return (
     <SrollWrappr whileHover="hover" initial="rest">
       <Scrollbars
         height="100%"
         width="100%"
+        ref={scrollElem}
         onScrollFrame={({ scrollTop }) => setCeiling(scrollTop === 0)}
         renderTrackVertical={({ style, ...props }) => {
           return (

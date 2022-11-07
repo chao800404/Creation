@@ -1,44 +1,57 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { SelectBlockContainerWrapper } from './container.styles'
-import { BLOCK_SELECTOR } from '../../utils/config'
+import { useBlocksStore } from '../../store/useBlocksStore'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import shallow from 'zustand/shallow'
 
 const SelectBlockContainer = () => {
-  const elemRef = useRef<HTMLUListElement | null>(null)
-  const [focusIndex, setFocusIndex] = useState<number>(0)
+  const { blocksMap, filterBlocks, show, focusIndexSet, focusIndex } =
+    useBlocksStore(
+      (state) => ({
+        blocksMap: state.blocksMap,
+        filterBlocks: state.filterBlocks,
+        show: state.show,
+        focusIndexSet: state.focusIndexSet,
+        focusIndex: state.focusIndex,
+      }),
+      shallow
+    )
 
   useEffect(() => {
-    if (elemRef && elemRef.current) {
-      elemRef.current?.focus()
-      const element = elemRef.current
+    if (show) {
       const handleOnKeydown = (e: KeyboardEvent) => {
         if (e.key === 'ArrowDown') {
-          setFocusIndex((prev) =>
-            prev < BLOCK_SELECTOR.length - 1 ? prev + 1 : prev
+          focusIndexSet(
+            focusIndex < blocksMap.length - 1 ? focusIndex + 1 : focusIndex
           )
         } else if (e.key === 'ArrowUp') {
-          setFocusIndex((prev) => (prev > 0 ? prev - 1 : prev))
+          e.preventDefault()
+          focusIndexSet(focusIndex > 0 ? focusIndex - 1 : focusIndex)
         }
       }
-      element.addEventListener('keydown', handleOnKeydown)
+      document.addEventListener('keydown', handleOnKeydown)
       return () => {
-        element.removeEventListener('keydown', handleOnKeydown)
+        document.removeEventListener('keydown', handleOnKeydown)
       }
     }
-  }, [])
+  }, [blocksMap.length, show, focusIndexSet, focusIndex])
+
+  const blocksMapContent = filterBlocks.length > 0 ? filterBlocks : blocksMap
 
   return (
-    <SelectBlockContainerWrapper ref={elemRef} tabIndex={0}>
-      {BLOCK_SELECTOR.map((item, index) => (
-        <motion.li
+    <SelectBlockContainerWrapper tabIndex={0}>
+      {blocksMapContent.map((item, index) => (
+        <li
           className="select_block-btn"
           key={index}
           onClick={() => console.log(true)}
-          // whileHover={{ backgroundColor: '#efefef' }}
           tabIndex={index}
           style={{
             backgroundColor: index === focusIndex ? '#efefef' : 'rgba(0,0,0,0)',
+          }}
+          onMouseEnter={(e) => {
+            const targetIndex = e.currentTarget.tabIndex
+            focusIndexSet(targetIndex)
           }}
         >
           <button>
@@ -54,7 +67,7 @@ const SelectBlockContainer = () => {
             <span>{item.name.replace('_', ' ')}</span>
             <span>{item.desc}</span>
           </button>
-        </motion.li>
+        </li>
       ))}
     </SelectBlockContainerWrapper>
   )

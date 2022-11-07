@@ -169,7 +169,6 @@ export const SelectBlockContainerWrapper = styled('ul')`
 
   li.select_block-btn {
     width: 100%;
-    background-color: #ffffff;
     padding: 0.5rem;
     border-bottom: 1px solid #efefef;
 
