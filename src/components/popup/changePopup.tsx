@@ -14,12 +14,14 @@ type ChangePopupType = {
   children: JSX.Element[] | JSX.Element
   tabs: string[]
   scrollTop?: number
+  scrollStart?: boolean
 }
 
 const ChangePopup: React.FC<ChangePopupType> = ({
   children,
   tabs,
   scrollTop,
+  scrollStart,
 }) => {
   const [tabIndex, setTabIndex] = useState(0)
 

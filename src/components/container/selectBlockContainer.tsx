@@ -3,6 +3,7 @@ import { SelectBlockContainerWrapper } from './container.styles'
 import { useBlocksStore } from '../../store/useBlocksStore'
 import Image from 'next/image'
 import shallow from 'zustand/shallow'
+import { clearTimeout } from 'timers'
 
 const SelectBlockContainer = () => {
   const { blocksMap, filterBlocks, show, focusIndexSet, focusIndex } =
@@ -16,10 +17,12 @@ const SelectBlockContainer = () => {
       }),
       shallow
     )
+  const [keyonStart, keyonStartSet] = useState(false)
 
   useEffect(() => {
     if (show) {
       const handleOnKeydown = (e: KeyboardEvent) => {
+        keyonStartSet(true)
         if (e.key === 'ArrowDown') {
           focusIndexSet(
             focusIndex < blocksMap.length - 1 ? focusIndex + 1 : focusIndex
@@ -28,6 +31,8 @@ const SelectBlockContainer = () => {
           e.preventDefault()
           focusIndexSet(focusIndex > 0 ? focusIndex - 1 : focusIndex)
         }
+        const timeout = setTimeout(() => keyonStartSet(false), 100)
+        return () => clearTimeout(timeout)
       }
       document.addEventListener('keydown', handleOnKeydown)
       return () => {
@@ -50,8 +55,10 @@ const SelectBlockContainer = () => {
             backgroundColor: index === focusIndex ? '#efefef' : 'rgba(0,0,0,0)',
           }}
           onMouseEnter={(e) => {
-            const targetIndex = e.currentTarget.tabIndex
-            focusIndexSet(targetIndex)
+            if (!keyonStart) {
+              const targetIndex = e.currentTarget.tabIndex
+              focusIndexSet(targetIndex)
+            }
           }}
         >
           <button>
