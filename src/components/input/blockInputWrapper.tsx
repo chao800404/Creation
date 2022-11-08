@@ -13,13 +13,19 @@ type BlockInputWrapperType = {
   children: React.ReactNode
 }
 
+const animate = (scale: number) => ({
+  scale: scale,
+  originX: 0,
+  originY: 0,
+})
+
 const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
   const [isFocus, setIsFocus] = useState(false)
-  const { blocksMapSet, show, showSet, focusIndex } = useBlocksStore(
+  const { blocksMapSet, popupShow, popupShowSet, focusIndex } = useBlocksStore(
     (state) => ({
       blocksMapSet: state.blocksMapSet,
-      show: state.show,
-      showSet: state.showSet,
+      popupShow: state.popupShow,
+      popupShowSet: state.popupShowSet,
       focusIndex: state.focusIndex,
     }),
     shallow
@@ -29,7 +35,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
     const target = (e.target as HTMLElement).closest(
       '[data-type = "block-add-popup"]'
     )
-    !target && showSet(false)
+    !target && popupShowSet(false)
   })
 
   useEffect(() => {
@@ -43,9 +49,9 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
       tabIndex={0}
     >
       <motion.div
-        animate={{ opacity: isFocus ? 1 : 0 }}
+        animate={{ opacity: isFocus && !popupShow ? 1 : 0 }}
         className="add_block-icon"
-        onClick={() => showSet(true)}
+        onClick={() => popupShowSet(true)}
         data-type="block-add-popup"
       >
         <BsFillPlusCircleFill className="add_block-icon-content" />
@@ -53,11 +59,12 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
 
       {children}
       <AnimatePresence>
-        {show && (
+        {popupShow && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            transition={{ type: 'spring', damping: 10, stiffness: 350 }}
+            initial={animate(1)}
+            animate={animate(1.05)}
+            exit={animate(0.95)}
             className="add_block-popup"
             data-type="block-add-popup"
           >

@@ -11,7 +11,6 @@ export const validateEamil = (email: string) => {
 }
 
 export const validateUserName = (name: string) => {
-  console.log(name)
   const trimName = name?.trim()
   const nameRule = trimName.length >= 2
   return {

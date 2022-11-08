@@ -102,7 +102,6 @@ export const useListSWR: UseListType = (id) => {
             return produce(list, ({ data }) => {
               const index = data.findIndex((item) => item.id === id)
               if (index !== -1 && index !== undefined) {
-                console.log(updateItem)
                 data[index][key] = updateItem.data[key] as never
               }
             })
@@ -132,7 +131,6 @@ export const useListSWR: UseListType = (id) => {
             return produce(list, ({ data }) => {
               const index = data.findIndex((item) => item.id === id)
               if (index !== -1 && index !== undefined) {
-                console.log(updateEmoji)
                 data[index].emoji.image = updateEmoji.data.image
               }
             })

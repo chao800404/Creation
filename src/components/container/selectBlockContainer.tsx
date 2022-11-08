@@ -4,32 +4,44 @@ import { useBlocksStore } from '../../store/useBlocksStore'
 import Image from 'next/image'
 import shallow from 'zustand/shallow'
 import { clearTimeout } from 'timers'
+import { debounce } from 'lodash'
 
 const SelectBlockContainer = () => {
-  const { blocksMap, filterBlocks, show, focusIndexSet, focusIndex } =
-    useBlocksStore(
-      (state) => ({
-        blocksMap: state.blocksMap,
-        filterBlocks: state.filterBlocks,
-        show: state.show,
-        focusIndexSet: state.focusIndexSet,
-        focusIndex: state.focusIndex,
-      }),
-      shallow
-    )
+  const {
+    blocksMap,
+    filterBlocks,
+    popupShow,
+    incrOrDecrFocusIndex,
+    focusIndex,
+    focusIndexSet,
+  } = useBlocksStore(
+    (state) => ({
+      blocksMap: state.blocksMap,
+      filterBlocks: state.filterBlocks,
+      popupShow: state.popupShow,
+      incrOrDecrFocusIndex: state.incrOrDecrFocusIndex,
+      focusIndex: state.focusIndex,
+      focusIndexSet: state.focusIndexSet,
+    }),
+    shallow
+  )
   const [keyonStart, keyonStartSet] = useState(false)
 
   useEffect(() => {
-    if (show) {
+    if (popupShow) {
       const handleOnKeydown = (e: KeyboardEvent) => {
         keyonStartSet(true)
-        if (e.key === 'ArrowDown') {
-          focusIndexSet(
-            focusIndex < blocksMap.length - 1 ? focusIndex + 1 : focusIndex
-          )
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault()
-          focusIndexSet(focusIndex > 0 ? focusIndex - 1 : focusIndex)
+        switch (e.key) {
+          case 'ArrowDown':
+            incrOrDecrFocusIndex('ArrowDown')
+            break
+          case 'ArrowUp':
+            e.preventDefault()
+            incrOrDecrFocusIndex('ArrowUp')
+            break
+          case 'Enter':
+            console.log(focusIndex)
+            break
         }
         const timeout = setTimeout(() => keyonStartSet(false), 100)
         return () => clearTimeout(timeout)
@@ -39,7 +51,7 @@ const SelectBlockContainer = () => {
         document.removeEventListener('keydown', handleOnKeydown)
       }
     }
-  }, [blocksMap.length, show, focusIndexSet, focusIndex])
+  }, [blocksMap.length, popupShow, incrOrDecrFocusIndex, focusIndex])
 
   const blocksMapContent = filterBlocks.length > 0 ? filterBlocks : blocksMap
 

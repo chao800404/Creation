@@ -65,7 +65,6 @@ export const usePageSWR: UsePageSWRType = (id) => {
       mutate(`/api/page/${id}`, uploadFile('uploadImage', { id, file }), {
         populateCache: (uploadImage, page) => {
           return produce<PageResDataType>(page, (draft) => {
-            console.log(uploadImage)
             draft.data.cover.image = uploadImage.data?.image
           })
         },
