@@ -10,6 +10,14 @@ const nextConfig = {
     minimumCacheTTL: 60,
     domains: ['lh3.googleusercontent.com', 'res.cloudinary.com'],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/dashboard/:page*',
+        destination: '/',
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

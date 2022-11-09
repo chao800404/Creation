@@ -4,12 +4,13 @@ import {
   EmojiContainerWrapper,
   EmojiComponentWrapper,
 } from './container.styles'
-import Image, { ImageLoader } from 'next/image'
+import Image from 'next/image'
 import { useInView } from 'react-intersection-observer'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { EmojiBaseMap } from '@prisma/client'
 import { useEmojiStore } from '../../store/index'
 import shallow from 'zustand/shallow'
+import { fetcher } from '../../utils/fetch'
 
 const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
   <EmojiComponentWrapper>
@@ -28,6 +29,8 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
             width={30}
             height={30}
             alt={name || 'emoji'}
+            placeholder="blur"
+            blurDataURL={image}
           />
         </div>
       ))}
@@ -52,16 +55,15 @@ const EmojiContainer = () => {
 
   useEffect(() => {
     if (pageIndex && !isEnd) {
-      const fetcher = async () => {
-        const res = await fetch(
-          `api/getImageEmoji?pageIndex=${pageIndex}&limit=96`
+      const profetch = async () => {
+        const data = await fetcher(
+          `/api/getImageEmoji?pageIndex=${pageIndex}&limit=96`
         )
-        const data = await res.json()
         emojiMapSet(data.data.emoji)
         isEndSet(data.isEnd)
       }
 
-      fetcher()
+      profetch()
     }
   }, [pageIndex, isEnd, emojiMapSet, isEndSet])
 

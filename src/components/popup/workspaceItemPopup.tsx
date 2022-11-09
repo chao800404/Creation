@@ -11,10 +11,11 @@ import { useListSWR } from '../../hook/useListSWR'
 const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
   const popupElem = useRef<HTMLDivElement>(null)
   const { page } = useRouter().query
+  const id = (page && (page[0] as string)) || ''
   const {
     data: { favorite },
     mutateFution,
-  } = useListSWR(page as string)
+  } = useListSWR(id)
   const router = useRouter()
 
   const [toggle, setToggle] = useState(false)
@@ -82,7 +83,7 @@ const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
               wrapperOnClick(() => {
                 const index = list?.findIndex((item) => item.id === itemId)
                 index && list
-                  ? router.push(list[index - 1].id)
+                  ? router.push(`dashboard/${list[index - 1].id}`)
                   : router.push('/')
                 mutateFution.deleteList(itemId as string)
               })

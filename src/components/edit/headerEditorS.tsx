@@ -1,10 +1,10 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState } from 'react'
 import ReactTextareaAutosize from 'react-textarea-autosize'
 import { HeaderEditorSWrapper } from './editor.styles'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import EditorOptionButton from '../button/editorOptionButton'
-import { useCoverStore, useEmojiStore } from '../../store'
+import { useCoverStore } from '../../store'
 import { useRouter } from 'next/router'
 import { randomPath } from '../../utils/randomPath'
 import shallow from 'zustand/shallow'
@@ -12,11 +12,12 @@ import { usePageSWR } from '../../hook/usePageSWR'
 import { BsFillEmojiSunglassesFill } from 'react-icons/bs'
 import { FaImage } from 'react-icons/fa'
 import { MdOutlineTitle } from 'react-icons/md'
-import ChangePopup from '../popup/changePopup'
 import EmojiContainer from '../container/emojiContainer'
 import { useListSWR } from '../../hook/useListSWR'
 import { debounce } from 'lodash'
 import useOnClickOutside from '../../utils/useOnClickOutside'
+import { EMOJI_BASE } from '../../utils/config'
+import ChangePopup from '../popup/changePopup'
 
 type Level = 1 | 2
 
@@ -25,6 +26,7 @@ const fontColor = (image: string) =>
 
 const HeaderEditorS = () => {
   const { page } = useRouter().query
+  const id = (page && (page[0] as string)) || ''
   const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
   const [shouldeShow, setShouldShow] = useState(false)
   const [headerLevel, setHeaderLevel] = useState(1)
@@ -33,14 +35,12 @@ const HeaderEditorS = () => {
   const {
     mutateFution: { updateListEmoji, updateListItem },
     data: { emoji, title },
-  } = useListSWR(page as string)
+  } = useListSWR(id)
 
   const {
     mutateFution,
     data: { cover },
-  } = usePageSWR(page as string)
-
-  const emojiMap = useEmojiStore((state) => state.emojiMap, shallow)
+  } = usePageSWR(id)
 
   const cacheMap = useMemo(() => {
     const imageArray = []
@@ -56,10 +56,10 @@ const HeaderEditorS = () => {
       const randomInt = randomPath(cacheMap.length)
       if (randomInt <= cacheMap.length) {
         const randomPath = cacheMap[randomInt]
-        return mutateFution.uploadCoverImage(page as string, randomPath)
+        return mutateFution.uploadCoverImage(id, randomPath)
       }
     }
-    return mutateFution.uploadCoverImage(page as string, '')
+    return mutateFution.uploadCoverImage(id, '')
   }
 
   const handleChangeHeaderLevel = (level: Level) => {
@@ -68,19 +68,18 @@ const HeaderEditorS = () => {
 
   const handleAddEmoji = () => {
     if (!emoji) {
-      const compareEmoji = emojiMap.flatMap((emojis) => emojis)
-      const randomInt = randomPath(compareEmoji.length)
-      if (randomInt <= compareEmoji.length) {
-        const randomPath = compareEmoji[randomInt]
-        return updateListEmoji(page as string, randomPath.image)
+      const randomInt = randomPath(EMOJI_BASE.length)
+      if (randomInt <= EMOJI_BASE.length) {
+        const randomPath = EMOJI_BASE[randomInt]
+        return updateListEmoji(id, randomPath)
       }
     }
-    return updateListEmoji(page as string, '')
+    return updateListEmoji(id, '')
   }
 
   const handleOnChange = debounce((e) => {
     const value = e.target.value
-    updateListItem(page as string, 'title', value)
+    updateListItem(id, 'title', value)
   }, 1000)
 
   useOnClickOutside((e) => {
@@ -96,7 +95,7 @@ const HeaderEditorS = () => {
     if (emojiContent) {
       const emoji = emojiContent.getAttribute('data-src')
       setToggleEomjiPopup(false)
-      emoji && updateListEmoji(page as string, emoji)
+      emoji && updateListEmoji(id, emoji)
     }
   })
 

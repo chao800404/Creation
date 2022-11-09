@@ -123,7 +123,7 @@ const Heading = ({
     extensions: [StarterKit],
     autofocus: true,
     onCreate: ({ editor }) => {
-      editor.commands.focus(2)
+      editor.commands.focus(100)
     },
     content: `
       <p>${value}</p>
@@ -133,6 +133,7 @@ const Heading = ({
   useEffect(() => {
     editor &&
       editor.on('update', ({ editor }) => {
+        console.log('Update')
         if (editor.isEmpty) memoEmptySet(editor.isEmpty)
       })
   }, [editor, memoEmptySet])

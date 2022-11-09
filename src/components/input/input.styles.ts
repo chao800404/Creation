@@ -55,6 +55,8 @@ export const BlockInputBaseWrapper = styled(motion.div)`
 
 export const AddBlocknputWrapper = styled('div')`
   position: relative;
+  min-height: 28px;
+  height: auto;
 
   .add_block-input {
     font-size: 1.25rem;

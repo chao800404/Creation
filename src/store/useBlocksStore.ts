@@ -54,6 +54,9 @@ export const useBlocksStore = create<InitialBlocksStore & Action>(
       set(
         produce<InitialBlocksStore>((state) => {
           state.popupShow = toggle
+          if (toggle === false) {
+            state.filterBlocks = []
+          }
         })
       ),
     focusIndexSet: (index) =>
@@ -65,10 +68,14 @@ export const useBlocksStore = create<InitialBlocksStore & Action>(
     incrOrDecrFocusIndex: (key) =>
       set(
         produce<InitialBlocksStore>((state) => {
-          const { focusIndex, blocksMap } = get()
+          const { focusIndex, blocksMap, filterBlocks } = get()
+          const currentLength =
+            filterBlocks.length > 0 ? filterBlocks : blocksMap
           if (key === 'ArrowDown') {
             state.focusIndex =
-              focusIndex < blocksMap.length - 1 ? focusIndex + 1 : focusIndex
+              focusIndex < currentLength.length - 1
+                ? focusIndex + 1
+                : focusIndex
           } else if (key === 'ArrowUp') {
             state.focusIndex = focusIndex > 0 ? focusIndex - 1 : focusIndex
           }

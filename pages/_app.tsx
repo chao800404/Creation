@@ -4,8 +4,6 @@ import Head from 'next/head'
 import { ThemeProvider, DefaultTheme } from 'styled-components'
 import { GlobalStyle } from '../src/components/globalstyles'
 import { Session } from 'next-auth'
-import DashboardLayout from '../src/components/layout/dashboardLayout'
-import { useListSWR } from '../src/hook/useListSWR'
 
 const theme: DefaultTheme = {
   colors: {

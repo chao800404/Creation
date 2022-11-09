@@ -1,14 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  Suspense,
+} from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCoverStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { DashboardBannerWrapper } from './banner.styles'
-import ChangePopup from '../popup/changePopup'
 import SelectImageContainer from '../container/selectImageContainer'
 import UploadImagContainer from '../container/uploadImageContainer'
 import useOnClickOutside from '../../utils/useOnClickOutside'
+import dynamic from 'next/dynamic'
+
+const DynamicChangePopup = dynamic(() => import('../popup/changePopup'), {
+  suspense: true,
+})
 
 const btnTap = {
   scale: 0.98,
@@ -113,20 +123,22 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
         <AnimatePresence>
           {togglePopup && (
             <motion.div className="Dashboard_Banner-controller-btn-popup">
-              <ChangePopup tabs={['cover', 'upload', 'link']}>
-                <div className="change_popup-padding">
-                  {coverImageMap &&
-                    Object.entries(coverImageMap).map((cover, index) => (
-                      <SelectImageContainer
-                        key={index}
-                        groupName={cover[0]}
-                        coverGroup={cover[1]}
-                        setToggleShow={togglePopupMemorize}
-                      />
-                    ))}
-                </div>
-                <UploadImagContainer setToggleShow={togglePopupMemorize} />
-              </ChangePopup>
+              <Suspense fallback={``}>
+                <DynamicChangePopup tabs={['cover', 'upload', 'link']}>
+                  <div className="change_popup-padding">
+                    {coverImageMap &&
+                      Object.entries(coverImageMap).map((cover, index) => (
+                        <SelectImageContainer
+                          key={index}
+                          groupName={cover[0]}
+                          coverGroup={cover[1]}
+                          setToggleShow={togglePopupMemorize}
+                        />
+                      ))}
+                  </div>
+                  <UploadImagContainer setToggleShow={togglePopupMemorize} />
+                </DynamicChangePopup>
+              </Suspense>
             </motion.div>
           )}
         </AnimatePresence>

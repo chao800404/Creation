@@ -61,6 +61,19 @@ export const SIDE_OPTION = {
   },
 }
 
+export const EMOJI_BASE = [
+  '/static/emoji/2nd-place-medal_1f948.png',
+  '/static/emoji/b-button-blood-type_1f171-fe0f.png',
+  '/static/emoji/badminton_1f3f8.png',
+  '/static/emoji/boxing-glove_1f94a.png',
+  '/static/emoji/carp-streamer_1f38f.png',
+  '/static/emoji/cinema_1f3a6.png',
+  '/static/emoji/construction-worker_medium-dark-skin-tone_1f477-1f3fe_1f3fe.png',
+  '/static/emoji/cool-button_1f192.png',
+  '/static/emoji/deaf-person_medium-light-skin-tone_1f9cf-1f3fc_1f3fc.png',
+  '/static/emoji/dizzy_1f4ab.png',
+]
+
 export const BLOCK_SELECTOR = [
   {
     name: 'Heading_1',

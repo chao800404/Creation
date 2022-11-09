@@ -7,9 +7,9 @@ export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token
     if (token) {
-      return rewrite(new URL('/dashboard', req.url))
+      return NextResponse.rewrite(new URL('/dashboard', req.url))
     }
-    return rewrite(new URL('/', req.url))
+    return NextResponse.rewrite(new URL('/', req.url))
   },
   {
     callbacks: {
@@ -21,4 +21,4 @@ export default withAuth(
   }
 )
 
-export const config = { matcher: ['/'] }
+export const config = { matcher: ['/', '/dashboard/:page*'] }

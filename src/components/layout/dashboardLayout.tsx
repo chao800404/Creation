@@ -6,12 +6,9 @@ import Accordion from '../accordion/accordion'
 import WorkspaceControl from '../control/workspaceControl'
 import SideContainer from '../container/sideContainer'
 import FeaturesBtn from '../button/featuresBtn'
-
 import { SIDE_OPTION } from '../../utils/config'
 import { DashboardLayoutWrapper } from './dashboard.styles'
 import dynamic from 'next/dynamic'
-
-import { Emoji, List } from '@prisma/client'
 import { useListSWR } from '../../hook/useListSWR'
 import { useRouter } from 'next/router'
 
@@ -35,10 +32,10 @@ const { searchBarBtn, interfaces, workspaces, importFile, trash, newPage } =
 
 const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
   const { page } = useRouter().query
+  const id = (page && (page[0] as string)) || ''
   const {
     data: { list },
-    isLoading,
-  } = useListSWR(page as string)
+  } = useListSWR(id)
   return (
     <DashboardLayoutWrapper>
       <DynamicSideWrapper>

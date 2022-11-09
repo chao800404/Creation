@@ -6,7 +6,6 @@ import { usePageStore } from '../../../src/store'
 import { motion } from 'framer-motion'
 
 import { List, Emoji } from '@prisma/client'
-import shallow from 'zustand/shallow'
 import { useRouter } from 'next/router'
 
 type SideContainerType = {
@@ -22,6 +21,7 @@ const SideContainer: React.FC<SideContainerType> = ({
 }) => {
   const scrollElem = useRef<HTMLDivElement | null>(null)
   const { page } = useRouter().query
+  const id = (page && (page[0] as string)) || ''
 
   return (
     <motion.div
@@ -45,7 +45,7 @@ const SideContainer: React.FC<SideContainerType> = ({
               title={item.title as string}
               id={item.id}
               icon={item.emoji}
-              isActive={page === item.id}
+              isActive={id === item.id || false}
             />
           ))}
         </SideContainerWrapper>

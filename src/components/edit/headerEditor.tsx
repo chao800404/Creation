@@ -43,12 +43,10 @@ const HeaderEditor = () => {
   })
 
   const { page } = useRouter().query
+  const id = (page && (page[0] as string)) || ''
   const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
 
-  const {
-    mutateFution,
-    data: { cover },
-  } = usePageSWR(page as string)
+  const { mutateFution } = usePageSWR(id)
 
   const cacheMap = useMemo(() => {
     const imageArray = []

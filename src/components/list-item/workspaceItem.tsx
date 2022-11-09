@@ -40,7 +40,7 @@ const WorkspaceItem: React.FC<WorkspaceItemType> = ({
       hoverColor={isActive ? '#ffffff' : '#1c1c1c'}
       backgroundColor={isActive ? '#1c1c1c' : '#ffffff'}
     >
-      <Link href={`/${id}`}>
+      <Link href={`/dashboard/${id}`}>
         <motion.a className="workspaceItem_content">
           <Accordion id={icon?.id} text={title} sideWidth={sideWidth || 0}>
             {icon && icon?.image?.length > 0 ? (

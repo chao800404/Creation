@@ -12,6 +12,7 @@ import shallow from 'zustand/shallow'
 import { usePageControllerStore } from '../../store'
 import { UserPopupWrapper } from './popup.styles'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/router'
 
 const variants = {
   show: {
@@ -36,6 +37,8 @@ const UserPopup: React.FC = () => {
     shallow
   )
 
+  const router = useRouter()
+
   const userSet = useUserStore((state) => state.userSet, shallow)
 
   useEffect(() => {
@@ -56,10 +59,12 @@ const UserPopup: React.FC = () => {
       </div>
     )
   }
-
   const handleOnClick = (e: React.MouseEvent) => {
     const target = (e.target as HTMLDivElement).id
-    if (target === 'logout-icon') signOut()
+    if (target === 'logout-icon') {
+      router.push('/')
+      router.events.on('routeChangeComplete', signOut)
+    }
     userPopupToggle(!userPopupOpen)
   }
 

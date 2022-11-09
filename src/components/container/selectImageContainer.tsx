@@ -13,14 +13,15 @@ const SelectImageContainer = ({
   groupName: string
   setToggleShow: (toggle: boolean) => void
 }) => {
-  const { page: id } = useRouter().query
-  const { mutateFution } = usePageSWR(id as string)
+  const { page } = useRouter().query
+  const id = (page && (page[0] as string)) || ''
+  const { mutateFution } = usePageSWR(id)
 
   const handleClick = (e: React.MouseEvent) => {
     const target = (e.target as HTMLElement).closest('.cover_image')
     const src = target && target.getAttribute('data-src')
     if (src) {
-      mutateFution.uploadCoverImage(id as string, src)
+      mutateFution.uploadCoverImage(id, src)
       setToggleShow(false)
     }
   }

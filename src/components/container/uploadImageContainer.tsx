@@ -32,13 +32,14 @@ const UploadImageContainer = ({
     errorMessage: undefined,
   })
   const [onDrag, setOnDrag] = useState(false)
-  const { page: id } = useRouter().query
-  const { mutateFution } = usePageSWR(id as string)
+  const { page } = useRouter().query
+  const id = (page && (page[0] as string)) || ''
+  const { mutateFution } = usePageSWR(id)
 
   const handleUpload = () => {
     if (file.file && file.errorMessage === undefined) {
       setToggleShow(false)
-      mutateFution.uploadCoverImageFile(id as string, file.file as File)
+      mutateFution.uploadCoverImageFile(id, file.file as File)
     }
   }
 

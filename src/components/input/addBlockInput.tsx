@@ -17,22 +17,17 @@ const AddBlockInput = () => {
   const [filterError, setFilterError] = useState(0)
   const [isEmpty, setIsEmpty] = useState(true)
   const [value, setValue] = useState('')
-  const {
-    filterBlocksMapSet,
-    popupShowSet,
-    filterBlocks,
-    focusIndexSet,
-    focusIndex,
-  } = useBlocksStore(
-    (state) => ({
-      filterBlocksMapSet: state.filterBlocksMapSet,
-      popupShowSet: state.popupShowSet,
-      filterBlocks: state.filterBlocks,
-      focusIndexSet: state.focusIndexSet,
-      focusIndex: state.focusIndex,
-    }),
-    shallow
-  )
+  const { filterBlocksMapSet, popupShowSet, filterBlocks, focusIndexSet } =
+    useBlocksStore(
+      (state) => ({
+        filterBlocksMapSet: state.filterBlocksMapSet,
+        popupShowSet: state.popupShowSet,
+        filterBlocks: state.filterBlocks,
+        focusIndexSet: state.focusIndexSet,
+        focusIndex: state.focusIndex,
+      }),
+      shallow
+    )
 
   const handleKeyDownOnEnter = (e: React.KeyboardEvent) => {
     const isFocus = document.activeElement === textareaRef.current
@@ -51,12 +46,6 @@ const AddBlockInput = () => {
   }
 
   useEffect(() => {
-    if (filterBlocks.length <= 0) {
-      return setFilterError((prev) => prev + 1)
-    }
-  }, [filterBlocks])
-
-  useEffect(() => {
     if (filterError > 2) {
       return popupShowSet(false)
     }
@@ -68,19 +57,25 @@ const AddBlockInput = () => {
 
   const memoEmptySet = useCallback((toggle: boolean) => setIsEmpty(toggle), [])
 
+  console.log(isEmpty)
+
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const isFocus = document.activeElement === textareaRef.current
     const value = e.target.value.toLowerCase()
+    if (filterBlocks.length <= 0) {
+      setFilterError((prev) => prev + 1)
+    }
     if (value.startsWith('/') && isFocus) {
       const blockName = value.replace('/', '')
       filterBlocksMapSet(blockName)
       focusIndexSet(0)
-    } else {
+    } else if (value.length > 1) {
       setIsEmpty(false)
       setValue(e.target.value)
     }
-    if (value.length <= 0 && isFocus) {
+    if (!value && isFocus) {
       popupShowSet(false)
+      setFilterError(0)
     }
   }
 
