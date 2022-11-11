@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SelectBlockContainerWrapper } from './container.styles'
 import { useBlocksStore } from '../../store/useBlocksStore'
 import Image from 'next/image'
 import shallow from 'zustand/shallow'
 import { clearTimeout } from 'timers'
-import { debounce } from 'lodash'
 
 const SelectBlockContainer = () => {
   const {

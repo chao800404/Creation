@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import WorkspaceItem from '../list-item/workspaceItem'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import { SideContainerWrapper } from './container.styles'
-import { usePageStore } from '../../../src/store'
 import { motion } from 'framer-motion'
 
 import { Page, Emoji } from '@prisma/client'

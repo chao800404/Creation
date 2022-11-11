@@ -3,7 +3,6 @@ import { z, ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
 import formidable, { File } from 'formidable'
-import fs, { mkdirSync } from 'fs'
 import { v2 as cloudinary } from 'cloudinary'
 
 const ACCEPTED_IMAGE_TYPES = [

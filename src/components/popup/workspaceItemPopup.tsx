@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import shallow from 'zustand/shallow'
 import { AiOutlineStar, AiFillStar } from 'react-icons/ai'
 import { IoTrashOutline } from 'react-icons/io5'
 import PopupItem from '../list-item/popup-item'

@@ -4,11 +4,11 @@ import { usePageControllerStore } from '../../store'
 import SideContainer from '../container/sideContainer'
 import shallow from 'zustand/shallow'
 import { SIDE_OPTION } from '../../utils/config'
-import { Emoji, List } from '@prisma/client'
+import { Emoji, Page } from '@prisma/client'
 
 const { favorite } = SIDE_OPTION
 
-const FavoriteTag = ({ list }: { list: (List & { emoji: Emoji })[] }) => {
+const FavoriteTag = ({ list }: { list: (Page & { emoji: Emoji })[] }) => {
   const { favoriteTagOpen, favoriteTagToggle } = usePageControllerStore(
     (state) => ({
       favoriteTagOpen: state.favoriteTagOpen,
