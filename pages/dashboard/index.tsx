@@ -15,10 +15,12 @@ const Dashboard = () => {
     (state) => state.coverImageMapSet,
     shallow
   )
+
   const { page } = useRouter().query
-  const { isLoading } = useListSWR(page && (page[0] as string))
+
   const {
     data: { emoji, title },
+    isLoading,
   } = useListSWR(page && (page[0] as string))
 
   useEffect(() => {

@@ -14,7 +14,7 @@ const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
   const id = (page && (page[0] as string)) || ''
   const {
     data: { favorite },
-    mutateFution,
+    mutateFunction,
   } = useListSWR(id)
   const router = useRouter()
 
@@ -85,7 +85,7 @@ const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
                 index && list
                   ? router.push(`dashboard/${list[index - 1].id}`)
                   : router.push('/')
-                mutateFution.deleteList(itemId as string)
+                mutateFunction.deletePage(itemId as string)
               })
             }}
           />
@@ -97,7 +97,7 @@ const WorkspaceItemPopup = ({ focusNodeDom }: { focusNodeDom: string }) => {
                 () =>
                   itemId &&
                   toggle &&
-                  mutateFution.updateListItem(itemId, 'favorite', !favorite)
+                  mutateFunction.updatePageItem(itemId, 'favorite', !favorite)
               )
             }}
           />

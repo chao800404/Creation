@@ -28,9 +28,8 @@ const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (
             objectFit="cover"
             width={30}
             height={30}
+            quality={20}
             alt={name || 'emoji'}
-            placeholder="blur"
-            blurDataURL={image}
           />
         </div>
       ))}

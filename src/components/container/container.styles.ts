@@ -8,7 +8,7 @@ export const SideContainerWrapper = styled('div')`
   gap: 0.1rem;
 `
 
-export const DashboardContainerWrapper = styled('div')`
+export const DashboardContainerWrapper = styled('main')`
   height: 100vh;
   margin-left: 14px;
 

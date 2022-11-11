@@ -39,18 +39,16 @@ const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
   return (
     <DashboardLayoutWrapper>
       <DynamicSideWrapper>
-        <div>
-          <SearchBarBtn desc={searchBarBtn.text} />
-          <div className="dashboard_side-feature">
-            {list && (
-              <FavoriteTag list={list?.filter((item) => item.favorite)} />
-            )}
-            <Accordion text={interfaces.text} />
-          </div>
+        <SearchBarBtn desc={searchBarBtn.text} />
+        <div className="dashboard_side-feature">
+          {list && (
+            <FavoriteTag list={list?.filter((item) => item?.favorite)} />
+          )}
+          <Accordion text={interfaces.text} />
+        </div>
 
-          <div className="dashboard_side_controller">
-            <WorkspaceControl text={workspaces.text} />
-          </div>
+        <div className="dashboard_side_controller">
+          <WorkspaceControl text={workspaces.text} />
         </div>
 
         {list && <SideContainer list={list} height="100%" />}

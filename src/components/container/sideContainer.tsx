@@ -5,11 +5,11 @@ import { SideContainerWrapper } from './container.styles'
 import { usePageStore } from '../../../src/store'
 import { motion } from 'framer-motion'
 
-import { List, Emoji } from '@prisma/client'
+import { Page, Emoji } from '@prisma/client'
 import { useRouter } from 'next/router'
 
 type SideContainerType = {
-  list: (List & { emoji: Emoji })[]
+  list: (Page & { emoji: Emoji })[]
   height?: string
   maxH?: string
 }

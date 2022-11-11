@@ -1,6 +1,16 @@
-import { Editor, EditorContent, useEditor, BubbleMenu } from '@tiptap/react'
+import {
+  Editor,
+  EditorContent,
+  useEditor,
+  BubbleMenu,
+  EditorEvents,
+} from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import React, { useEffect } from 'react'
+import { Text } from '@prisma/client'
+import { useRouter } from 'next/router'
+import { usePageSWR } from '../../hook/usePageSWR'
+import { debounce } from 'lodash'
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
@@ -113,30 +123,54 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 }
 
 const Heading = ({
-  value,
+  blockData,
   memoEmptySet,
+  value,
 }: {
+  blockData: Text
   value: string
   memoEmptySet: (toggle: boolean) => void
 }) => {
+  const { page } = useRouter().query
+  const pageId = (page && page[0]) || ''
+  const {
+    mutateFunction: { updateBlock },
+  } = usePageSWR(pageId)
+
   const editor = useEditor({
     extensions: [StarterKit],
     autofocus: true,
     onCreate: ({ editor }) => {
       editor.commands.focus(100)
     },
-    content: `
-      <p>${value}</p>
-    `,
+    content: value,
   })
 
   useEffect(() => {
     editor &&
       editor.on('update', ({ editor }) => {
-        console.log('Update')
-        if (editor.isEmpty) memoEmptySet(editor.isEmpty)
+        if (editor.isEmpty) {
+          memoEmptySet(editor.isEmpty)
+        }
       })
   }, [editor, memoEmptySet])
+
+  useEffect(() => {
+    editor &&
+      editor.on(
+        'update',
+        debounce(({ editor }: { editor: EditorEvents['update']['editor'] }) => {
+          if (editor.getHTML() === blockData.content) return
+          updateBlock(blockData.id, {
+            key: blockData.name,
+            content: editor.getHTML(),
+            block_id: blockData.id,
+            index: blockData.index,
+          })
+        }, 2000)
+      )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor])
 
   return (
     <div>
@@ -146,4 +180,4 @@ const Heading = ({
   )
 }
 
-export default Heading
+export default React.memo(Heading)

@@ -21,7 +21,7 @@ const NavbarOption = () => {
 
   const {
     data: { favorite, editable },
-    mutateFution,
+    mutateFunction,
   } = useListSWR(id)
 
   return (
@@ -34,7 +34,9 @@ const NavbarOption = () => {
         }}
       >
         <ControllDataIcon
-          onClick={() => mutateFution.updateListItem(id, 'editable', !editable)}
+          onClick={() =>
+            mutateFunction.updatePageItem(id, 'editable', !editable)
+          }
           toggle={editable as boolean}
           openIcon={FiUnlock}
           closeIcon={FiLock}
@@ -45,7 +47,7 @@ const NavbarOption = () => {
 
         <ControllDataIcon
           onClick={() => {
-            mutateFution.updateListItem(id, 'favorite', !favorite)
+            mutateFunction.updatePageItem(id, 'favorite', !favorite)
           }}
           toggle={favorite as boolean}
           openIcon={AiFillStar}

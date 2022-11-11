@@ -35,12 +35,17 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
- 
+  li {
+    list-style: none;
+    font-size: .5rem;
+    font-weight: 700;
+  }
 
   a,a:active,a:focus {
   
     text-decoration: none;
     outline:none;
+    color: #1c1c1c;
   }
   
   button,li,Ul:focus,div:focus-visible {
@@ -80,7 +85,7 @@ export const GlobalStyle = createGlobalStyle`
 
     p {
       font-size: 1.25rem;
-      height: 24px;
+      height: fit-content;
     }
 
     code {

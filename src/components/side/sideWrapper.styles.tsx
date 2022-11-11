@@ -4,7 +4,7 @@ type Props = {
   width: number
 }
 
-export const SideWrapperLayout = styled('div').attrs<Props>((props) => ({
+export const SideWrapperLayout = styled('aside').attrs<Props>((props) => ({
   width: props.width,
 }))<Props>`
   height: inherit;

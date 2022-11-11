@@ -44,6 +44,9 @@ export const DashboardMainWrapper = styled('div')<DashboardMain>`
         width: 100%;
         margin-top: 1rem;
         position: relative;
+        display: inherit;
+        flex-direction: column;
+        gap: 0.2rem;
       }
     }
   }

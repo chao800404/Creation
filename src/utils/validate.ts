@@ -11,9 +11,7 @@ export default async function validateUser<T>(
 ) {
   try {
     const user = await getToken({ req, secret })
-    if (!user) {
-      return res.redirect('/login')
-    }
+    if (!user) throw new Error('You are not logged in')
     const userCache = await userLoader.load(user.sub as string)
     if (!userCache) throw new Error('You are not logged in')
     return await next(userCache)

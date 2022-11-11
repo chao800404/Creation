@@ -10,7 +10,7 @@ export default async function getUserData(
   if (req.method === 'GET') {
     await validateUser(req, res, async (user) => {
       try {
-        const resData = await prisma.list.findMany({
+        const resData = await prisma.page.findMany({
           where: {
             authorId: user.id,
           },

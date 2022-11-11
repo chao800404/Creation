@@ -10,6 +10,7 @@ import shallow from 'zustand/shallow'
 import { BLOCK_SELECTOR } from '../../utils/config'
 
 type BlockInputWrapperType = {
+  tabIndex: number
   children: React.ReactNode
 }
 
@@ -19,7 +20,10 @@ const animate = (scale: number) => ({
   originY: 0,
 })
 
-const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
+const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
+  tabIndex,
+  children,
+}) => {
   const [isFocus, setIsFocus] = useState(false)
   const { blocksMapSet, popupShow, popupShowSet, focusIndex } = useBlocksStore(
     (state) => ({
@@ -35,7 +39,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
     const target = (e.target as HTMLElement).closest(
       '[data-type = "block-add-popup"]'
     )
-    !target && popupShowSet(false)
+    !target && popupShow && popupShowSet(false)
   })
 
   useEffect(() => {
@@ -46,7 +50,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({ children }) => {
     <BlockInputBaseWrapper
       onFocus={() => setIsFocus(true)}
       onBlur={() => setIsFocus(false)}
-      tabIndex={0}
+      tabIndex={tabIndex}
     >
       <motion.div
         animate={{ opacity: isFocus && !popupShow ? 1 : 0 }}

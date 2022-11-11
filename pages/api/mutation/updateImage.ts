@@ -23,7 +23,7 @@ export default async function handler(
         const data = JSON.parse(req.body)
         const { id, key, src } = MySchema.parse(data)
 
-        const resData = await prisma.list.findUnique({
+        const resData = await prisma.page.findUnique({
           where: {
             id,
           },
@@ -37,7 +37,7 @@ export default async function handler(
         if (key === 'cover') {
           updateData = await prisma.cover.update({
             where: {
-              listId: resData.id,
+              pageId: resData.id,
             },
             data: {
               image: src,
@@ -48,7 +48,7 @@ export default async function handler(
         if (key === 'emoji') {
           updateData = await prisma.emoji.update({
             where: {
-              listId: resData.id,
+              pageId: resData.id,
             },
             data: {
               image: src,

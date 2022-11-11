@@ -78,10 +78,10 @@ export default async function handler(
             throw new Error('Something went error')
           }
           const file = (await MySchema.parseAsync(files)) as unknown as Image
-          const listId = IdSchema.parse(fields.id)
-          const resData = await prisma.list.findUnique({
+          const pageId = IdSchema.parse(fields.id)
+          const resData = await prisma.page.findUnique({
             where: {
-              id: listId,
+              id: pageId,
             },
           })
 
@@ -90,7 +90,7 @@ export default async function handler(
 
           const result = await cloudinary.uploader.upload(file.image.filepath, {
             secret: true,
-            folder: `${user.email}/${listId}`,
+            folder: `${user.email}/${pageId}`,
 
             transformation: {
               width: 1350,
@@ -101,7 +101,7 @@ export default async function handler(
           // const path = await saveFile(file.image as unknown as File, listId)
           const data = await prisma.cover.update({
             where: {
-              listId,
+              pageId,
             },
             data: {
               image: result.secure_url,

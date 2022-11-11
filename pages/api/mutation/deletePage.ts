@@ -4,7 +4,6 @@ import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
 
 type MySchema = z.infer<typeof MySchema>
-const keyEnum = ['favorite', 'editable', 'title'] as const
 
 const MySchema = z.object({
   id: z.string().cuid({ message: 'Please provide correct ID' }),
@@ -20,7 +19,7 @@ export default async function handler(
         const data = JSON.parse(req.body)
         const { id } = MySchema.parse(data)
 
-        const resData = await prisma.list.findUnique({
+        const resData = await prisma.page.findUnique({
           where: {
             id,
           },
@@ -29,13 +28,11 @@ export default async function handler(
         if (!resData || resData.authorId !== user.id)
           throw new Error("You can't delete this file")
 
-        const { authorId, ...otherData } = await prisma.list.delete({
+        const { authorId, ...otherData } = await prisma.page.delete({
           where: {
             id,
           },
         })
-
-        console.table(otherData)
 
         res.status(200).json({
           status: 'success',

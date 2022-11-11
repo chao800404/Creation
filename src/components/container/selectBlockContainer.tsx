@@ -46,9 +46,9 @@ const SelectBlockContainer = () => {
         const timeout = setTimeout(() => keyonStartSet(false), 100)
         return () => clearTimeout(timeout)
       }
-      document.addEventListener('keydown', handleOnKeydown)
+      document.addEventListener('keydown', handleOnKeydown, false)
       return () => {
-        document.removeEventListener('keydown', handleOnKeydown)
+        document.removeEventListener('keydown', handleOnKeydown, false)
       }
     }
   }, [blocksMap.length, popupShow, incrOrDecrFocusIndex, focusIndex])

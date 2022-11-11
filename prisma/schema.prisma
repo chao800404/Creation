@@ -50,7 +50,7 @@ model User {
   image         String    @default("/static/png/default.png")
   accounts      Account[]
   sessions      Session[]
-  list          List[]
+  page          Page[]
 
 
   createdAt     DateTime  @default(now())
@@ -74,8 +74,8 @@ model Cover {
   id           String       @id @default(cuid())
   image        String       @default("")
   layoutY      Int?          
-  list         List         @relation(fields: [listId], references: [id],onDelete: Cascade) 
-  listId       String       @unique 
+  page         Page         @relation(fields: [pageId], references: [id],onDelete: Cascade) 
+  pageId       String       @unique 
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @default(now())
 
@@ -85,8 +85,8 @@ model Cover {
 model Emoji {
   id           String       @id @default(cuid())
   image        String       @default("")
-  list         List         @relation(fields: [listId], references: id , onDelete: Cascade) 
-  listId       String       @unique
+  page         Page         @relation(fields: [pageId], references: id , onDelete: Cascade) 
+  pageId       String       @unique
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @default(now())
 
@@ -103,7 +103,7 @@ model EmojiBaseMap {
   @@map("emojiBaseMap")
 }
 
-model List  {
+model Page  {
   id           String       @id @default(cuid())
   title        String?       
   favorite     Boolean      @default(false)
@@ -111,10 +111,26 @@ model List  {
   authorId     String            
   editable     Boolean      @default(true)   
   cover        Cover?
-  emoji        Emoji?
+  emoji        Emoji?       
+  text         Text[]
 
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @default(now())
 
-  @@map("list")
+  @@map("page")
+}
+
+
+model Text  {
+  id           String       @id @default(cuid())
+  name         String       @default("text")
+  content      String       @default("")
+  page         Page         @relation(fields: [pageId], references: [id] , onDelete: Cascade)
+  pageId       String       
+  index        Int          
+
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
+
+  @@map("text") 
 }

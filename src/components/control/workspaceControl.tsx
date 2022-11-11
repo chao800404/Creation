@@ -9,7 +9,7 @@ type WorkspaceControlType = {
 }
 
 const WorkspaceControl: React.FC<WorkspaceControlType> = ({ text }) => {
-  const { mutateFution } = useListSWR()
+  const { mutateFunction } = useListSWR()
 
   return (
     <WorkspaceControllerWrapper>
@@ -17,7 +17,7 @@ const WorkspaceControl: React.FC<WorkspaceControlType> = ({ text }) => {
       <div
         className="WorkspaceController_content"
         onClick={() => {
-          mutateFution.addNewList()
+          mutateFunction.addNewPage()
         }}
       >
         <div className="WorkspaceController_content-icon">

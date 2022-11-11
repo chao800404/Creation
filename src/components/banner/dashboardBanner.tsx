@@ -53,8 +53,8 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
         if (moveY >= 100 || moveY <= 0) return
         layoutYSet(moveY)
       }
-      document.addEventListener('pointermove', setCoverMove)
-      document.addEventListener('pointerup', handlePointerUp)
+      document.addEventListener('pointermove', setCoverMove, true)
+      document.addEventListener('pointerup', handlePointerUp, true)
       return () => {
         document.removeEventListener('pointermove', setCoverMove)
         document.removeEventListener('pointerup', handlePointerUp)

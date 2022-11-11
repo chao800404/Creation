@@ -37,11 +37,11 @@ const SearchBarBtn: React.FC<SearchBarBtnProps> = ({ desc }) => {
       setToggleOpen(false)
     }
 
-    document.addEventListener('click', handleOnClick)
-    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('click', handleOnClick, false)
+    document.addEventListener('keydown', handleKeyDown, false)
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      document.removeEventListener('click', handleOnClick)
+      document.removeEventListener('keydown', handleKeyDown, false)
+      document.removeEventListener('click', handleOnClick, false)
     }
   }, [toggleOpen])
 

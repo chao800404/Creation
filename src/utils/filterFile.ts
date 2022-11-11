@@ -12,3 +12,6 @@ export const imageFormatFilter = (path: string) => {
   const THIRD_PARTY = /^https:/i
   return THIRD_PARTY.test(path)
 }
+
+export const blockContentFilter = (content: string) =>
+  content.replace(/<[^>]*>/g, '')

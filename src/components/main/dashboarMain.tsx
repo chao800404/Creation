@@ -4,9 +4,10 @@ import { usePageSWR } from '../../hook/usePageSWR'
 import HeaderEditorS from '../edit/headerEditorS'
 import Spinner from '../spinner/spinner'
 import { DashboardMainWrapper } from './main.styles'
-import AddBlockInput from '../input/addBlockInput'
+import BlockInputContent from '../input/blockInputContent'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
+import { object } from 'zod'
 
 const DynamicDashboardBanner = dynamic(
   () => import('../banner/dashboardBanner'),
@@ -23,13 +24,15 @@ const DashboardMain = () => {
   const id = (page && (page[0] as string)) || ''
 
   const {
-    data: { cover },
+    data: { cover, blocks },
     isLoading,
   } = usePageSWR(id)
 
   if (isLoading) {
     return <Spinner />
   }
+
+  console.log(blocks)
 
   return (
     <DashboardMainWrapper
@@ -50,7 +53,13 @@ const DashboardMain = () => {
             <HeaderEditorS />
           </div>
           <div className="DashboardMain_container-content-add">
-            <AddBlockInput />
+            {blocks && blocks?.length > 0 ? (
+              blocks.map((block) => (
+                <BlockInputContent blockData={block} key={block.id} />
+              ))
+            ) : (
+              <BlockInputContent />
+            )}
           </div>
 
           <div style={{ height: '20vh', background: '#ffffff' }}></div>

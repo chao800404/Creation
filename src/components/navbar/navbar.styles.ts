@@ -9,6 +9,26 @@ export const DashboardNavbar = styled('header')`
   width: 100%;
 
   .navbar-breadCrumb {
+    max-width: 15rem;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #1c1c1c;
+    border-radius: 5px;
+    border-bottom: 3px solid #1c1c1c;
+
+    ul {
+      display: flex;
+
+      li {
+        display: inherit;
+        gap: 0.5rem;
+        align-items: center;
+        user-select: none;
+
+        a {
+          margin-top: 2px;
+        }
+      }
+    }
   }
 
   .navbar-userOption {

@@ -1,46 +1,46 @@
-import { Emoji, List } from '@prisma/client'
+import { Emoji, Page } from '@prisma/client'
 import useSWR, { useSWRConfig } from 'swr'
 import { createData, deleteData, fetcher, updateData } from '../utils/fetch'
 import cuid from 'cuid'
 import produce from 'immer'
 
 type ListResDataType = {
-  data: (List & { emoji: Emoji })[]
+  data: (Page & { emoji: Emoji })[]
   status: 'success' | 'fail'
 }
 
 type UseListSWRResult = {
   data: {
-    list: (List & { emoji: Emoji })[] | undefined
+    list: (Page & { emoji: Emoji })[] | undefined
     favorite: boolean | undefined
     editable: boolean | undefined
     emoji: Emoji['image'] | undefined
-    title: List['title'] | undefined
+    title: Page['title'] | undefined
   }
   isLoading: boolean
-  mutateFution: {
-    addNewList: () => void
-    deleteList: (id: string) => void
-    updateListItem: (
+  mutateFunction: {
+    addNewPage: () => void
+    deletePage: (id: string) => void
+    updatePageItem: (
       id: string,
-      key: keyof List,
+      key: keyof Page,
       value: boolean | string
     ) => void
-    updateListEmoji: (id: string, src: string) => void
+    updatePageEmoji: (id: string, src: string) => void
   }
 }
 
 type UseListType = (id?: string) => UseListSWRResult
 
-export const useListSWR: UseListType = (id) => {
+export const useListSWR: UseListType = (pageId) => {
   const { mutate } = useSWRConfig()
   const { data, error } = useSWR<ListResDataType>(
     `/api/query/queryList`,
     fetcher
   )
 
-  const mutateFution: UseListSWRResult['mutateFution'] = {
-    addNewList: () => {
+  const mutateFunction: UseListSWRResult['mutateFunction'] = {
+    addNewPage: () => {
       const newPage = {
         editable: true,
         favorite: false,
@@ -50,7 +50,7 @@ export const useListSWR: UseListType = (id) => {
 
       const addList = produce(data, (draft) => {
         if (draft) {
-          draft?.data.push(newPage as List & { emoji: Emoji })
+          draft?.data.push(newPage as Page & { emoji: Emoji })
         }
       })
 
@@ -65,7 +65,7 @@ export const useListSWR: UseListType = (id) => {
         rollbackOnError: true,
       })
     },
-    deleteList: (id) => {
+    deletePage: (id) => {
       const deleteList = produce(data, (draft) => {
         if (draft) {
           draft.data = draft.data.filter((item) => item.id !== id)
@@ -84,7 +84,7 @@ export const useListSWR: UseListType = (id) => {
         rollbackOnError: true,
       })
     },
-    updateListItem: (id, key, value) => {
+    updatePageItem: (id, key, value) => {
       const preUpdateItem = produce<ListResDataType>(({ data }) => {
         if (data) {
           const index = data.findIndex((item) => item.id === id)
@@ -113,7 +113,7 @@ export const useListSWR: UseListType = (id) => {
       )
     },
 
-    updateListEmoji: (id, src) => {
+    updatePageEmoji: (id, src) => {
       const preUpdateEmoji = produce<ListResDataType>(({ data }) => {
         if (data) {
           const index = data.findIndex((item) => item.id === id)
@@ -143,7 +143,7 @@ export const useListSWR: UseListType = (id) => {
     },
   }
 
-  const listItem = data?.data?.find((item) => item.id === id)
+  const listItem = data?.data?.find((item) => item.id === pageId)
 
   return {
     data: {
@@ -154,6 +154,6 @@ export const useListSWR: UseListType = (id) => {
       title: listItem?.title,
     },
     isLoading: !error && !data,
-    mutateFution,
+    mutateFunction,
   }
 }

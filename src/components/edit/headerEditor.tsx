@@ -46,7 +46,7 @@ const HeaderEditor = () => {
   const id = (page && (page[0] as string)) || ''
   const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
 
-  const { mutateFution } = usePageSWR(id)
+  const { mutateFunction } = usePageSWR(id)
 
   const cacheMap = useMemo(() => {
     const imageArray = []
@@ -113,7 +113,7 @@ const HeaderEditor = () => {
     const randomInt = randomPath(cacheMap.length)
     if (randomInt <= cacheMap.length) {
       const randomPath = cacheMap[randomInt]
-      mutateFution.uploadCoverImage(page as string, randomPath)
+      mutateFunction.uploadCoverImage(randomPath)
       editor && editor.chain().focus().blur().run()
     }
   }

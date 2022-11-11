@@ -1,9 +1,4 @@
-import {
-  NextApiResponse,
-  NextApiRequest,
-  GetStaticProps,
-  GetStaticPropsResult,
-} from 'next'
+import { NextApiResponse, NextApiRequest } from 'next'
 import { ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
@@ -16,24 +11,39 @@ export default async function getUserData(
     await validateUser(req, res, async (user) => {
       const params = req.query
       try {
-        const resData = await prisma.list.findUnique({
+        const resData = await prisma.page.findUnique({
           where: {
             id: params.id as string,
           },
           select: {
             authorId: true,
             cover: true,
+            text: {
+              select: {
+                content: true,
+                id: true,
+                index: true,
+                name: true,
+              },
+            },
           },
         })
 
         if (user.id !== resData?.authorId || !resData)
           throw new Error('You are not allowed to query these data')
 
-        const { authorId, ...otherData } = resData
+        const { authorId, cover, ...otherData } = resData
+
+        const blocks = Object.values(otherData)
+          .flatMap((block) => block)
+          .sort((a, b) => a.index - b.index)
 
         res.status(200).json({
           status: 'success',
-          data: otherData,
+          data: {
+            cover,
+            blocks,
+          },
         })
       } catch (error) {
         console.log(error)

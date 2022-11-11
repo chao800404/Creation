@@ -4,8 +4,8 @@ const useOnClickOutside = (callback: (e: MouseEvent) => void) => {
   useEffect(() => {
     const handle = (e: MouseEvent) => callback(e)
 
-    document.addEventListener('pointerdown', handle, false)
-    return () => document.removeEventListener('pointerdown', handle, false)
+    document.addEventListener('pointerdown', handle, true)
+    return () => document.removeEventListener('pointerdown', handle, true)
   }, [callback])
 }
 

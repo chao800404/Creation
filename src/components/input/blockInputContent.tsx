@@ -1,22 +1,55 @@
-import React, {
-  ChangeEventHandler,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import ReactTextareaAutosize from 'react-textarea-autosize'
 import { AddBlocknputWrapper } from './input.styles'
 import BlockInputWrapper from './blockInputWrapper'
 import { useBlocksStore } from '../../store/useBlocksStore'
 import shallow from 'zustand/shallow'
 import Heading from '../blocks/heading'
+import { Text } from '@prisma/client'
+import { blockContentFilter } from '../../utils/filterFile'
 
-const AddBlockInput = () => {
+type BlockInputType = {
+  blockData?: Text
+}
+
+const BlockFilterType = ({
+  blockData,
+  memoEmptySet,
+  value,
+}: {
+  blockData: Text
+  value: string
+  memoEmptySet: (toggle: boolean) => void
+}) => {
+  switch (blockData.name) {
+    case 'text':
+      return (
+        <Heading
+          blockData={blockData}
+          memoEmptySet={memoEmptySet}
+          value={value}
+        />
+      )
+    default:
+      return (
+        <Heading
+          blockData={blockData}
+          memoEmptySet={memoEmptySet}
+          value={value}
+        />
+      )
+  }
+}
+
+const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
   const textareaRef = useRef<null | HTMLTextAreaElement>(null)
   const [filterError, setFilterError] = useState(0)
-  const [isEmpty, setIsEmpty] = useState(true)
-  const [value, setValue] = useState('')
+  const [isEmpty, setIsEmpty] = useState<boolean>(
+    !blockContentFilter(blockData?.content || '')
+  )
+  const [value, setValue] = useState(blockData?.content)
+
   const { filterBlocksMapSet, popupShowSet, filterBlocks, focusIndexSet } =
     useBlocksStore(
       (state) => ({
@@ -31,7 +64,6 @@ const AddBlockInput = () => {
 
   const handleKeyDownOnEnter = (e: React.KeyboardEvent) => {
     const isFocus = document.activeElement === textareaRef.current
-
     if (isFocus) {
       switch (e.key) {
         case 'Enter':
@@ -57,8 +89,6 @@ const AddBlockInput = () => {
 
   const memoEmptySet = useCallback((toggle: boolean) => setIsEmpty(toggle), [])
 
-  console.log(isEmpty)
-
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const isFocus = document.activeElement === textareaRef.current
     const value = e.target.value.toLowerCase()
@@ -69,7 +99,7 @@ const AddBlockInput = () => {
       const blockName = value.replace('/', '')
       filterBlocksMapSet(blockName)
       focusIndexSet(0)
-    } else if (value.length > 1) {
+    } else if (value.length > 0) {
       setIsEmpty(false)
       setValue(e.target.value)
     }
@@ -80,7 +110,7 @@ const AddBlockInput = () => {
   }
 
   return (
-    <BlockInputWrapper>
+    <BlockInputWrapper tabIndex={blockData?.index || 0}>
       <AddBlocknputWrapper>
         {isEmpty ? (
           <ReactTextareaAutosize
@@ -91,11 +121,15 @@ const AddBlockInput = () => {
             onChange={handleOnChange}
           />
         ) : (
-          <Heading value={value} memoEmptySet={memoEmptySet} />
+          <BlockFilterType
+            blockData={blockData as Text}
+            memoEmptySet={memoEmptySet}
+            value={value || ''}
+          />
         )}
       </AddBlocknputWrapper>
     </BlockInputWrapper>
   )
 }
 
-export default React.memo(AddBlockInput)
+export default React.memo(BlockInputContent)

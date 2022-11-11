@@ -1,10 +1,10 @@
 import { Emoji } from '@prisma/client'
 import { NextApiResponse, NextApiRequest } from 'next'
 import { z, ZodError } from 'zod'
-import prisma from '../../../../src/lib/prisma'
-import validateUser from '../../../../src/utils/validate'
+import prisma from '../../../src/lib/prisma'
+import validateUser from '../../../src/utils/validate'
 
-export default async function getUserData(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -14,7 +14,7 @@ export default async function getUserData(
     await validateUser(req, res, async (user) => {
       try {
         const { authorId, emoji, createdAt, updatedAt, ...otherData } =
-          await prisma.list.create({
+          await prisma.page.create({
             data: {
               authorId: user.id,
               id: id as string,
@@ -23,6 +23,11 @@ export default async function getUserData(
               },
               cover: {
                 create: {},
+              },
+              text: {
+                create: {
+                  index: 0,
+                },
               },
             },
             include: {

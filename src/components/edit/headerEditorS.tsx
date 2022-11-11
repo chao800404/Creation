@@ -33,12 +33,12 @@ const HeaderEditorS = () => {
   const [toggleEmojiPopup, setToggleEomjiPopup] = useState(false)
 
   const {
-    mutateFution: { updateListEmoji, updateListItem },
+    mutateFunction: { updatePageEmoji, updatePageItem },
     data: { emoji, title },
   } = useListSWR(id)
 
   const {
-    mutateFution,
+    mutateFunction,
     data: { cover },
   } = usePageSWR(id)
 
@@ -56,10 +56,10 @@ const HeaderEditorS = () => {
       const randomInt = randomPath(cacheMap.length)
       if (randomInt <= cacheMap.length) {
         const randomPath = cacheMap[randomInt]
-        return mutateFution.uploadCoverImage(id, randomPath)
+        return mutateFunction.uploadCoverImage(randomPath)
       }
     }
-    return mutateFution.uploadCoverImage(id, '')
+    return mutateFunction.uploadCoverImage('')
   }
 
   const handleChangeHeaderLevel = (level: Level) => {
@@ -71,15 +71,15 @@ const HeaderEditorS = () => {
       const randomInt = randomPath(EMOJI_BASE.length)
       if (randomInt <= EMOJI_BASE.length) {
         const randomPath = EMOJI_BASE[randomInt]
-        return updateListEmoji(id, randomPath)
+        return updatePageEmoji(id, randomPath)
       }
     }
-    return updateListEmoji(id, '')
+    return updatePageEmoji(id, '')
   }
 
   const handleOnChange = debounce((e) => {
     const value = e.target.value
-    updateListItem(id, 'title', value)
+    updatePageItem(id, 'title', value)
   }, 1000)
 
   useOnClickOutside((e) => {
@@ -95,7 +95,7 @@ const HeaderEditorS = () => {
     if (emojiContent) {
       const emoji = emojiContent.getAttribute('data-src')
       setToggleEomjiPopup(false)
-      emoji && updateListEmoji(id, emoji)
+      emoji && updatePageEmoji(id, emoji)
     }
   })
 

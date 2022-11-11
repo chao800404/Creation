@@ -22,7 +22,7 @@ export default async function handler(
         const data = JSON.parse(req.body)
         const { id, key, value } = MySchema.parse(data)
 
-        const resData = await prisma.list.findUnique({
+        const resData = await prisma.page.findUnique({
           where: {
             id,
           },
@@ -31,7 +31,7 @@ export default async function handler(
         if (!resData || resData.authorId !== user.id)
           throw new Error("You can't be updating this file")
 
-        const { authorId, ...otherData } = await prisma.list.update({
+        const { authorId, ...otherData } = await prisma.page.update({
           where: {
             id,
           },
