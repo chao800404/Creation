@@ -8,6 +8,7 @@ import shallow from 'zustand/shallow'
 import Heading from '../blocks/heading'
 import { Text } from '@prisma/client'
 import { blockContentFilter } from '../../utils/filterFile'
+import { phoneticNotationFilter } from '../../utils/filterFile'
 
 type BlockInputType = {
   blockData?: Text
@@ -100,8 +101,10 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
       filterBlocksMapSet(blockName)
       focusIndexSet(0)
     } else if (value.length > 0) {
-      setIsEmpty(false)
-      setValue(e.target.value)
+      if (!phoneticNotationFilter(e.target.value)) {
+        setIsEmpty(false)
+        setValue(e.target.value)
+      }
     }
     if (!value && isFocus) {
       popupShowSet(false)
@@ -119,6 +122,7 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
             ref={textareaRef}
             onKeyDown={handleKeyDownOnEnter}
             onChange={handleOnChange}
+            onCompositionUpdate={(e) => console.log(e.data)}
           />
         ) : (
           <BlockFilterType

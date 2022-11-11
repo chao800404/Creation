@@ -90,7 +90,6 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
     },
 
     updateBlock: (blockId, blockContent) => {
-      // console.log(blockContent)
       const updateBlock = produce(data, (draft) => {
         if (draft) {
           const index = draft.data.blocks.findIndex(
@@ -120,7 +119,7 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
               if (index !== -1 && index !== undefined) {
                 draft.data.blocks[index] = {
                   ...draft.data.blocks[index],
-                  ...updateBlock,
+                  ...updateBlock.data,
                 }
               }
             })
