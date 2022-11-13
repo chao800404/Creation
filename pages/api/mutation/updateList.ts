@@ -28,10 +28,10 @@ export default async function handler(
           },
         })
 
-        if (!resData || resData.authorId !== user.id)
+        if (!resData || resData.userId !== user.id)
           throw new Error("You can't be updating this file")
 
-        const { authorId, ...otherData } = await prisma.page.update({
+        const { userId, ...otherData } = await prisma.page.update({
           where: {
             id,
           },

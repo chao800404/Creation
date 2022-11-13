@@ -63,7 +63,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
 
       {children}
       <AnimatePresence>
-        {popupShow && (
+        {popupShow && isFocus && (
           <motion.div
             transition={{ type: 'spring', damping: 10, stiffness: 350 }}
             initial={animate(1)}

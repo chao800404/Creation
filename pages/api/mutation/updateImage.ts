@@ -29,7 +29,7 @@ export default async function handler(
           },
         })
 
-        if (!resData || resData.authorId !== user.id)
+        if (!resData || resData.userId !== user.id)
           throw new Error("You can't be updating this file")
 
         let updateData: Cover | Emoji | null = null

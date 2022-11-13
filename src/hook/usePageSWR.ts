@@ -1,33 +1,42 @@
 import useSWR, { useSWRConfig } from 'swr'
-import { fetcher, updateData, uploadFile } from '../utils/fetch'
-import { Cover, Text } from '@prisma/client'
+import { fetcher, updateData, uploadFile, createBlock } from '../utils/fetch'
+import { Cover } from '@prisma/client'
 import produce from 'immer'
+import { findIndex } from '../utils/findIndex'
+import cuid from 'cuid'
 
 type PageResDataType = {
   data: {
     cover: Cover
-    blocks: Text[]
+    blocks: BlocksType[]
   }
   status: 'success' | 'fail'
 }
 
-type BlockUpdateType = {
-  key: string
-  index?: number
+type BlocksType = {
+  id: string
+  name: string
+  index: number
   content: string
-  block_id: string
 }
+
+type BlocksNameType = 'text'
 
 type UsePageSWRResult = {
   data: {
     cover: Cover['image'] | undefined
-    blocks?: Text[]
+    blocks?: BlocksType[]
   }
   isLoading: boolean
   mutateFunction: {
     uploadCoverImage: (src: string) => void
     uploadCoverImageFile: (file: File) => void
-    updateBlock: (blockId: string, blockContent: BlockUpdateType) => void
+    updateBlock: (
+      blockId: string,
+      blockContent: BlocksType,
+      signal?: AbortSignal | null | undefined
+    ) => void
+    addBlock: (name: BlocksNameType) => void
   }
 }
 
@@ -89,18 +98,47 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
       )
     },
 
-    updateBlock: (blockId, blockContent) => {
+    addBlock: (name) => {
+      const newBlock = {
+        name,
+        id: cuid(),
+        content: '',
+        index: data ? data?.data?.blocks?.length + 1 : 0,
+      }
+
+      const addBlock = produce(data, (draft) => {
+        draft?.data.blocks.push(newBlock)
+      })
+
+      mutate(
+        `/api/page/${pageId}`,
+        createBlock('pageBlocksUpdateOrCreate', {
+          page_id: pageId,
+          ...newBlock,
+        }),
+        {
+          populateCache: (addBlock, block) => {
+            return produce<PageResDataType>(block, (draft) => {
+              draft.data.blocks.push(addBlock.data)
+            })
+          },
+
+          revalidate: false,
+          optimisticData: addBlock,
+          rollbackOnError: true,
+        }
+      )
+    },
+
+    updateBlock: (blockId, blockContent, signal) => {
       const updateBlock = produce(data, (draft) => {
         if (draft) {
-          const index = draft.data.blocks.findIndex(
-            (block) => block.id === blockId
-          )
-          if (index !== -1 && index !== undefined) {
+          findIndex(draft.data.blocks, blockId, (index) => {
             draft.data.blocks[index] = {
               ...draft.data.blocks[index],
               ...blockContent,
             }
-          }
+          })
         }
       })
       mutate(
@@ -108,20 +146,17 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
         updateData(
           'pageBlocksUpdateOrCreate',
           { page_id: pageId, ...blockContent },
-          null
+          signal
         ),
         {
           populateCache: (updateBlock, page) => {
             return produce<PageResDataType>(page, (draft) => {
-              const index = draft.data.blocks.findIndex(
-                (block) => block.id === blockId
-              )
-              if (index !== -1 && index !== undefined) {
+              findIndex(draft.data.blocks, blockId, (index) => {
                 draft.data.blocks[index] = {
                   ...draft.data.blocks[index],
                   ...updateBlock.data,
                 }
-              }
+              })
             })
           },
 

@@ -1,13 +1,12 @@
 // import DashboardBanner from '../banner/dashboardBanner'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import HeaderEditorS from '../edit/headerEditorS'
 import Spinner from '../spinner/spinner'
 import { DashboardMainWrapper } from './main.styles'
 import BlockInputContent from '../input/blockInputContent'
 import dynamic from 'next/dynamic'
-import { Suspense } from 'react'
-import { object } from 'zod'
+import { Suspense, useEffect } from 'react'
 
 const DynamicDashboardBanner = dynamic(
   () => import('../banner/dashboardBanner'),
@@ -17,9 +16,10 @@ const DynamicDashboardBanner = dynamic(
 )
 
 const DashboardMain = () => {
+  const router = useRouter()
   const {
     query: { page },
-  } = useRouter()
+  } = router
 
   const id = (page && (page[0] as string)) || ''
 
@@ -31,8 +31,6 @@ const DashboardMain = () => {
   if (isLoading) {
     return <Spinner />
   }
-
-  console.log(blocks)
 
   return (
     <DashboardMainWrapper
@@ -62,7 +60,7 @@ const DashboardMain = () => {
             )}
           </div>
 
-          <div style={{ height: '20vh', background: '#ffffff' }}></div>
+          <div style={{ height: '50vh', background: '#ffffff' }}></div>
         </div>
 
         {/* {title === null && <InitialContainer />} */}

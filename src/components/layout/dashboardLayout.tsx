@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import SearchBarBtn from '../button/searchBar-button'
 import FavoriteTag from '../tag/favoriteTag'
@@ -31,11 +31,13 @@ const { searchBarBtn, interfaces, workspaces, importFile, trash, newPage } =
   SIDE_OPTION
 
 const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
-  const { page } = useRouter().query
+  const router = useRouter()
+  const { page } = router.query
   const id = (page && (page[0] as string)) || ''
   const {
     data: { list },
   } = useListSWR(id)
+
   return (
     <DashboardLayoutWrapper>
       <DynamicSideWrapper>

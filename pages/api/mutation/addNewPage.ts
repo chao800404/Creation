@@ -13,10 +13,10 @@ export default async function handler(
     if (!id) throw new Error('Please provide id')
     await validateUser(req, res, async (user) => {
       try {
-        const { authorId, emoji, createdAt, updatedAt, ...otherData } =
+        const { userId, emoji, createdAt, updatedAt, ...otherData } =
           await prisma.page.create({
             data: {
-              authorId: user.id,
+              userId: user.id,
               id: id as string,
               emoji: {
                 create: {},

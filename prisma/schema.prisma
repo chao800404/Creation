@@ -13,7 +13,7 @@ datasource db {
 
 model Account {
   id                 String  @id @default(cuid())
-  userId             String
+  userId             String  @map("user_id")
   type               String
   provider           String
   providerAccountId  String
@@ -75,7 +75,7 @@ model Cover {
   image        String       @default("")
   layoutY      Int?          
   page         Page         @relation(fields: [pageId], references: [id],onDelete: Cascade) 
-  pageId       String       @unique 
+  pageId      String        @unique @map("page_id")
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @default(now())
 
@@ -86,7 +86,7 @@ model Emoji {
   id           String       @id @default(cuid())
   image        String       @default("")
   page         Page         @relation(fields: [pageId], references: id , onDelete: Cascade) 
-  pageId       String       @unique
+  pageId       String       @unique @map("page_id")
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @default(now())
 
@@ -107,8 +107,8 @@ model Page  {
   id           String       @id @default(cuid())
   title        String?       
   favorite     Boolean      @default(false)
-  user         User         @relation(fields: [authorId], references: [id])
-  authorId     String            
+  user         User         @relation(fields: [userId], references: [id])
+  userId       String       @map("user_id")   
   editable     Boolean      @default(true)   
   cover        Cover?
   emoji        Emoji?       
@@ -126,7 +126,7 @@ model Text  {
   name         String       @default("text")
   content      String       @default("")
   page         Page         @relation(fields: [pageId], references: [id] , onDelete: Cascade)
-  pageId       String       
+  pageId       String       @map("page_id")
   index        Int          
 
   createdAt    DateTime     @default(now())

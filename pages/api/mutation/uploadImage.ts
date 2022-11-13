@@ -84,7 +84,7 @@ export default async function handler(
             },
           })
 
-          if (resData?.authorId !== user.id)
+          if (resData?.userId !== user.id)
             throw new Error("You can't be updating this file")
 
           const result = await cloudinary.uploader.upload(file.image.filepath, {
@@ -100,7 +100,7 @@ export default async function handler(
           // const path = await saveFile(file.image as unknown as File, listId)
           const data = await prisma.cover.update({
             where: {
-              pageId,
+              pageId: pageId,
             },
             data: {
               image: result.secure_url,

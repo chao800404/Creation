@@ -73,25 +73,27 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 2.2rem;
   }
 
-  .ProseMirror {
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      line-height: 1.1;
-    }
+  blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid #c3c3c3;
+  }
 
-    p {
-      font-size: 1.25rem;
-      height: fit-content;
-    }
 
-    code {
-    background-color: rgba(#616161, 0.1);
+  code {
+    background-color: #c3c3c3;
     color: #616161;
+  }
+    
+
+  .ProseMirror {
+  
+    p {
+      font-size: 1.1rem;
+      height: fit-content;
+      line-height: 1.4;
     }
+
+  
 
     pre {
     background: #0D0D0D;
@@ -100,18 +102,9 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
 
-    code {
-      color: inherit;
-      padding: 0;
-      background: none;
-      font-size: 0.8rem;
-    }
+  
 
-    blockquote {
-      padding-left: 1rem;
-      border-left: 2px solid rgba(#0D0D0D, 0.1);
-    }
-    
+  
     hr {
     border: none;
     border-top: 2px solid rgba(#0D0D0D, 0.1);

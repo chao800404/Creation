@@ -25,10 +25,10 @@ export default async function handler(
           },
         })
 
-        if (!resData || resData.authorId !== user.id)
+        if (!resData || resData.userId !== user.id)
           throw new Error("You can't delete this file")
 
-        const { authorId, ...otherData } = await prisma.page.delete({
+        const { userId, ...otherData } = await prisma.page.delete({
           where: {
             id,
           },

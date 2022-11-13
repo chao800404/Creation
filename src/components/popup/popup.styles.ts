@@ -364,3 +364,53 @@ export const LoginPopupWrapper = styled('div')`
     }
   }
 `
+
+export const BlockPopupWrapper = styled('div')`
+  width: auto;
+  display: flex;
+  color: #5c5c5c;
+  background-color: #1c1c1c;
+  font-size: 0.8rem;
+  padding: 0.5rem 0;
+  border-radius: 5px;
+  position: relative;
+
+  .color-picker {
+    position: fixed;
+    top: -13rem;
+    width: 100%;
+    height: 100%;
+
+    &-content {
+      width: auto;
+    }
+  }
+
+  button.is-active {
+    color: #ffffff;
+  }
+
+  .blockPopup-btn {
+    color: inherit;
+    width: auto;
+    background-color: #1c1c1c;
+    padding: 0 0.5rem;
+    cursor: pointer;
+
+    &:not(:last-child) {
+      border-right: 1px solid #5c5c5c;
+    }
+
+    &-icon {
+      color: inherit;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
+`

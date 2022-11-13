@@ -37,7 +37,7 @@ export const BlockInputBaseWrapper = styled(motion.div)`
     left: -2.5rem;
     z-index: 10;
     top: 50%;
-    transform: translateY(-60%);
+    transform: translateY(-50%);
 
     &-content {
       font-size: 1.5rem;
@@ -50,6 +50,7 @@ export const BlockInputBaseWrapper = styled(motion.div)`
     left: 0;
     bottom: fit-content;
     width: fit-content;
+    z-index: 300;
   }
 `
 
@@ -57,8 +58,14 @@ export const AddBlocknputWrapper = styled('div')`
   position: relative;
   min-height: 28px;
   height: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
 
   .add_block-input {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+    align-self: center;
+    grid-columns: 1 / -1;
+    grid-row: 1 / -1;
   }
 `

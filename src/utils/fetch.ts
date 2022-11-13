@@ -35,6 +35,22 @@ export const createData = async <T>(path: string, id: string): Promise<T> => {
   return await res.json()
 }
 
+export const createBlock = async <T>(
+  path: string,
+  data: T,
+  signal?: AbortSignal | null | undefined
+): Promise<T> => {
+  const res = await fetch(`/api/mutation/${path}`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    signal,
+  })
+  return await res.json()
+}
+
 export const proFetch = async <T>(path: string): Promise<T> => {
   const res = await fetch(`${URL}/api/query/${path}`)
   const resData = (await res.json()) as T

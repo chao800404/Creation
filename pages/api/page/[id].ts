@@ -16,7 +16,7 @@ export default async function getUserData(
             id: params.id as string,
           },
           select: {
-            authorId: true,
+            userId: true,
             cover: true,
             text: {
               select: {
@@ -29,10 +29,10 @@ export default async function getUserData(
           },
         })
 
-        if (user.id !== resData?.authorId || !resData)
+        if (user.id !== resData?.userId || !resData)
           throw new Error('You are not allowed to query these data')
 
-        const { authorId, cover, ...otherData } = resData
+        const { userId, cover, ...otherData } = resData
 
         const blocks = Object.values(otherData)
           .flatMap((block) => block)

@@ -12,7 +12,7 @@ export default async function getUserData(
       try {
         const resData = await prisma.page.findMany({
           where: {
-            authorId: user.id,
+            userId: user.id,
           },
           select: {
             id: true,

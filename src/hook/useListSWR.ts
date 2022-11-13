@@ -3,6 +3,7 @@ import useSWR, { useSWRConfig } from 'swr'
 import { createData, deleteData, fetcher, updateData } from '../utils/fetch'
 import cuid from 'cuid'
 import produce from 'immer'
+import { findIndex } from '../utils/findIndex'
 
 type ListResDataType = {
   data: (Page & { emoji: Emoji })[]
@@ -87,10 +88,9 @@ export const useListSWR: UseListType = (pageId) => {
     updatePageItem: (id, key, value) => {
       const preUpdateItem = produce<ListResDataType>(({ data }) => {
         if (data) {
-          const index = data.findIndex((item) => item.id === id)
-          if (index !== -1 && index !== undefined) {
+          findIndex(data, id, (index) => {
             data[index][key] = value as never
-          }
+          })
         }
       })
 
@@ -100,10 +100,9 @@ export const useListSWR: UseListType = (pageId) => {
         {
           populateCache: (updateItem, list: ListResDataType) => {
             return produce(list, ({ data }) => {
-              const index = data.findIndex((item) => item.id === id)
-              if (index !== -1 && index !== undefined) {
+              findIndex(data, id, (index) => {
                 data[index][key] = updateItem.data[key] as never
-              }
+              })
             })
           },
           revalidate: false,
@@ -116,10 +115,9 @@ export const useListSWR: UseListType = (pageId) => {
     updatePageEmoji: (id, src) => {
       const preUpdateEmoji = produce<ListResDataType>(({ data }) => {
         if (data) {
-          const index = data.findIndex((item) => item.id === id)
-          if (index !== -1 && index !== undefined) {
+          findIndex(data, id, (index) => {
             data[index].emoji.image = src
-          }
+          })
         }
       })
 
@@ -129,10 +127,9 @@ export const useListSWR: UseListType = (pageId) => {
         {
           populateCache: (updateEmoji, list: ListResDataType) => {
             return produce(list, ({ data }) => {
-              const index = data.findIndex((item) => item.id === id)
-              if (index !== -1 && index !== undefined) {
+              findIndex(data, id, (index) => {
                 data[index].emoji.image = updateEmoji.data.image
-              }
+              })
             })
           },
           revalidate: false,

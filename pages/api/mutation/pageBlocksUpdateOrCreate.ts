@@ -8,9 +8,9 @@ const keyEnum = ['text'] as const
 
 const MySchema = z.object({
   page_id: z.string().cuid({ message: 'Please provide correct ID' }),
-  key: z.enum(keyEnum),
+  name: z.enum(keyEnum),
   index: z.number(),
-  block_id: z.union([
+  id: z.union([
     z.string().cuid({ message: 'Please provide correct ID' }),
     z.undefined(),
   ]),
@@ -23,10 +23,10 @@ export default async function handler(
 ) {
   await validateUser(req, res, async (user) => {
     let block
-    const data = JSON.parse(req.body)
 
-    console.log(data)
-    const { page_id, key, index, block_id, content } = MySchema.parse(data)
+    const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
+    // console.log(data)
+    const { page_id, name, index, id, content } = MySchema.parse(data)
 
     try {
       const resData = await prisma.page.findUnique({
@@ -34,11 +34,11 @@ export default async function handler(
           id: page_id,
         },
       })
-      if (!resData || resData.authorId !== user.id)
+      if (!resData || resData.userId !== user.id)
         throw new Error("You can't be updating this file")
       switch (req.method) {
         case 'POST':
-          block = await prisma[key].create({
+          block = await prisma[name].create({
             data: {
               pageId: page_id,
               index: index,
@@ -47,15 +47,13 @@ export default async function handler(
               id: true,
               name: true,
               index: true,
-              pageId: true,
-              content: true,
             },
           })
           break
         case 'PATCH':
-          block = await prisma[key].update({
+          block = await prisma[name].update({
             where: {
-              id: block_id,
+              id,
             },
             data: {
               content: content,
@@ -65,7 +63,6 @@ export default async function handler(
               id: true,
               name: true,
               index: true,
-              pageId: true,
               content: true,
             },
           })
