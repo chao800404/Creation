@@ -373,18 +373,6 @@ export const BlockPopupWrapper = styled('div')`
   font-size: 0.8rem;
   padding: 0.5rem 0;
   border-radius: 5px;
-  position: relative;
-
-  .color-picker {
-    position: fixed;
-    top: -13rem;
-    width: 100%;
-    height: 100%;
-
-    &-content {
-      width: auto;
-    }
-  }
 
   button.is-active {
     color: #ffffff;
@@ -412,5 +400,28 @@ export const BlockPopupWrapper = styled('div')`
     &:hover {
       color: #ffffff;
     }
+  }
+`
+
+type ColorPickerWrapperType = {
+  isOverThenMiddleWindow?: boolean
+}
+
+export const ColorPickerWrapper = styled.div.attrs<ColorPickerWrapperType>(
+  (props) => ({
+    isOverThenMiddleWindow: props.isOverThenMiddleWindow,
+  })
+)<ColorPickerWrapperType>`
+  position: absolute;
+  top: ${({ isOverThenMiddleWindow }) =>
+    isOverThenMiddleWindow ? '-13rem' : '2.5rem'};
+  /* right: -10rem; */
+  width: 100%;
+  outline: 2px solid #1c1c1c;
+  border-radius: 6px;
+  background-color: #1c1c1c;
+
+  .color-picker-content {
+    width: auto;
   }
 `

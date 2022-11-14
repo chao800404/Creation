@@ -40,6 +40,7 @@ const Dashboard = () => {
         <meta name="description" content="Creation App" />
         <link rel="icon" href={emoji ? emoji : '/favicon.ico'} />
       </Head>
+
       <DashboardLayout>
         <DashboardMain />
       </DashboardLayout>

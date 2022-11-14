@@ -1,98 +1,141 @@
 import { Editor } from '@tiptap/react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { BlockPopupWrapper } from './popup.styles'
-import { HiOutlineCode } from 'react-icons/hi'
-import { ImStrikethrough, ImBold } from 'react-icons/im'
-import { TbBlockquote } from 'react-icons/tb'
-import { ImUnderline } from 'react-icons/im'
-import { BiItalic, BiFontColor } from 'react-icons/bi'
 import { MdFormatColorText } from 'react-icons/md'
-import { GoItalic } from 'react-icons/go'
+import { IconType } from 'react-icons'
+
+import useOnClickOutside from '../../utils/useOnClickOutside'
 import { HexAlphaColorPicker } from 'react-colorful'
+import { ColorPickerWrapper } from './popup.styles'
 
-const BlockPopup = ({ editor }: { editor: Editor }) => {
-  const [toggle, setToggle] = useState(false)
-  const [color, setColor] = useState(
-    editor.getAttributes('textStyle').color || ''
-  )
+type BlockMunuBtn = {
+  name: string
+  onClick: () => boolean
+  disabled: boolean
+  className: string
+  icon: IconType
+}
 
-  useEffect(() => {
-    editor.chain().focus().setColor(color).run()
-  }, [color, editor])
+type BlockPopupType = {
+  editor: Editor
+  toggle: boolean
+  displayColor: string
+  setToggle: React.Dispatch<React.SetStateAction<boolean>>
+  blockMenuBtns: BlockMunuBtn[]
+}
+
+const Menubar: React.FC<BlockPopupType> = ({
+  editor,
+  toggle,
+  displayColor,
+  setToggle,
+  blockMenuBtns,
+}) => {
+  if (!editor) {
+    return null
+  }
 
   return (
     <BlockPopupWrapper>
+      {blockMenuBtns.map(
+        ({ name, className, disabled, icon, onClick }, index) => (
+          <button
+            key={index}
+            onClick={onClick}
+            className={`${className} blockPopup-btn`}
+            disabled={disabled}
+            data-name={name}
+          >
+            {React.createElement(icon, {
+              className: 'blockPopup-btn-icon',
+            })}
+          </button>
+        )
+      )}
+
       <button
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        disabled={!editor.can().chain().focus().toggleBold().run()}
-        className={`blockPopup-btn ${
-          editor.isActive('bold') ? 'is-active' : ''
-        }`}
-      >
-        <ImBold className="blockPopup-btn-icon" />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        disabled={!editor.can().chain().focus().toggleItalic().run()}
-        className={`blockPopup-btn ${
-          editor.isActive('italic') ? 'is-active' : ''
-        }`}
-      >
-        <GoItalic className="blockPopup-btn-icon" />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleUnderline().run()}
-        className={`blockPopup-btn ${
-          editor.isActive('underline') ? 'is-active' : ''
-        }`}
-      >
-        <ImUnderline className="blockPopup-btn-icon" />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        disabled={!editor.can().chain().focus().toggleStrike().run()}
-        className={`blockPopup-btn ${
-          editor.isActive('strike') ? 'is-active' : ''
-        }`}
-      >
-        <ImStrikethrough className="blockPopup-btn-icon" />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleCode().run()}
-        disabled={!editor.can().chain().focus().toggleCode().run()}
-        className={`blockPopup-btn ${
-          editor.isActive('code') ? 'is-active' : ''
-        }`}
-      >
-        <HiOutlineCode className="blockPopup-btn-icon" />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={`blockPopup-btn ${
-          editor.isActive('blockquote') ? 'is-active' : ''
-        }`}
-      >
-        <TbBlockquote className="blockPopup-btn-icon" />
-      </button>
-      <button
+        id="color-picker"
         onClick={() => setToggle((prev) => !prev)}
         className={`blockPopup-btn ${toggle ? 'is-active' : ''}`}
-        style={{ color: color ? color : '' }}
+        style={{ color: displayColor ? displayColor : '' }}
       >
         <MdFormatColorText className="blockPopup-btn-icon" />
       </button>
+    </BlockPopupWrapper>
+  )
+}
+
+const BlockPopup = ({
+  editor,
+  blockMenuBtns,
+}: {
+  editor: Editor | null
+  blockMenuBtns: BlockMunuBtn[]
+}) => {
+  const [toggle, setToggle] = useState(false)
+  const elemRef = useRef<null | HTMLDivElement>(null)
+  const [color, setColor] = useState(
+    (editor && editor.getAttributes('textStyle').color) || ''
+  )
+  const [displayColor, setDisplayColor] = useState(
+    (editor && editor.getAttributes('textStyle').color) || ''
+  )
+  const [isOverThenMiddleWindow, setIsOverThenMiddleWindow] = useState(false)
+
+  useEffect(() => {
+    editor && editor.chain().focus().setColor(color).run()
+  }, [color, editor])
+
+  useEffect(() => {
+    editor &&
+      editor.on('selectionUpdate', ({ editor }) => {
+        setDisplayColor(editor.getAttributes('textStyle').color)
+      })
+  }, [editor])
+
+  useOnClickOutside((e) => {
+    if (!(e.target as HTMLDivElement).closest('#color-picker')) {
+      setToggle(false)
+    }
+  })
+
+  if (!editor) {
+    return null
+  }
+
+  return (
+    <div
+      onClick={() => {
+        const { y } = elemRef.current?.getBoundingClientRect() as DOMRect
+        setIsOverThenMiddleWindow(y > window.innerHeight / 3)
+        editor.chain().focus().run()
+      }}
+      ref={elemRef}
+    >
+      <Menubar
+        editor={editor}
+        toggle={toggle}
+        displayColor={displayColor}
+        setToggle={setToggle}
+        blockMenuBtns={blockMenuBtns}
+      />
 
       {toggle && (
-        <div className="color-picker">
+        <ColorPickerWrapper
+          id="color-picker"
+          isOverThenMiddleWindow={isOverThenMiddleWindow}
+        >
           <HexAlphaColorPicker
             className="color-picker-content"
-            color={color}
-            onChange={setColor}
-            onClickCapture={() => setToggle(false)}
+            color={displayColor}
+            onChange={(color) => {
+              setDisplayColor(color)
+              setColor(color)
+            }}
           />
-        </div>
+        </ColorPickerWrapper>
       )}
-    </BlockPopupWrapper>
+    </div>
   )
 }
 

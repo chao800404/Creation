@@ -48,9 +48,9 @@ export const BlockInputBaseWrapper = styled(motion.div)`
   .add_block-popup {
     position: absolute;
     left: 0;
-    bottom: fit-content;
     width: fit-content;
     z-index: 300;
+    bottom: -20.5rem;
   }
 `
 

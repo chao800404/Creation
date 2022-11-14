@@ -8,6 +8,7 @@ import useOnClickOutside from '../../utils/useOnClickOutside'
 import { useBlocksStore } from '../../store/useBlocksStore'
 import shallow from 'zustand/shallow'
 import { BLOCK_SELECTOR } from '../../utils/config'
+import { usePageLeave } from 'react-use'
 
 type BlockInputWrapperType = {
   tabIndex: number
@@ -39,6 +40,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
     const target = (e.target as HTMLElement).closest(
       '[data-type = "block-add-popup"]'
     )
+
     !target && popupShow && popupShowSet(false)
   })
 
@@ -49,7 +51,9 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
   return (
     <BlockInputBaseWrapper
       onFocus={() => setIsFocus(true)}
-      onBlur={() => setIsFocus(false)}
+      onBlur={() => {
+        setIsFocus(false)
+      }}
       tabIndex={tabIndex}
     >
       <motion.div
@@ -63,7 +67,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
 
       {children}
       <AnimatePresence>
-        {popupShow && isFocus && (
+        {popupShow && (
           <motion.div
             transition={{ type: 'spring', damping: 10, stiffness: 350 }}
             initial={animate(1)}

@@ -7,7 +7,6 @@ import { DashboardMainWrapper } from './main.styles'
 import BlockInputContent from '../input/blockInputContent'
 import dynamic from 'next/dynamic'
 import { Suspense, useEffect } from 'react'
-
 const DynamicDashboardBanner = dynamic(
   () => import('../banner/dashboardBanner'),
   {

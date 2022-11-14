@@ -16,7 +16,7 @@ import Italic from '@tiptap/extension-italic'
 import Code from '@tiptap/extension-code'
 import Bold from '@tiptap/extension-bold'
 import { Color } from '@tiptap/extension-color'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Text as TextType } from '@prisma/client'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
@@ -26,18 +26,9 @@ import Text from '@tiptap/extension-text'
 import BlockPopup from '../popup/blockPopup'
 import TextStyle from '@tiptap/extension-text-style'
 import Underline from '@tiptap/extension-underline'
-
-const MenuBar = ({ editor }: { editor: Editor | null }) => {
-  if (!editor) {
-    return null
-  }
-
-  return (
-    <BubbleMenu tippyOptions={{ duration: 100 }} editor={editor}>
-      <BlockPopup editor={editor} />
-    </BubbleMenu>
-  )
-}
+import { HexAlphaColorPicker } from 'react-colorful'
+import useOnClickOutside from '../../utils/useOnClickOutside'
+import { TextPopupBtns } from '../../utils/config'
 
 const TextBlock = ({
   blockData,
@@ -70,15 +61,6 @@ const TextBlock = ({
       TextStyle,
       Underline,
       History.configure({ depth: 10 }),
-
-      // HardBreak.extend({
-      //   addKeyboardShortcuts: () => ({
-      //     Enter: () => {
-      //       addBlock('text')
-      //       return true
-      //     },
-      //   }),
-      // }),
     ],
 
     autofocus: true,
@@ -89,12 +71,14 @@ const TextBlock = ({
   })
 
   useEffect(() => {
-    editor &&
+    if (editor) {
       editor.on('update', ({ editor }) => {
         if (editor.isEmpty) {
+          console.log('run')
           memoEmptySet(editor.isEmpty)
         }
       })
+    }
   }, [editor, memoEmptySet])
 
   const handleAsync = (content: string) => {
@@ -118,9 +102,18 @@ const TextBlock = ({
       )
   }, [editor])
 
+  if (!editor) {
+    return null
+  }
+
   return (
     <div className={className}>
-      <MenuBar editor={editor} />
+      <BubbleMenu tippyOptions={{ duration: 100 }} editor={editor}>
+        <BlockPopup
+          editor={editor}
+          blockMenuBtns={Object.values(TextPopupBtns(editor))}
+        />
+      </BubbleMenu>
       <EditorContent editor={editor} />
     </div>
   )

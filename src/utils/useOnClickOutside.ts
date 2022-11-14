@@ -1,12 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const useOnClickOutside = (callback: (e: MouseEvent) => void) => {
-  useEffect(() => {
-    const handle = (e: MouseEvent) => callback(e)
+  const [isLeave, setIsLeave] = useState(false)
 
-    document.addEventListener('pointerdown', handle, true)
-    return () => document.removeEventListener('pointerdown', handle, true)
-  }, [callback])
+  useEffect(() => {
+    const handler = (e: MouseEvent) => !isLeave && callback(e)
+
+    const handleToggleLeave = (event: MouseEvent) => {
+      const from = event.relatedTarget
+      setIsLeave(!from)
+    }
+
+    document.addEventListener('pointerdown', handler, false)
+    document.addEventListener('mouseout', handleToggleLeave, false)
+    document.addEventListener('mouseenter', handleToggleLeave, false)
+    return () => {
+      document.removeEventListener('pointerdown', handler, false)
+      document.removeEventListener('mouseout', handleToggleLeave, false)
+      document.removeEventListener('mouseenter', handleToggleLeave, false)
+    }
+  }, [callback, isLeave])
 }
 
 export default useOnClickOutside

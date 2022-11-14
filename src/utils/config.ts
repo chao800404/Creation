@@ -5,9 +5,16 @@ import {
   AiOutlinePlusSquare,
   AiOutlinePlus,
 } from 'react-icons/ai'
-import { HiOutlineViewList, HiDocumentText } from 'react-icons/hi'
+import {
+  HiOutlineViewList,
+  HiDocumentText,
+  HiOutlineCode,
+} from 'react-icons/hi'
 import { BsFillGridFill, BsCaretRightFill } from 'react-icons/bs'
-import { TbGridDots } from 'react-icons/tb'
+import { TbBlockquote, TbGridDots } from 'react-icons/tb'
+import { Editor } from '@tiptap/react'
+import { ImBold, ImStrikethrough, ImUnderline } from 'react-icons/im'
+import { GoItalic } from 'react-icons/go'
 
 const SIDE_MAX_WIDTH = 450
 const SIDE_MIN_WIDTH = 250
@@ -116,3 +123,48 @@ export const BLOCK_SELECTOR = [
     image: '/static/blocks/numbered-list.png',
   },
 ]
+
+export const TextPopupBtns = (editor: Editor) => ({
+  bold: {
+    name: 'bold',
+    onClick: () => editor.chain().focus().toggleBold().run(),
+    disabled: !editor.can().chain().focus().toggleBold().run(),
+    className: editor.isActive('bold') ? 'is-active' : '',
+    icon: ImBold,
+  },
+  italic: {
+    name: 'italic',
+    onClick: () => editor.chain().focus().toggleItalic().run(),
+    disabled: !editor.can().chain().focus().toggleItalic().run(),
+    className: editor.isActive('italic') ? 'is-active' : '',
+    icon: GoItalic,
+  },
+  underline: {
+    name: 'underline',
+    onClick: () => editor.chain().focus().toggleUnderline().run(),
+    disabled: !editor.can().chain().focus().toggleUnderline().run(),
+    className: editor.isActive('underline') ? 'is-active' : '',
+    icon: ImUnderline,
+  },
+  strike: {
+    name: 'strike',
+    onClick: () => editor.chain().focus().toggleStrike().run(),
+    disabled: !editor.can().chain().focus().toggleStrike().run(),
+    className: editor.isActive('strike') ? 'is-active' : '',
+    icon: ImStrikethrough,
+  },
+  code: {
+    name: 'code',
+    onClick: () => editor.chain().focus().toggleCode().run(),
+    disabled: !editor.can().chain().focus().toggleCode().run(),
+    className: editor.isActive('code') ? 'is-active' : '',
+    icon: HiOutlineCode,
+  },
+  blockquote: {
+    name: 'blockquote',
+    onClick: () => editor.chain().focus().toggleBlockquote().run(),
+    disabled: !editor.can().chain().focus().toggleBlockquote().run(),
+    className: editor.isActive('blockquote') ? 'is-active' : '',
+    icon: TbBlockquote,
+  },
+})

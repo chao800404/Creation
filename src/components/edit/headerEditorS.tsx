@@ -42,6 +42,8 @@ const HeaderEditorS = () => {
     data: { cover },
   } = usePageSWR(id)
 
+  console.log(title)
+
   const cacheMap = useMemo(() => {
     const imageArray = []
     for (const imageGroup in coverImageMap) {
@@ -182,7 +184,7 @@ const HeaderEditorS = () => {
         style={{
           fontSize: headerLevel === 1 ? '2.3rem' : '1.8rem' || '2.3rem',
         }}
-        defaultValue={title || ''}
+        value={title || ''}
         onChange={handleOnChange}
       />
     </HeaderEditorSWrapper>
