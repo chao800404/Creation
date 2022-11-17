@@ -14,7 +14,7 @@ export const imageFormatFilter = (path: string) => {
 }
 
 export const blockContentFilter = (content: string) =>
-  content.replace(/<[^>]*>/g, '')
+  content.replace(/<\/?p>/g, '')
 
 export const phoneticNotationFilter = (word: string) => {
   const filter = /[\u3105-\u312F]+/g

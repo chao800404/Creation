@@ -27,7 +27,7 @@ const DashboardBannerWrapper = styled(motion.div)`
 
     &-btn {
       margin: auto;
-      background-color: #1c1c1c;
+      background-color: ${({ theme }) => theme.colors.primary};
       color: #ffffff;
       width: fit-content;
       height: fit-content;

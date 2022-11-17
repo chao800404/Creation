@@ -27,7 +27,7 @@ const NavbarOption = () => {
   return (
     <NavbarOptionWrapper>
       <motion.div
-        className="navbar_option-container"
+        className="navbar_option-container round_m"
         animate={userPopupOpen ? { x: '-0.5rem', y: '0.5rem' } : {}}
         style={{
           gap: id ? '0.8rem' : '0',

@@ -18,6 +18,28 @@ const nextConfig = {
       },
     ]
   },
+  async headers() {
+    return [
+      {
+        source: '/api/getImageCover',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2593000, must-revalidate',
+          },
+        ],
+      },
+      {
+        source: '/api/getImageEmoji',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2593000, must-revalidate',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

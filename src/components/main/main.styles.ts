@@ -12,7 +12,7 @@ export const DashboardMainWrapper = styled('div')<DashboardMain>`
   .DashboardMain_container {
     background: white;
     height: 100%;
-    padding: 1rem;
+    /* padding: 1rem; */
     width: 100%;
 
     &-banner {

@@ -20,6 +20,10 @@ const useOnClickOutside = (callback: (e: MouseEvent) => void) => {
       document.removeEventListener('mouseenter', handleToggleLeave, false)
     }
   }, [callback, isLeave])
+
+  return {
+    isLeave,
+  }
 }
 
 export default useOnClickOutside

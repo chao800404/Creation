@@ -6,6 +6,7 @@ import { Navbar, LoginPopup } from '../src/components/index'
 import { usePopupStore } from '../src/store'
 import shallow from 'zustand/shallow'
 import { IndexLayout } from '../src/components/layout'
+
 export const Home: NextPage = () => {
   const popupDisplay = usePopupStore(
     (state) => state.indexSignInDisplay,

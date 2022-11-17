@@ -123,7 +123,8 @@ model Page  {
 
 model Text  {
   id           String       @id @default(cuid())
-  name         String       @default("text")
+  name         String       @default("paragraph")
+  type         String       @default("text")
   content      String       @default("")
   page         Page         @relation(fields: [pageId], references: [id] , onDelete: Cascade)
   pageId       String       @map("page_id")

@@ -4,53 +4,82 @@ import { useBlocksStore } from '../../store/useBlocksStore'
 import Image from 'next/image'
 import shallow from 'zustand/shallow'
 import { clearTimeout } from 'timers'
+import { usePageSWR } from '../../hook/usePageSWR'
+import { useRouter } from 'next/router'
+import { blockTypeSelector } from '../../lib/tiptap'
 
-const SelectBlockContainer = () => {
-  const {
-    blocksMap,
-    filterBlocks,
-    popupShow,
-    incrOrDecrFocusIndex,
-    focusIndex,
-    focusIndexSet,
-  } = useBlocksStore(
+type SelectBlockContainerType = {
+  id: string
+  isEmpty: boolean
+  focusIndex: number
+  blockIndex: number
+  focusIndexSet: (index: React.SetStateAction<number>) => void
+}
+
+const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
+  id,
+  isEmpty,
+  focusIndex,
+  focusIndexSet,
+  blockIndex,
+}) => {
+  const { blocksMap, filterBlocks } = useBlocksStore(
     (state) => ({
       blocksMap: state.blocksMap,
       filterBlocks: state.filterBlocks,
-      popupShow: state.popupShow,
-      incrOrDecrFocusIndex: state.incrOrDecrFocusIndex,
-      focusIndex: state.focusIndex,
-      focusIndexSet: state.focusIndexSet,
     }),
     shallow
   )
+
   const [keyonStart, keyonStartSet] = useState(false)
+  const { page } = useRouter().query
+  const {
+    mutateFunction: { updateBlock },
+  } = usePageSWR((page && page[0]) || '')
 
   useEffect(() => {
-    if (popupShow) {
-      const handleOnKeydown = (e: KeyboardEvent) => {
-        keyonStartSet(true)
-        switch (e.key) {
-          case 'ArrowDown':
-            incrOrDecrFocusIndex('ArrowDown')
-            break
-          case 'ArrowUp':
-            e.preventDefault()
-            incrOrDecrFocusIndex('ArrowUp')
-            break
-          case 'Enter':
-            console.log(focusIndex)
-            break
-        }
-        const timeout = setTimeout(() => keyonStartSet(false), 100)
-        return () => clearTimeout(timeout)
+    const blockMapContent = filterBlocks.length > 0 ? filterBlocks : blocksMap
+    const handleOnKeydown = (e: KeyboardEvent) => {
+      keyonStartSet(true)
+      switch (e.key) {
+        case 'ArrowDown':
+          if (focusIndex < blockMapContent.length - 1)
+            focusIndexSet((prev) => prev + 1)
+          break
+        case 'ArrowUp':
+          e.preventDefault()
+          if (focusIndex > 0) focusIndexSet((prev) => prev - 1)
+          break
+        case 'Enter':
+          const block = blocksMap[focusIndex]
+
+          updateBlock(id, {
+            name: block.name,
+            content: blockTypeSelector(block.name).initContent,
+            type: block.type,
+            index: blockIndex,
+            id,
+          })
+          break
+        default:
+          return
       }
-      document.addEventListener('keydown', handleOnKeydown, false)
-      return () => {
-        document.removeEventListener('keydown', handleOnKeydown, false)
-      }
+      const timeout = setTimeout(() => keyonStartSet(false), 100)
+      return () => clearTimeout(timeout)
     }
-  }, [blocksMap.length, popupShow, incrOrDecrFocusIndex, focusIndex])
+    document.addEventListener('keydown', handleOnKeydown, false)
+    return () => {
+      document.removeEventListener('keydown', handleOnKeydown, false)
+    }
+  }, [
+    blockIndex,
+    blocksMap,
+    filterBlocks,
+    focusIndex,
+    focusIndexSet,
+    id,
+    updateBlock,
+  ])
 
   const blocksMapContent = filterBlocks.length > 0 ? filterBlocks : blocksMap
 

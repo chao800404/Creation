@@ -24,6 +24,7 @@ export default async function getUserData(
                 id: true,
                 index: true,
                 name: true,
+                type: true,
               },
             },
           },

@@ -31,7 +31,7 @@ export const DashboardContainerWrapper = styled('main')`
     position: relative;
     border-right: 2px solid;
     border-left: 2px solid;
-    border-color: #1c1c1c;
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 
   .dashboardContainer_container {
@@ -95,7 +95,7 @@ export const UploadImageContainerWrapper = styled('div')`
     }
 
     &-btn {
-      color: #1c1c1c;
+      color: primary;
       position: relative;
       width: inherit;
       background-color: #e1e1e1;

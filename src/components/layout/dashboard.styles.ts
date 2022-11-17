@@ -13,7 +13,7 @@ export const DashboardLayoutWrapper = styled('main')`
 
   .dashboard_side-option {
     border-top: 2px solid;
-    border-color: '#1c1c1c';
+    border-color: ${({ theme }) => theme.colors.primary};
     height: 12rem;
     flex-direction: column;
     display: flex;
@@ -27,8 +27,8 @@ export const DashboardLayoutWrapper = styled('main')`
     margin: 0.5rem 0 0 0;
     padding: 0.5rem;
     width: 100%;
-    border-bottom: 2px solid #1c1c1c;
-    border-top: 2px solid #1c1c1c;
+    border-bottom: 2px solid ${({ theme }) => theme.colors.primary};
+    border-top: 2px solid ${({ theme }) => theme.colors.primary};
   }
 `
 

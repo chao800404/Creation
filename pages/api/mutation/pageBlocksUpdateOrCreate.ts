@@ -8,7 +8,8 @@ const keyEnum = ['text'] as const
 
 const MySchema = z.object({
   page_id: z.string().cuid({ message: 'Please provide correct ID' }),
-  name: z.enum(keyEnum),
+  name: z.string(),
+  type: z.enum(keyEnum),
   index: z.number(),
   id: z.union([
     z.string().cuid({ message: 'Please provide correct ID' }),
@@ -25,8 +26,8 @@ export default async function handler(
     let block
 
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
-    // console.log(data)
-    const { page_id, name, index, id, content } = MySchema.parse(data)
+
+    const { page_id, name, index, id, content, type } = MySchema.parse(data)
 
     try {
       const resData = await prisma.page.findUnique({
@@ -36,34 +37,42 @@ export default async function handler(
       })
       if (!resData || resData.userId !== user.id)
         throw new Error("You can't be updating this file")
+
       switch (req.method) {
         case 'POST':
-          block = await prisma[name].create({
+          block = await prisma[type].create({
             data: {
               pageId: page_id,
               index: index,
+              name,
+              content,
+              id,
             },
             select: {
               id: true,
               name: true,
               index: true,
+              type: true,
             },
           })
           break
         case 'PATCH':
-          block = await prisma[name].update({
+          block = await prisma[type].update({
             where: {
               id,
             },
             data: {
               content: content,
               index: index,
+              name,
+              type,
             },
             select: {
               id: true,
               name: true,
               index: true,
               content: true,
+              type: true,
             },
           })
 

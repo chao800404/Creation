@@ -19,7 +19,6 @@ export const SideWrapperLayout = styled('aside').attrs<Props>((props) => ({
   .sideWrapperContainer {
     flex-direction: column;
     height: 100%;
-    border-radius: 0.5rem;
     position: relative;
     box-shadow: 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.2);
     border: 2px solid #1c1c1c;
@@ -35,7 +34,7 @@ export const SideWrapperLayout = styled('aside').attrs<Props>((props) => ({
       z-index: -10;
       bottom: -0.5rem;
       right: -0.5rem;
-      background-color: #1c1c1c;
+      background-color: ${({ theme }) => theme.colors.primary};
       border-radius: 0.5rem;
     }
   }

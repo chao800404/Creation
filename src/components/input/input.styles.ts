@@ -34,14 +34,14 @@ export const BlockInputBaseWrapper = styled(motion.div)`
 
   .add_block-icon {
     position: absolute;
-    left: -2.5rem;
+    left: -2.2rem;
     z-index: 10;
     top: 50%;
     transform: translateY(-50%);
 
     &-content {
       font-size: 1.5rem;
-      color: #1c1c1c;
+      color: ${({ theme }) => theme.colors.primary};
     }
   }
 
@@ -54,18 +54,30 @@ export const BlockInputBaseWrapper = styled(motion.div)`
   }
 `
 
-export const AddBlocknputWrapper = styled('div')`
+type AddBlocknputWrapperTyep = {
+  isFocus: boolean
+}
+
+export const AddBlocknputWrapper = styled('div').attrs<AddBlocknputWrapperTyep>(
+  ({ isFocus }) => ({ isFocus })
+)<AddBlocknputWrapperTyep>`
   position: relative;
   min-height: 28px;
   height: auto;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
+  cursor: text;
 
   .add_block-input {
     font-size: 1.1rem;
     align-self: center;
     grid-columns: 1 / -1;
     grid-row: 1 / -1;
+    background-color: transparent;
+
+    &::placeholder {
+      color: ${({ isFocus, theme }) => (isFocus ? '#E3E3E3' : '#efefef')};
+    }
   }
 `

@@ -27,6 +27,8 @@ export default async function handler(
               text: {
                 create: {
                   index: 0,
+                  type: 'text',
+                  name: 'paragraph',
                 },
               },
             },

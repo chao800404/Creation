@@ -1,68 +1,44 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Editor,
   EditorContent,
   useEditor,
   BubbleMenu,
   EditorEvents,
 } from '@tiptap/react'
-import Paragraph from '@tiptap/extension-paragraph'
-import StarterKit from '@tiptap/starter-kit'
-import HardBreak from '@tiptap/extension-hard-break'
-import History from '@tiptap/extension-history'
-import Blockquote from '@tiptap/extension-blockquote'
-import Strike from '@tiptap/extension-strike'
-import Italic from '@tiptap/extension-italic'
-import Code from '@tiptap/extension-code'
-import Bold from '@tiptap/extension-bold'
-import { Color } from '@tiptap/extension-color'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Text as TextType } from '@prisma/client'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { debounce } from 'lodash'
-import Document from '@tiptap/extension-document'
-import Text from '@tiptap/extension-text'
 import BlockPopup from '../popup/blockPopup'
-import TextStyle from '@tiptap/extension-text-style'
-import Underline from '@tiptap/extension-underline'
-import { HexAlphaColorPicker } from 'react-colorful'
-import useOnClickOutside from '../../utils/useOnClickOutside'
-import { TextPopupBtns } from '../../utils/config'
+import { TextPopupBtns } from '../../lib/tiptap'
+import * as blockFeatures from '../../lib/tiptap'
+import { BlockInputType } from '../../types/block'
+import { blockContentFilter } from '../../utils/filterFile'
 
-const TextBlock = ({
+type TextBlockType = {
+  blockData: BlockInputType['blockData']
+  value: string
+  className: string
+  memoEmptySet: (toggle: boolean) => void
+}
+
+const TextBlock: React.FC<TextBlockType> = ({
   blockData,
   memoEmptySet,
   value,
   className,
-}: {
-  blockData: TextType
-  value: string
-  className: string
-  memoEmptySet: (toggle: boolean) => void
 }) => {
   const { page } = useRouter().query
   const pageId = (page && page[0]) || ''
   const {
-    mutateFunction: { updateBlock, addBlock },
+    mutateFunction: { updateBlock },
   } = usePageSWR(pageId)
 
-  const editor = useEditor({
-    extensions: [
-      Document,
-      Paragraph,
-      Text,
-      Blockquote,
-      Strike,
-      Italic,
-      Code,
-      Bold,
-      Color,
-      TextStyle,
-      Underline,
-      History.configure({ depth: 10 }),
-    ],
+  const { feature } = blockFeatures.blockTypeSelector(blockData.name)
+  console.log(value)
 
+  const editor = useEditor({
+    extensions: feature,
     autofocus: true,
     onCreate: ({ editor }) => {
       editor.commands.focus(100)
@@ -70,34 +46,34 @@ const TextBlock = ({
     content: value,
   })
 
+  const handleAsync = (content: string) => {
+    updateBlock(blockData.id, {
+      name:
+        blockContentFilter(content).length > 0 ? blockData.name : 'paragraph',
+      id: blockData.id,
+      index: blockData.index,
+      type: blockData.type,
+      content: blockContentFilter(content).length > 0 ? content : '',
+    })
+  }
+
   useEffect(() => {
     if (editor) {
       editor.on('update', ({ editor }) => {
         if (editor.isEmpty) {
-          console.log('run')
           memoEmptySet(editor.isEmpty)
         }
       })
     }
   }, [editor, memoEmptySet])
 
-  const handleAsync = (content: string) => {
-    updateBlock(blockData.id, {
-      name: blockData.name,
-      id: blockData.id,
-      index: blockData.index,
-      content,
-    })
-  }
-
   useEffect(() => {
     editor &&
       editor.on(
         'update',
         debounce(({ editor }: { editor: EditorEvents['update']['editor'] }) => {
-          if (editor.getHTML() !== blockData.content) {
-            handleAsync(editor.getHTML())
-          }
+          handleAsync(editor.getHTML())
+          console.log(editor.getHTML())
         }, 1000)
       )
   }, [editor])
@@ -114,7 +90,16 @@ const TextBlock = ({
           blockMenuBtns={Object.values(TextPopupBtns(editor))}
         />
       </BubbleMenu>
-      <EditorContent editor={editor} />
+      <EditorContent
+        editor={editor}
+        // onKeyDown={(e) => {
+        //   if (e.key === 'Enter') {
+        //   }
+        // }}
+        data-name={blockData.name}
+        id={blockData.id}
+        data-type={blockData.type}
+      />
     </div>
   )
 }

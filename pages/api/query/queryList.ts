@@ -30,7 +30,6 @@ export default async function getUserData(
             createdAt: 'asc',
           },
         })
-
         res.status(200).json({
           status: 'success',
           data: resData,

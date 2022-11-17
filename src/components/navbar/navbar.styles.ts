@@ -11,9 +11,8 @@ export const DashboardNavbar = styled('header')`
   .navbar-breadCrumb {
     max-width: 15rem;
     padding: 0.3rem 0.5rem;
-    border: 1px solid #1c1c1c;
-    border-radius: 5px;
-    border-bottom: 3px solid #1c1c1c;
+    border: 1px solid ${({ theme }) => theme.colors.primary};
+    border-bottom: 3px solid ${({ theme }) => theme.colors.primary};
 
     ul {
       display: flex;
@@ -65,8 +64,7 @@ export const NavbarOptionWrapper = styled(motion.div)`
     display: flex;
     align-items: center;
     cursor: pointer;
-    border: 2px solid #1c1c1c;
-    border-radius: 0.5rem;
+    border: 2px solid ${({ theme }) => theme.colors.primary};
     padding: 0 1rem;
     background-color: #ffffff;
   }
@@ -77,7 +75,7 @@ export const NavbarOptionWrapper = styled(motion.div)`
     bottom: -0.5rem;
     left: -0.5rem;
     height: 100%;
-    background-color: #1c1c1c;
+    background-color: ${({ theme }) => theme.colors.primary};
     z-index: -1000;
     border-radius: 0.5rem;
     width: 100%;

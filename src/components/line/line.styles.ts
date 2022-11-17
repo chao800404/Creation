@@ -34,7 +34,7 @@ export const BoundLineWrapper = styled('span').attrs<LineProps>((props) => {
     height: 100%;
     right: 0;
     opacity: ${({ dragStart }) => (dragStart ? 1 : 0)};
-    background-color: #1c1c1c;
+    background-color: ${({ theme }) => theme.colors.primary};
   }
 
   &:hover .BoundLineContent {

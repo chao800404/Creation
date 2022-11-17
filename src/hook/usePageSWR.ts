@@ -1,31 +1,23 @@
 import useSWR, { useSWRConfig } from 'swr'
 import { fetcher, updateData, uploadFile, createBlock } from '../utils/fetch'
-import { Cover } from '@prisma/client'
+import { Cover, Emoji, Page } from '@prisma/client'
 import produce from 'immer'
 import { findIndex } from '../utils/findIndex'
 import cuid from 'cuid'
+import { BlockInputType, BlocksNameType } from '../types/block'
 
 type PageResDataType = {
   data: {
     cover: Cover
-    blocks: BlocksType[]
+    blocks: BlockInputType['blockData'][]
   }
   status: 'success' | 'fail'
 }
 
-type BlocksType = {
-  id: string
-  name: string
-  index: number
-  content: string
-}
-
-type BlocksNameType = 'text'
-
 type UsePageSWRResult = {
   data: {
     cover: Cover['image'] | undefined
-    blocks?: BlocksType[]
+    blocks?: BlockInputType['blockData'][]
   }
   isLoading: boolean
   mutateFunction: {
@@ -33,16 +25,19 @@ type UsePageSWRResult = {
     uploadCoverImageFile: (file: File) => void
     updateBlock: (
       blockId: string,
-      blockContent: BlocksType,
+      blockContent: BlockInputType['blockData'],
       signal?: AbortSignal | null | undefined
     ) => void
-    addBlock: (name: BlocksNameType) => void
+    addBlock: (name?: string, type?: BlocksNameType) => void
   }
 }
 
-type UsePageSWRType = (pageId: string) => UsePageSWRResult
+type UsePageSWRType = (
+  pageId: string,
+  list?: (Page & { emoji: Emoji })[]
+) => UsePageSWRResult
 
-export const usePageSWR: UsePageSWRType = (pageId) => {
+export const usePageSWR: UsePageSWRType = (pageId, list) => {
   const { mutate } = useSWRConfig()
   const { data, error } = useSWR<PageResDataType>(
     pageId ? `/api/page/${pageId}` : null,
@@ -98,16 +93,18 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
       )
     },
 
-    addBlock: (name) => {
+    addBlock: (name = 'paragraph', type = 'text') => {
       const newBlock = {
         name,
         id: cuid(),
         content: '',
-        index: data ? data?.data?.blocks?.length + 1 : 0,
+        index: data ? data?.data?.blocks?.length : 0,
+        type,
+        newBlock: true,
       }
 
       const addBlock = produce(data, (draft) => {
-        draft?.data.blocks.push(newBlock)
+        draft?.data.blocks.push({ ...newBlock, newBlock: true })
       })
 
       mutate(
@@ -119,7 +116,7 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
         {
           populateCache: (addBlock, block) => {
             return produce<PageResDataType>(block, (draft) => {
-              draft.data.blocks.push(addBlock.data)
+              draft.data.blocks.push({ ...newBlock, newBlock: true })
             })
           },
 
@@ -137,6 +134,7 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
             draft.data.blocks[index] = {
               ...draft.data.blocks[index],
               ...blockContent,
+              newBlock: false,
             }
           })
         }
@@ -154,7 +152,8 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
               findIndex(draft.data.blocks, blockId, (index) => {
                 draft.data.blocks[index] = {
                   ...draft.data.blocks[index],
-                  ...updateBlock.data,
+                  ...blockContent,
+                  newBlock: false,
                 }
               })
             })

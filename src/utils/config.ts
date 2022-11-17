@@ -11,10 +11,7 @@ import {
   HiOutlineCode,
 } from 'react-icons/hi'
 import { BsFillGridFill, BsCaretRightFill } from 'react-icons/bs'
-import { TbBlockquote, TbGridDots } from 'react-icons/tb'
-import { Editor } from '@tiptap/react'
-import { ImBold, ImStrikethrough, ImUnderline } from 'react-icons/im'
-import { GoItalic } from 'react-icons/go'
+import { TbGridDots } from 'react-icons/tb'
 
 const SIDE_MAX_WIDTH = 450
 const SIDE_MIN_WIDTH = 250
@@ -81,90 +78,60 @@ export const EMOJI_BASE = [
   '/static/emoji/dizzy_1f4ab.png',
 ]
 
-export const BLOCK_SELECTOR = [
+type BlockSelectorType = {
+  name: string
+  type: 'text' | 'table' | 'list'
+  desc: string
+  image: string
+}
+
+export const BLOCK_SELECTOR: BlockSelectorType[] = [
   {
     name: 'Heading_1',
+    type: 'text',
     desc: 'Big section heading.',
     image: '/static/blocks/header.png',
   },
   {
     name: 'Heading_2',
+    type: 'text',
     desc: 'Medium section heading.',
     image: '/static/blocks/subheader.png',
   },
   {
     name: 'Heading_3',
+    type: 'text',
     desc: 'Small section heading.',
     image: '/static/blocks/subsubheader.png',
   },
   {
     name: 'Paragraph',
+    type: 'text',
     desc: 'Just start writing with plain text.',
     image: '/static/blocks/en-US.png',
   },
   {
     name: 'Table',
+    type: 'table',
     desc: 'Add simple a tabular content.',
     image: '/static/blocks/simple-table.png',
   },
   {
     name: 'To-do_list',
+    type: 'list',
     desc: 'Embed a sub-page inside the page.',
     image: '/static/blocks/to-do-list.png',
   },
   {
     name: 'Bullested_list',
+    type: 'list',
     desc: 'Create a simple bulleted list.',
     image: '/static/blocks/bulleted-list.png',
   },
   {
     name: 'Numbered_list',
+    type: 'list',
     desc: 'Create a list with numbering.',
     image: '/static/blocks/numbered-list.png',
   },
 ]
-
-export const TextPopupBtns = (editor: Editor) => ({
-  bold: {
-    name: 'bold',
-    onClick: () => editor.chain().focus().toggleBold().run(),
-    disabled: !editor.can().chain().focus().toggleBold().run(),
-    className: editor.isActive('bold') ? 'is-active' : '',
-    icon: ImBold,
-  },
-  italic: {
-    name: 'italic',
-    onClick: () => editor.chain().focus().toggleItalic().run(),
-    disabled: !editor.can().chain().focus().toggleItalic().run(),
-    className: editor.isActive('italic') ? 'is-active' : '',
-    icon: GoItalic,
-  },
-  underline: {
-    name: 'underline',
-    onClick: () => editor.chain().focus().toggleUnderline().run(),
-    disabled: !editor.can().chain().focus().toggleUnderline().run(),
-    className: editor.isActive('underline') ? 'is-active' : '',
-    icon: ImUnderline,
-  },
-  strike: {
-    name: 'strike',
-    onClick: () => editor.chain().focus().toggleStrike().run(),
-    disabled: !editor.can().chain().focus().toggleStrike().run(),
-    className: editor.isActive('strike') ? 'is-active' : '',
-    icon: ImStrikethrough,
-  },
-  code: {
-    name: 'code',
-    onClick: () => editor.chain().focus().toggleCode().run(),
-    disabled: !editor.can().chain().focus().toggleCode().run(),
-    className: editor.isActive('code') ? 'is-active' : '',
-    icon: HiOutlineCode,
-  },
-  blockquote: {
-    name: 'blockquote',
-    onClick: () => editor.chain().focus().toggleBlockquote().run(),
-    disabled: !editor.can().chain().focus().toggleBlockquote().run(),
-    className: editor.isActive('blockquote') ? 'is-active' : '',
-    icon: TbBlockquote,
-  },
-})

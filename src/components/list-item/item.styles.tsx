@@ -61,7 +61,7 @@ export const ItemWrapper = styled('div').attrs<Item>((props) => {
 
   .base_item-header {
     margin-left: 0.2rem;
-    color: ${({ color }) => color || '#1c1c1c'};
+    color: ${({ color, theme }) => color || theme.colors.primary};
     font-size: ${({ fontSize }) => fontSize};
     overflow: hidden;
     text-overflow: ellipsis;
@@ -74,12 +74,12 @@ export const ItemWrapper = styled('div').attrs<Item>((props) => {
 export const PopupItemWrapper = styled('div')`
   border-top: 1px solid;
   border-bottom: 1px solid;
-  border-color: #1c1c1c;
+  border-color: ${({ theme }) => theme.colors.primary};
 
   &:hover {
     background-color: #cccccc;
     border-radius: 0.2rem;
-    color: #1c1c1c;
+    color: ${({ theme }) => theme.colors.primary};
   }
 
   .container {
@@ -108,9 +108,11 @@ export const WorkspaceItemWrapper = styled('div').attrs<WorkspaceItemWrapper>(
 
   &:hover {
     .workspaceItem_content {
-      color: ${({ hoverColor = '#1c1c1c' }) => hoverColor};
-      background-color: ${({ backgroundColor }) =>
-        backgroundColor === '#1c1c1c' ? '#1c1c1c' : '#c3c3c3'};
+      color: ${({ hoverColor, theme }) => hoverColor || theme.colors.primary};
+      background-color: ${({ backgroundColor, theme }) =>
+        backgroundColor === theme.colors.primary
+          ? theme.colors.primary
+          : '#c3c3c3'};
     }
   }
 
@@ -151,7 +153,7 @@ export const UserPopupItemWrapper = styled('div')`
 
   .userpopup_item-desc {
     font-size: inherit;
-    color: #1c1c1c;
+    color: ${({ theme }) => theme.colors.primary};
     font-weight: inherit;
   }
 `

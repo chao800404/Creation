@@ -22,7 +22,7 @@ export const KeyboardWrapper = styled.div`
       left: 0;
       width: 100%;
       height: 1px;
-      background-color: #1c1c1c;
+      background-color: ${({ theme }) => theme.colors.primary};
     }
   }
 

@@ -1,33 +1,20 @@
 import create from 'zustand'
 import produce from 'immer'
-import { stat } from 'fs/promises'
-
-type BlockType = {
-  name: string
-  image: string
-  desc: string
-}
+import { BlockSelectorType } from '../types/block'
 
 type InitialBlocksStore = {
-  blocksMap: BlockType[]
-  filterBlocks: BlockType[]
-  popupShow: boolean
-  focusIndex: number
+  blocksMap: BlockSelectorType[]
+  filterBlocks: BlockSelectorType[]
 }
 
 type Action = {
-  blocksMapSet: (blockMap: BlockType[]) => void
+  blocksMapSet: (blockMap: BlockSelectorType[]) => void
   filterBlocksMapSet: (blockName: string) => void
-  popupShowSet: (toggle: boolean) => void
-  focusIndexSet: (index: number) => void
-  incrOrDecrFocusIndex: (key: 'ArrowDown' | 'ArrowUp') => void
 }
 
 const initialBlocksStore = {
   blocksMap: [],
   filterBlocks: [],
-  popupShow: false,
-  focusIndex: 0,
 }
 const replaceWord = (word: string) =>
   word.toLowerCase().replace('_', ' ').replace('-', ' ')
@@ -48,37 +35,6 @@ export const useBlocksStore = create<InitialBlocksStore & Action>(
           state.filterBlocks = blocksMap.filter((block) =>
             replaceWord(block.name).includes(replaceWord(blockName))
           )
-        })
-      ),
-    popupShowSet: (toggle) =>
-      set(
-        produce<InitialBlocksStore>((state) => {
-          state.popupShow = toggle
-          if (toggle === false) {
-            state.filterBlocks = []
-          }
-        })
-      ),
-    focusIndexSet: (index) =>
-      set(
-        produce<InitialBlocksStore>((state) => {
-          state.focusIndex = index
-        })
-      ),
-    incrOrDecrFocusIndex: (key) =>
-      set(
-        produce<InitialBlocksStore>((state) => {
-          const { focusIndex, blocksMap, filterBlocks } = get()
-          const currentLength =
-            filterBlocks.length > 0 ? filterBlocks : blocksMap
-          if (key === 'ArrowDown') {
-            state.focusIndex =
-              focusIndex < currentLength.length - 1
-                ? focusIndex + 1
-                : focusIndex
-          } else if (key === 'ArrowUp') {
-            state.focusIndex = focusIndex > 0 ? focusIndex - 1 : focusIndex
-          }
         })
       ),
   })

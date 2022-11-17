@@ -1,5 +1,5 @@
 // import DashboardBanner from '../banner/dashboardBanner'
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import HeaderEditorS from '../edit/headerEditorS'
 import Spinner from '../spinner/spinner'
@@ -46,17 +46,14 @@ const DashboardMain = () => {
         </div>
         <div className="DashboardMain_container-content">
           <div className="DashboardMain_container-content-gap" />
-          <div className="DashboardMain_container-content-header">
+          <div className="DashboardMain_container-content-header pl_m pr_m">
             <HeaderEditorS />
           </div>
-          <div className="DashboardMain_container-content-add">
-            {blocks && blocks?.length > 0 ? (
+          <div className="DashboardMain_container-content-add ">
+            {blocks &&
               blocks.map((block) => (
                 <BlockInputContent blockData={block} key={block.id} />
-              ))
-            ) : (
-              <BlockInputContent />
-            )}
+              ))}
           </div>
 
           <div style={{ height: '50vh', background: '#ffffff' }}></div>

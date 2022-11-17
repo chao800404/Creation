@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from 'react'
 import { BlockPopupWrapper } from './popup.styles'
 import { MdFormatColorText } from 'react-icons/md'
 import { IconType } from 'react-icons'
-
 import useOnClickOutside from '../../utils/useOnClickOutside'
 import { HexAlphaColorPicker } from 'react-colorful'
 import { ColorPickerWrapper } from './popup.styles'

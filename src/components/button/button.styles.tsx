@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const SearchBtnWrapper = styled.button`
-  color: #1c1c1c;
+  color: ${({ theme }) => theme.colors.primary};
   font-size: 0.8rem;
   font-weight: 600;
   width: 100%;

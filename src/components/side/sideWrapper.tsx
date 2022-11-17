@@ -38,7 +38,7 @@ const SideWrapper = ({ children }: { children: React.ReactNode }) => {
         width={sideWidth}
         ref={elemRef}
       >
-        <div className="sideWrapperContainer">{children}</div>
+        <div className="sideWrapperContainer round_m">{children}</div>
         <BoundLine
           widthSet={sideWidthSet}
           right="-2px"

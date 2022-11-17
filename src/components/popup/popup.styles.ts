@@ -16,7 +16,7 @@ export const SearchPopupWrapper = styled('div')`
   font-weight: 700;
 
   .search_popup {
-    border: 1px solid #1c1c1c;
+    border: 1px solid ${({ theme }) => theme.colors.primary};
     position: absolute;
     top: 10rem;
     width: 30rem;
@@ -24,13 +24,13 @@ export const SearchPopupWrapper = styled('div')`
     background-color: #ffffff;
     border-radius: 0.5rem;
     padding: 0 1rem;
-    border: 3px solid #1c1c1c;
+    border: 3px solid ${({ theme }) => theme.colors.primary};
     font-size: 1.5rem;
     box-shadow: 0.2rem 0.2rem 0.8rem rgba(0, 0, 0, 0.5);
 
     &--content {
       width: 100%;
-      border-bottom: 2px solid #1c1c1c;
+      border-bottom: 2px solid ${({ theme }) => theme.colors.primary};
       border-top-right-radius: 0.5rem;
       border-top-left-radius: 0.5rem;
       margin-top: 1rem;
@@ -45,7 +45,7 @@ export const SearchPopupWrapper = styled('div')`
         position: absolute;
         width: 100%;
         height: 1px;
-        background-color: #1c1c1c;
+        background-color: ${({ theme }) => theme.colors.primary};
         bottom: -6px;
         width: 50%;
       }
@@ -75,7 +75,7 @@ export const WorkspaceItemPopupWrapper = styled(motion.div)`
   border-radius: 0.3rem;
   background: #f4f4f4;
   box-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.2);
-  border: 2px solid #1c1c1c;
+  border: 2px solid ${({ theme }) => theme.colors.primary};
   z-index: 10001;
   padding: 1px;
 `
@@ -118,7 +118,7 @@ export const UserPopupWrapper = styled(motion.div)`
     width: 15rem;
     height: fit-content;
     border-radius: 0.4rem;
-    border: 2px solid #1c1c1c;
+    border: 2px solid ${({ theme }) => theme.colors.primary};
     background-color: #ffffff;
     box-shadow: 0rem 0rem 0.4rem rgba(0, 0, 0, 0.2);
     z-index: 1000;
@@ -133,8 +133,8 @@ export const UserPopupWrapper = styled(motion.div)`
       left: 50%;
       z-index: 3000;
       top: -0.6rem;
-      border-top: 2px solid #1c1c1c;
-      border-left: 2px solid #1c1c1c;
+      border-top: 2px solid ${({ theme }) => theme.colors.primary};
+      border-left: 2px solid ${({ theme }) => theme.colors.primary};
     }
 
     &-header,
@@ -177,8 +177,8 @@ export const ChangePopupWrapper = styled(motion.div)`
   box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.2);
   background-color: #ffffff;
   font-size: 0.8rem;
-  color: #1c1c1c;
-  border: 2px solid #1c1c1c;
+  color: ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${({ theme }) => theme.colors.primary};
 
   font-weight: bold;
 
@@ -203,7 +203,7 @@ export const ChangePopupWrapper = styled(motion.div)`
         cursor: pointer;
 
         &:hover {
-          color: #1c1c1c;
+          color: ${({ theme }) => theme.colors.primary};
         }
       }
 
@@ -219,7 +219,7 @@ export const ChangePopupWrapper = styled(motion.div)`
           width: 100%;
           display: block;
           height: 100%;
-          background: #1c1c1c;
+          background: ${({ theme }) => theme.colors.primary};
           border-top-left-radius: 5px;
           border-top-right-radius: 5px;
         }
@@ -227,14 +227,14 @@ export const ChangePopupWrapper = styled(motion.div)`
     }
 
     &-delete {
-      background-color: #1c1c1c;
+      background-color: ${({ theme }) => theme.colors.primary};
       color: #ffffff;
       border-right: unset;
       border-bottom: unset;
       width: 5rem;
 
       &:hover {
-        background-color: #1c1c1c;
+        background-color: ${({ theme }) => theme.colors.primary};
         color: #ffffff;
       }
     }
@@ -335,7 +335,7 @@ export const LoginPopupWrapper = styled('div')`
       height: 3rem;
       border-radius: 5px;
       color: #ffffff;
-      background-color: #1c1c1c;
+      background-color: ${({ theme }) => theme.colors.primary};
     }
   }
 
@@ -369,7 +369,7 @@ export const BlockPopupWrapper = styled('div')`
   width: auto;
   display: flex;
   color: #5c5c5c;
-  background-color: #1c1c1c;
+  background-color: ${({ theme }) => theme.colors.primary};
   font-size: 0.8rem;
   padding: 0.5rem 0;
   border-radius: 5px;
@@ -381,7 +381,7 @@ export const BlockPopupWrapper = styled('div')`
   .blockPopup-btn {
     color: inherit;
     width: auto;
-    background-color: #1c1c1c;
+    background-color: ${({ theme }) => theme.colors.primary};
     padding: 0 0.5rem;
     cursor: pointer;
 
@@ -417,9 +417,9 @@ export const ColorPickerWrapper = styled.div.attrs<ColorPickerWrapperType>(
     isOverThenMiddleWindow ? '-13rem' : '2.5rem'};
   /* right: -10rem; */
   width: 100%;
-  outline: 2px solid #1c1c1c;
+  outline: 2px solid ${({ theme }) => theme.colors.primary};
   border-radius: 6px;
-  background-color: #1c1c1c;
+  background-color: ${({ theme }) => theme.colors.primary};
 
   .color-picker-content {
     width: auto;

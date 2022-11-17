@@ -17,7 +17,7 @@ const DashBoardNav = () => {
   return (
     <DashboardNavbar>
       <motion.nav
-        className="navbar-breadCrumb"
+        className="navbar-breadCrumb round_sm"
         whileTap={{ scale: 0.98, y: 1 }}
       >
         <ul>
