@@ -19,7 +19,10 @@ const FavoriteTag = ({ list }: { list: (Page & { emoji: Emoji })[] }) => {
 
   return (
     <>
-      <div style={{ borderBottom: favoriteTagOpen ? '1px solid' : 'unset' }}>
+      <div
+        className="caption"
+        style={{ borderBottom: favoriteTagOpen ? '1px solid' : 'unset' }}
+      >
         <Accordion
           text={favorite.text}
           open={favoriteTagOpen}

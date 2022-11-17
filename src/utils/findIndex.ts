@@ -7,6 +7,6 @@ export const findIndex = (
 ) => {
   const index = map.findIndex((item) => item.id === id)
   if (index !== -1 && index !== undefined) {
-    callback(index)
+    return callback(index)
   }
 }

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useRef, useEffect, useMemo, useState } from 'react'
 import ReactTextareaAutosize from 'react-textarea-autosize'
 import { HeaderEditorSWrapper } from './editor.styles'
 import Image from 'next/image'
@@ -27,20 +27,22 @@ const fontColor = (image: string) =>
 const HeaderEditorS = () => {
   const { page } = useRouter().query
   const id = (page && (page[0] as string)) || ''
-  const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
-  const [shouldeShow, setShouldShow] = useState(false)
-  const [headerLevel, setHeaderLevel] = useState(1)
-  const [toggleEmojiPopup, setToggleEomjiPopup] = useState(false)
-
-  const {
-    mutateFunction: { updatePageEmoji, updatePageItem },
-    data: { emoji, title },
-  } = useListSWR(id)
-
   const {
     mutateFunction,
     data: { cover },
   } = usePageSWR(id)
+
+  const {
+    mutateFunction: { updatePageEmoji, updatePageItem },
+    data: { emoji, title: dataTitle },
+  } = useListSWR(id)
+
+  const coverImageMap = useCoverStore((state) => state.coverImageMap, shallow)
+  const [shouldeShow, setShouldShow] = useState(false)
+  const [headerLevel, setHeaderLevel] = useState(1)
+  const [toggleEmojiPopup, setToggleEomjiPopup] = useState(false)
+  const [title, setTitle] = useState(dataTitle)
+  const firstLoad = useRef(true)
 
   const cacheMap = useMemo(() => {
     const imageArray = []
@@ -77,10 +79,16 @@ const HeaderEditorS = () => {
     return updatePageEmoji(id, '')
   }
 
-  const handleOnChange = debounce((e) => {
-    const value = e.target.value
-    updatePageItem(id, 'title', value)
-  }, 1000)
+  useEffect(() => {
+    if (!firstLoad.current && dataTitle !== title) {
+      const timeout = setTimeout(() => {
+        updatePageItem(id, 'title', title as string)
+      }, 1000)
+
+      return () => clearTimeout(timeout)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title])
 
   useOnClickOutside((e) => {
     const target = (e.target as HTMLDivElement).closest(
@@ -176,13 +184,16 @@ const HeaderEditorS = () => {
       <ReactTextareaAutosize
         placeholder="Enter something.."
         className="headerEditor_content"
-        onFocus={() => setShouldShow(true)}
+        onFocus={() => {
+          setShouldShow(true)
+          firstLoad.current = false
+        }}
         onBlur={() => setShouldShow(false)}
         style={{
           fontSize: headerLevel === 1 ? '2.3rem' : '1.8rem' || '2.3rem',
         }}
         value={title || ''}
-        onChange={handleOnChange}
+        onChange={(e) => setTitle(e.target.value)}
       />
     </HeaderEditorSWrapper>
   )

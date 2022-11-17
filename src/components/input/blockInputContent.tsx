@@ -52,8 +52,11 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
           break
         case '/':
           setPopupShow(true)
-
           break
+        case 'v':
+          if (e.ctrlKey === true) {
+            setIsEmpty(false)
+          }
         case 'Backspace':
           if (value.length <= 1) setPopupShow(false)
       }
@@ -66,7 +69,7 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
       setValue(blockData?.content)
       setPopupShow(blockData.newBlock ? blockData.newBlock : false)
     }
-  }, [blockData])
+  }, [blockData, blockData.content])
 
   useEffect(() => {
     textareaRef.current?.focus()
@@ -92,14 +95,14 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
       compositionEnd
     ) {
       setIsEmpty(false)
-      setValue(value)
+      // setValue(value)
     }
     // if (!value && isFocus) {
     //   popupShowSet(false)
     //   setFilterError(0)
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [compositionEnd, value])
+  }, [compositionEnd])
 
   return (
     <BlockInputWrapper
@@ -121,7 +124,9 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
             className="add_block-input"
             ref={textareaRef}
             onKeyDown={handleKeyDownOnEnter}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {
+              if (isEmpty) setValue(e.target.value)
+            }}
             onCompositionUpdate={() => setCompositionEnd(false)}
             onCompositionEnd={() => setCompositionEnd(true)}
           />

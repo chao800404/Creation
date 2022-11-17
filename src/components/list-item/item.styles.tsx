@@ -105,6 +105,7 @@ export const WorkspaceItemWrapper = styled('div').attrs<WorkspaceItemWrapper>(
   width: 100%;
   position: relative;
   height: 1.8rem;
+  font-family: 'Roboto', sans-serif;
 
   &:hover {
     .workspaceItem_content {

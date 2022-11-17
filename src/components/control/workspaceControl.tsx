@@ -13,7 +13,7 @@ const WorkspaceControl: React.FC<WorkspaceControlType> = ({ text }) => {
 
   return (
     <WorkspaceControllerWrapper>
-      <p>{text}</p>
+      <p className="caption">{text}</p>
       <div
         className="WorkspaceController_content"
         onClick={() => {

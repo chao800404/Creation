@@ -224,3 +224,33 @@ export const SelectBlockContainerWrapper = styled('ul')`
     }
   }
 `
+
+export const BlockReviewWrapper = styled.aside`
+  width: 100%;
+  height: 100%;
+
+  .blockReview-header {
+    width: inherit;
+    /* background-color: ${({ theme }) => theme.colors.primary}; */
+    border-bottom: thick double ${({ theme }) => theme.colors.primary};
+
+    p {
+      inset: 80%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0.5rem;
+      font-size: 0.5rem;
+      font-weight: bold;
+      text-align: center;
+      color: ${({ theme }) => theme.colors.primary};
+    }
+  }
+
+  .blockReview-content {
+    padding: 0.5rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+`

@@ -5,7 +5,7 @@ import {
   BubbleMenu,
   EditorEvents,
 } from '@tiptap/react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { debounce } from 'lodash'
@@ -35,7 +35,6 @@ const TextBlock: React.FC<TextBlockType> = ({
   } = usePageSWR(pageId)
 
   const { feature } = blockFeatures.blockTypeSelector(blockData.name)
-  console.log(value)
 
   const editor = useEditor({
     extensions: feature,
@@ -49,7 +48,7 @@ const TextBlock: React.FC<TextBlockType> = ({
   const handleAsync = (content: string) => {
     updateBlock(blockData.id, {
       name:
-        blockContentFilter(content).length > 0 ? blockData.name : 'paragraph',
+        blockContentFilter(content).length > 0 ? blockData.name : 'Paragraph',
       id: blockData.id,
       index: blockData.index,
       type: blockData.type,
@@ -73,10 +72,9 @@ const TextBlock: React.FC<TextBlockType> = ({
         'update',
         debounce(({ editor }: { editor: EditorEvents['update']['editor'] }) => {
           handleAsync(editor.getHTML())
-          console.log(editor.getHTML())
         }, 1000)
       )
-  }, [editor])
+  }, [editor, value])
 
   if (!editor) {
     return null
@@ -92,10 +90,6 @@ const TextBlock: React.FC<TextBlockType> = ({
       </BubbleMenu>
       <EditorContent
         editor={editor}
-        // onKeyDown={(e) => {
-        //   if (e.key === 'Enter') {
-        //   }
-        // }}
         data-name={blockData.name}
         id={blockData.id}
         data-type={blockData.type}
@@ -103,5 +97,4 @@ const TextBlock: React.FC<TextBlockType> = ({
     </div>
   )
 }
-
-export default React.memo(TextBlock)
+export default TextBlock

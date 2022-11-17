@@ -1,6 +1,6 @@
 import useSWR, { useSWRConfig } from 'swr'
 import { fetcher, updateData, uploadFile, createBlock } from '../utils/fetch'
-import { Cover, Emoji, Page } from '@prisma/client'
+import { Cover } from '@prisma/client'
 import produce from 'immer'
 import { findIndex } from '../utils/findIndex'
 import cuid from 'cuid'
@@ -26,18 +26,16 @@ type UsePageSWRResult = {
     updateBlock: (
       blockId: string,
       blockContent: BlockInputType['blockData'],
-      signal?: AbortSignal | null | undefined
+      signal?: AbortSignal | null | undefined,
+      revalidate?: boolean
     ) => void
     addBlock: (name?: string, type?: BlocksNameType) => void
   }
 }
 
-type UsePageSWRType = (
-  pageId: string,
-  list?: (Page & { emoji: Emoji })[]
-) => UsePageSWRResult
+type UsePageSWRType = (pageId: string) => UsePageSWRResult
 
-export const usePageSWR: UsePageSWRType = (pageId, list) => {
+export const usePageSWR: UsePageSWRType = (pageId) => {
   const { mutate } = useSWRConfig()
   const { data, error } = useSWR<PageResDataType>(
     pageId ? `/api/page/${pageId}` : null,
@@ -45,129 +43,87 @@ export const usePageSWR: UsePageSWRType = (pageId, list) => {
   )
 
   const mutateFunction: UsePageSWRResult['mutateFunction'] = {
-    uploadCoverImage: (src: string) => {
-      const uploadCover = produce(data, (draft) => {
-        if (draft) {
-          draft.data.cover.image = src
-        }
-      })
-      mutate(
+    uploadCoverImage: (src) => {
+      mutate<PageResDataType>(
         `/api/page/${pageId}`,
-        updateData('updateImage', { id: pageId, key: 'cover', src }, null),
-        {
-          populateCache: (uploadImage, page) => {
-            return produce<PageResDataType>(page, (draft) => {
-              draft.data.cover.image = uploadImage.data?.image
+        (data) => {
+          updateData('updateImage', { id: pageId, key: 'cover', src }, null)
+          if (data) {
+            return produce<PageResDataType>(data, (draft) => {
+              draft.data.cover.image = src
             })
-          },
-
-          revalidate: false,
-          optimisticData: uploadCover,
-          rollbackOnError: true,
-        }
+          }
+        },
+        { revalidate: false, rollbackOnError: true }
       )
     },
 
     uploadCoverImageFile: (file) => {
       const path = URL.createObjectURL(file)
-      const uploadCover = produce(data, (draft) => {
-        if (draft) {
-          draft.data.cover.image = path
-        }
-      })
-
-      mutate(
+      mutate<PageResDataType>(
         `/api/page/${pageId}`,
-        uploadFile('uploadImage', { id: pageId, file }),
-        {
-          populateCache: (uploadImage, page) => {
-            return produce<PageResDataType>(page, (draft) => {
-              draft.data.cover.image = uploadImage.data?.image
+        (data) => {
+          uploadFile('uploadImage', { id: pageId, file })
+          if (data) {
+            return produce<PageResDataType>(data, (draft) => {
+              draft.data.cover.image = path
             })
-          },
-
-          revalidate: false,
-          optimisticData: uploadCover,
-          rollbackOnError: true,
-        }
+          }
+        },
+        { revalidate: false, rollbackOnError: true }
       )
     },
 
-    addBlock: (name = 'paragraph', type = 'text') => {
-      const newBlock = {
-        name,
-        id: cuid(),
-        content: '',
-        index: data ? data?.data?.blocks?.length : 0,
-        type,
-        newBlock: true,
-      }
-
-      const addBlock = produce(data, (draft) => {
-        draft?.data.blocks.push({ ...newBlock, newBlock: true })
-      })
-
-      mutate(
+    addBlock: (name = 'Paragraph', type = 'text') => {
+      mutate<PageResDataType>(
         `/api/page/${pageId}`,
-        createBlock('pageBlocksUpdateOrCreate', {
-          page_id: pageId,
-          ...newBlock,
-        }),
-        {
-          populateCache: (addBlock, block) => {
-            return produce<PageResDataType>(block, (draft) => {
-              draft.data.blocks.push({ ...newBlock, newBlock: true })
-            })
-          },
+        (data) => {
+          const newBlock = {
+            name,
+            id: cuid(),
+            content: '',
+            index: data ? data?.data?.blocks?.length : 0,
+            type,
+          }
 
-          revalidate: false,
-          optimisticData: addBlock,
-          rollbackOnError: true,
-        }
-      )
-    },
-
-    updateBlock: (blockId, blockContent, signal) => {
-      const updateBlock = produce(data, (draft) => {
-        if (draft) {
-          findIndex(draft.data.blocks, blockId, (index) => {
-            draft.data.blocks[index] = {
-              ...draft.data.blocks[index],
-              ...blockContent,
-              newBlock: false,
-            }
+          createBlock('pageBlocksUpdateOrCreate', {
+            page_id: pageId,
+            ...newBlock,
           })
-        }
-      })
-      mutate(
+          if (data) {
+            return produce<PageResDataType>(data, (draft) => {
+              draft?.data.blocks.push({ ...newBlock, newBlock: true })
+            })
+          }
+        },
+        { revalidate: false, rollbackOnError: true }
+      )
+    },
+
+    updateBlock: (blockId, blockContent, signal, revalidate = false) => {
+      mutate<PageResDataType>(
         `/api/page/${pageId}`,
-        updateData(
-          'pageBlocksUpdateOrCreate',
-          { page_id: pageId, ...blockContent },
-          signal
-        ),
-        {
-          populateCache: (updateBlock, page) => {
-            return produce<PageResDataType>(page, (draft) => {
-              findIndex(draft.data.blocks, blockId, (index) => {
+        (data) => {
+          updateData(
+            'pageBlocksUpdateOrCreate',
+            { page_id: pageId, ...blockContent },
+            signal
+          )
+          if (data) {
+            return produce<PageResDataType>(data, (draft) => {
+              findIndex(data.data.blocks, blockId, (index) => {
                 draft.data.blocks[index] = {
-                  ...draft.data.blocks[index],
                   ...blockContent,
                   newBlock: false,
                 }
               })
             })
-          },
-
-          revalidate: false,
-          optimisticData: updateBlock,
-          rollbackOnError: true,
-        }
+          }
+        },
+        { revalidate: false, rollbackOnError: true }
       )
     },
   }
-
-  // console.log(data?.data.blocks)
 
   return {
     data: {

@@ -107,7 +107,6 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
               scrollTop={40 * focusIndex}
             >
               <SelectBlockContainer
-                isEmpty={isEmpty}
                 focusIndex={focusIndex}
                 focusIndexSet={memoFocusIndexSet}
                 id={id}

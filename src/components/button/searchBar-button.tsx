@@ -51,7 +51,7 @@ const SearchBarBtn: React.FC<SearchBarBtnProps> = ({ desc }) => {
         <div className="left_icon">
           <SlMagnifier fontSize="1rem" />
         </div>
-        <div>{desc}</div>
+        <div className="caption">{desc}</div>
         <div className="right_icon">
           <Keyword keyword="K" />
         </div>

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
 export const SearchBtnWrapper = styled.button`
@@ -49,7 +50,13 @@ export const EditorOptionButtonWrapper = styled('button')`
   justify-content: center;
   color: inherit;
   position: relative;
-  cursor: pointer;
   border: none;
   background-color: transparent;
+`
+
+export const BlockReviewBtnWrapper = styled(motion.button)`
+  background-color: ${({ theme }) => theme.colors.primary};
+  width: 100%;
+  height: 2.8rem;
+  color: ${({ theme }) => theme.colors.secondary};
 `

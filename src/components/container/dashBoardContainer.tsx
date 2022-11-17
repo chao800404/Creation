@@ -5,6 +5,7 @@ import { usePageControllerStore } from '../../store'
 import { DashboardContainerWrapper } from './container.styles'
 import BoundLine from '../line/boundLine'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
+import BlockReviewContainer from '../container/blockReviewContainer'
 
 const DashBoardContainr = ({ children }: { children: ReactNode }) => {
   const sideWidth = usePageControllerStore((state) => state.sideWidth, shallow)
@@ -37,7 +38,7 @@ const DashBoardContainr = ({ children }: { children: ReactNode }) => {
 
       <div className="dashboardContainer_container">
         <div className="dashboardContainer_container-left">
-          <div>jewofw</div>
+          <BlockReviewContainer />
         </div>
         <div
           className="dashboardContainer_main"

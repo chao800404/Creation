@@ -9,7 +9,6 @@ import Spinner from '../../src/components/spinner/spinner'
 import { fetcher } from '../../src/utils/fetch'
 import { useCoverStore } from '../../src/store'
 import shallow from 'zustand/shallow'
-import { usePageSWR } from '../../src/hook/usePageSWR'
 
 const Dashboard = () => {
   const coverImageMapSet = useCoverStore(
@@ -33,8 +32,6 @@ const Dashboard = () => {
   if (isLoading) {
     return <Spinner />
   }
-
-  console.log(cache)
 
   return (
     <SWRConfig>

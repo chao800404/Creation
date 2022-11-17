@@ -46,7 +46,10 @@ const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
           {list && (
             <FavoriteTag list={list?.filter((item) => item?.favorite)} />
           )}
-          <Accordion text={interfaces.text} />
+
+          <div className="caption">
+            <Accordion text={interfaces.text} />
+          </div>
         </div>
 
         <div className="dashboard_side_controller">

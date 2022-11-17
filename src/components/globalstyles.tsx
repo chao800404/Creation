@@ -8,8 +8,10 @@ export const GlobalStyle = createGlobalStyle`
   }
  
   html{ 
-      font-family: 'Roboto';
+    font-family: 'Robot', sans-serif;
   } 
+
+  
   
   body { 
       box-sizing: border-box;
@@ -43,7 +45,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   a,a:active,a:focus {
-  
     text-decoration: none;
     outline:none;
     color: #1c1c1c;
@@ -63,6 +64,7 @@ export const GlobalStyle = createGlobalStyle`
 
   button {
     border:none;
+    cursor: pointer;
   }
 
   h1 {
@@ -113,12 +115,21 @@ export const GlobalStyle = createGlobalStyle`
     align-items: center;
     justify-content:center;
   }
-    
+
+  .caption {
+    font-family: 'Exo', sans-serif;
+    font-size: .8rem;
+    font-weight: 700;
+  }
 
 
   .ProseMirror {
 
-    h1.is-empty:first-child::before ,p.is-empty:first-child::before {
+    h1.is-empty:first-child::before,
+    h2.is-empty:first-child::before,
+    h3.is-empty:first-child::before,
+    p.is-empty:first-child::before
+     {
       content: attr(data-placeholder);
       position: absolute;
       top:50%;

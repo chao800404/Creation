@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { SelectBlockContainerWrapper } from './container.styles'
 import { useBlocksStore } from '../../store/useBlocksStore'
 import Image from 'next/image'
@@ -10,7 +10,6 @@ import { blockTypeSelector } from '../../lib/tiptap'
 
 type SelectBlockContainerType = {
   id: string
-  isEmpty: boolean
   focusIndex: number
   blockIndex: number
   focusIndexSet: (index: React.SetStateAction<number>) => void
@@ -18,7 +17,6 @@ type SelectBlockContainerType = {
 
 const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
   id,
-  isEmpty,
   focusIndex,
   focusIndexSet,
   blockIndex,
@@ -37,29 +35,34 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
     mutateFunction: { updateBlock },
   } = usePageSWR((page && page[0]) || '')
 
+  const updataBlockContent = useCallback(() => {
+    const block = blocksMap[focusIndex]
+    updateBlock(id, {
+      name: block.name,
+      content: blockTypeSelector(block.name).initContent,
+      type: block.type,
+      index: blockIndex,
+      id,
+    })
+  }, [blockIndex, blocksMap, focusIndex, id, updateBlock])
+
   useEffect(() => {
     const blockMapContent = filterBlocks.length > 0 ? filterBlocks : blocksMap
     const handleOnKeydown = (e: KeyboardEvent) => {
-      keyonStartSet(true)
       switch (e.key) {
         case 'ArrowDown':
+          keyonStartSet(true)
           if (focusIndex < blockMapContent.length - 1)
             focusIndexSet((prev) => prev + 1)
           break
         case 'ArrowUp':
+          keyonStartSet(true)
           e.preventDefault()
           if (focusIndex > 0) focusIndexSet((prev) => prev - 1)
           break
         case 'Enter':
-          const block = blocksMap[focusIndex]
-
-          updateBlock(id, {
-            name: block.name,
-            content: blockTypeSelector(block.name).initContent,
-            type: block.type,
-            index: blockIndex,
-            id,
-          })
+          keyonStartSet(true)
+          updataBlockContent()
           break
         default:
           return
@@ -71,15 +74,13 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
     return () => {
       document.removeEventListener('keydown', handleOnKeydown, false)
     }
-  }, [
-    blockIndex,
-    blocksMap,
-    filterBlocks,
-    focusIndex,
-    focusIndexSet,
-    id,
-    updateBlock,
-  ])
+  }, [blocksMap, filterBlocks, focusIndex, focusIndexSet, updataBlockContent])
+
+  useEffect(() => {
+    keyonStartSet(false)
+    focusIndexSet(0)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const blocksMapContent = filterBlocks.length > 0 ? filterBlocks : blocksMap
 
@@ -89,7 +90,7 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
         <li
           className="select_block-btn"
           key={index}
-          onClick={() => console.log(true)}
+          onClick={updataBlockContent}
           tabIndex={index}
           style={{
             backgroundColor: index === focusIndex ? '#efefef' : 'rgba(0,0,0,0)',
