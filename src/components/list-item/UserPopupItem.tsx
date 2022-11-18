@@ -1,16 +1,22 @@
 import React from 'react'
-import { ListItem } from '../../types/listItem'
+import { IconType } from 'react-icons'
 import { UserPopupItemWrapper } from './item.styles'
+
+type ListItem = {
+  text: string
+  icon: IconType
+  fontSize?: string
+}
 
 const UserPopupItem: React.FC<ListItem> = ({
   text,
   icon,
-  frontSize = '1.2rem',
+  fontSize = '1.2rem',
 }) => {
   return (
     <UserPopupItemWrapper>
       {React.createElement(icon, {
-        style: { fontSize: frontSize, color: 'inherit' },
+        style: { fontSize: fontSize, color: 'inherit' },
       })}
       <p className="userpopup_item-desc">{text}</p>
     </UserPopupItemWrapper>

@@ -5,7 +5,7 @@ import {
   BubbleMenu,
   EditorEvents,
 } from '@tiptap/react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { debounce } from 'lodash'
