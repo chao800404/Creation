@@ -12,12 +12,14 @@ import TextStyle from '@tiptap/extension-text-style'
 import Underline from '@tiptap/extension-underline'
 import Heading from '@tiptap/extension-heading'
 import Placeholder from '@tiptap/extension-placeholder'
+import HardBreak from '@tiptap/extension-hard-break'
 import { BLOCK_SELECTOR } from '../utils/config'
 import { Editor } from '@tiptap/react'
 import { ImBold, ImStrikethrough, ImUnderline } from 'react-icons/im'
 import { GoItalic } from 'react-icons/go'
 import { HiOutlineCode } from 'react-icons/hi'
 import { TbBlockquote } from 'react-icons/tb'
+import { keys } from 'lodash'
 
 const basicBlockFeature = [
   Document,
@@ -43,6 +45,13 @@ export const headingBlockFeature = (name: string) => [
   }),
   Heading.configure({
     levels: [1, 2, 3],
+  }),
+  HardBreak.extend({
+    addKeyboardShortcuts() {
+      return {
+        Enter: () => true,
+      }
+    },
   }),
 ]
 

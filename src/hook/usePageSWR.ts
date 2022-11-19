@@ -1,8 +1,16 @@
 import useSWR, { useSWRConfig } from 'swr'
-import { fetcher, updateData, uploadFile, createBlock } from '../utils/fetch'
+import { useMemo } from 'react'
+import {
+  fetcher,
+  updateData,
+  uploadFile,
+  createBlock,
+  deleteData,
+} from '../utils/fetch'
 import { Cover } from '@prisma/client'
 import produce from 'immer'
 import { findIndex } from '../utils/findIndex'
+import { insertIndex } from '../utils/inserIndex'
 import cuid from 'cuid'
 import { BlockInputType, BlocksNameType } from '../types/block'
 
@@ -10,14 +18,16 @@ type PageResDataType = {
   data: {
     cover: Cover
     blocks: BlockInputType['blockData'][]
+    blockToOrder: string[]
   }
   status: 'success' | 'fail'
 }
 
 type UsePageSWRResult = {
   data: {
-    cover: Cover['image'] | undefined
+    cover?: Cover['image']
     blocks?: BlockInputType['blockData'][]
+    blockToOrder?: string[]
   }
   isLoading: boolean
   mutateFunction: {
@@ -29,7 +39,8 @@ type UsePageSWRResult = {
       signal?: AbortSignal | null | undefined,
       revalidate?: boolean
     ) => void
-    addBlock: (name?: string, type?: BlocksNameType) => void
+    addBlock: (index: number, name?: string, type?: BlocksNameType) => void
+    deleteBlock: (page_id: string, id: string) => void
   }
 }
 
@@ -74,61 +85,112 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
       )
     },
 
-    addBlock: (name = 'Paragraph', type = 'text') => {
+    addBlock: (index, name = 'Paragraph', type = 'text') => {
+      if (!data) return
+      const cloneBlockToOrder = [...(data?.data.blockToOrder as string[])]
+      const newBlock = {
+        name,
+        id: cuid(),
+        content: '',
+        type,
+      }
+      insertIndex(cloneBlockToOrder, index + 1, newBlock.id)
+      const newBlockCreate = produce<PageResDataType>(data, (draft) => {
+        draft.data.blockToOrder = cloneBlockToOrder
+        insertIndex(draft.data.blocks, index + 1, {
+          ...newBlock,
+          newBlock: true,
+        })
+      })
+
       mutate<PageResDataType>(
         `/api/page/${pageId}`,
-        (data) => {
-          const newBlock = {
-            name,
-            id: cuid(),
-            content: '',
-            index: data ? data?.data?.blocks?.length : 0,
-            type,
-          }
-
-          createBlock('pageBlocksUpdateOrCreate', {
+        async (data) => {
+          await createBlock('pageBlocksUpdateOrCreate', {
             page_id: pageId,
+            blockToOrder: cloneBlockToOrder,
             ...newBlock,
           })
-          if (data) {
-            return produce<PageResDataType>(data, (draft) => {
-              draft?.data.blocks.push({ ...newBlock, newBlock: true })
-            })
-          }
+          return newBlockCreate
         },
-        { revalidate: false, rollbackOnError: true }
+        {
+          revalidate: false,
+          rollbackOnError: true,
+          optimisticData: newBlockCreate,
+        }
       )
     },
 
     updateBlock: (blockId, blockContent, signal, revalidate = false) => {
+      if (!data) return
+      const cloneBlockToOrder = [...(data?.data.blockToOrder as string[])]
+
+      const updateBlock = produce<PageResDataType>(data, (draft) => {
+        draft.data.blockToOrder = cloneBlockToOrder
+        findIndex(data.data.blocks, blockId, (index) => {
+          draft.data.blocks[index] = {
+            ...blockContent,
+            newBlock: false,
+          }
+        })
+      })
       mutate<PageResDataType>(
         `/api/page/${pageId}`,
-        (data) => {
-          updateData(
+        async (data) => {
+          await updateData(
             'pageBlocksUpdateOrCreate',
-            { page_id: pageId, ...blockContent },
+            {
+              page_id: pageId,
+              blockToOrder: cloneBlockToOrder,
+              ...blockContent,
+            },
             signal
           )
-          if (data) {
-            return produce<PageResDataType>(data, (draft) => {
-              findIndex(data.data.blocks, blockId, (index) => {
-                draft.data.blocks[index] = {
-                  ...blockContent,
-                  newBlock: false,
-                }
-              })
-            })
-          }
+          return updateBlock
         },
-        { revalidate: false, rollbackOnError: true }
+        {
+          revalidate: false,
+          rollbackOnError: true,
+          optimisticData: updateBlock,
+        }
+      )
+    },
+
+    deleteBlock: (page_id, id) => {
+      if (!data) return
+      const cloneBlockToOrder = [...(data?.data.blockToOrder as string[])]
+      const newBlockToOder = cloneBlockToOrder.filter(
+        (blockId) => blockId !== id
+      )
+      const filterBlock = produce<PageResDataType>(data, (draft) => {
+        draft.data.blocks = data.data.blocks.filter((block) => block.id !== id)
+        draft.data.blockToOrder = newBlockToOder
+      })
+      mutate<PageResDataType>(
+        `/api/page/${pageId}`,
+        async (data) => {
+          await deleteData('pageBlocksUpdateOrCreate', {
+            id,
+            type: 'text',
+            page_id,
+            blockToOrder: newBlockToOder,
+          })
+          return filterBlock
+        },
+        {
+          revalidate: false,
+          rollbackOnError: true,
+          optimisticData: filterBlock,
+        }
       )
     },
   }
 
   return {
     data: {
-      cover: data?.data?.cover.image || '',
+      cover: data?.data?.cover?.image || '',
       blocks: data?.data?.blocks,
+      blockToOrder: data?.data?.blockToOrder,
     },
     isLoading: !error && !data,
     mutateFunction,

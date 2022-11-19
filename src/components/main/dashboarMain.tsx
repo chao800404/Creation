@@ -7,6 +7,8 @@ import { DashboardMainWrapper } from './main.styles'
 import BlockInputContent from '../input/blockInputContent'
 import dynamic from 'next/dynamic'
 import { Suspense, useEffect } from 'react'
+import { BlockInputType } from '../../types/block'
+import { sortPageBlock } from '../../utils/sortPageBlock'
 const DynamicDashboardBanner = dynamic(
   () => import('../banner/dashboardBanner'),
   {
@@ -23,15 +25,15 @@ const DashboardMain = () => {
   const id = (page && (page[0] as string)) || ''
 
   const {
-    data: { cover, blocks },
+    data: { cover, blocks, blockToOrder },
     isLoading,
   } = usePageSWR(id)
 
-  if (isLoading) {
+  const blocksContent = sortPageBlock({ blocks, blockToOrder })
+
+  if (isLoading && !blocksContent) {
     return <Spinner />
   }
-
-  console.log(blocks)
 
   return (
     <DashboardMainWrapper
@@ -52,9 +54,15 @@ const DashboardMain = () => {
             <HeaderEditorS />
           </div>
           <div className="DashboardMain_container-content-add ">
-            {blocks &&
-              blocks.map((block) => (
-                <BlockInputContent blockData={block} key={block.id} />
+            {blocksContent &&
+              blocksContent.map((block, index) => (
+                <BlockInputContent
+                  blockData={block}
+                  key={block?.id}
+                  pageId={id}
+                  blockIndex={index}
+                  bigThenOne={blocksContent.length >= 1}
+                />
               ))}
           </div>
 

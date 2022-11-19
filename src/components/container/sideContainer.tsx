@@ -40,11 +40,11 @@ const SideContainer: React.FC<SideContainerType> = ({
         <SideContainerWrapper>
           {list?.map((item) => (
             <WorkspaceItem
-              key={item.id}
-              title={item.title as string}
-              id={item.id}
-              icon={item.emoji}
-              isActive={id === item.id || false}
+              key={item?.id}
+              title={item?.title as string}
+              id={item?.id}
+              icon={item?.emoji}
+              isActive={id === item?.id || false}
             />
           ))}
         </SideContainerWrapper>

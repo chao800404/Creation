@@ -8,6 +8,7 @@ import TextBlock from '../blocks/textBlock'
 import { blockContentFilter } from '../../utils/filterFile'
 import { phoneticNotationFilter } from '../../utils/filterFile'
 import { BlockInputType } from '../../types/block'
+import { usePageSWR } from '../../hook/usePageSWR'
 
 const BlockFilterType = ({
   blockData,
@@ -18,7 +19,7 @@ const BlockFilterType = ({
   className: string
   memoEmptySet: (toggle: boolean) => void
 }) => {
-  switch (blockData.type) {
+  switch (blockData?.type) {
     case 'text':
       return <TextBlock blockData={blockData} {...otherProps} />
     default:
@@ -26,15 +27,20 @@ const BlockFilterType = ({
   }
 }
 
-const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
+const BlockInputContent: React.FC<
+  BlockInputType & { pageId: string; blockIndex: number; bigThenOne: boolean }
+> = ({ blockData, pageId, blockIndex, bigThenOne }) => {
   const textareaRef = useRef<null | HTMLTextAreaElement>(null)
-
-  const [isEmpty, setIsEmpty] = useState<boolean>(true)
+  const [isEmpty, setIsEmpty] = useState<boolean>(
+    blockContentFilter(blockData?.content)?.length <= 0
+  )
   const [value, setValue] = useState(blockData?.content)
   const [compositionEnd, setCompositionEnd] = useState(true)
-  const [popupShow, setPopupShow] = useState(blockData.newBlock || false)
+  const [popupShow, setPopupShow] = useState(blockData?.newBlock || false)
   const [isFocus, setIsFocus] = useState(false)
-
+  const {
+    mutateFunction: { deleteBlock },
+  } = usePageSWR(pageId)
   const { filterBlocksMapSet, filterBlocks } = useBlocksStore(
     (state) => ({
       filterBlocksMapSet: state.filterBlocksMapSet,
@@ -42,6 +48,10 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
     }),
     shallow
   )
+
+  // console.log(bigThenOne)
+
+  console.log(value.length, bigThenOne, value)
 
   const handleKeyDownOnEnter = (e: React.KeyboardEvent) => {
     const isFocus = document.activeElement === textareaRef.current
@@ -57,19 +67,29 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
           if (e.ctrlKey === true) {
             setIsEmpty(false)
           }
+          break
         case 'Backspace':
-          if (value.length <= 1) setPopupShow(false)
+          if (value.length <= 1) {
+            setPopupShow(false)
+          }
+          if (value.length <= 0 && bigThenOne) {
+            console.log(true)
+            deleteBlock(pageId, blockData.id)
+          }
+        default:
+          return
       }
     }
   }
 
   useEffect(() => {
-    if (blockData?.content) {
-      setIsEmpty(blockContentFilter(blockData?.content).length <= 0)
-      setValue(blockData?.content)
-      setPopupShow(blockData.newBlock ? blockData.newBlock : false)
-    }
-  }, [blockData, blockData.content])
+    setPopupShow(blockData?.newBlock ? blockData?.newBlock : false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    setValue(blockData.content)
+  }, [blockData])
 
   useEffect(() => {
     textareaRef.current?.focus()
@@ -84,36 +104,30 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
 
   useEffect(() => {
     const isFocus = document.activeElement === textareaRef.current
-    const lowerCaseValue = value.toLowerCase()
+    const lowerCaseValue = value?.toLowerCase()
 
-    if (lowerCaseValue.startsWith('/') && isFocus) {
-      const blockName = value.replace('/', '')
+    if (lowerCaseValue?.startsWith('/') && isFocus) {
+      const blockName = value?.replace('/', '')
       filterBlocksMapSet(blockName)
     } else if (
-      value.length > 0 &&
+      value?.length > 0 &&
       !phoneticNotationFilter(value) &&
       compositionEnd
     ) {
       setIsEmpty(false)
-      // setValue(value)
     }
-    // if (!value && isFocus) {
-    //   popupShowSet(false)
-    //   setFilterError(0)
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [compositionEnd])
+  }, [compositionEnd, filterBlocksMapSet, value])
 
   return (
     <BlockInputWrapper
-      tabIndex={blockData?.index || 0}
+      tabIndex={blockIndex}
       isEmpty={isEmpty}
       popupShowSet={memoPopupShowSet}
       popupShow={popupShow}
       focusSet={memoFocusSet}
       isFocus={isFocus}
-      id={blockData.id}
-      blockIndex={blockData.index}
+      id={blockData?.id}
+      blockIndex={blockIndex}
     >
       <AddBlocknputWrapper
         isFocus={document.activeElement === textareaRef.current}
@@ -124,9 +138,7 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
             className="add_block-input"
             ref={textareaRef}
             onKeyDown={handleKeyDownOnEnter}
-            onChange={(e) => {
-              if (isEmpty) setValue(e.target.value)
-            }}
+            onChange={(e) => setValue(e.target.value)}
             onCompositionUpdate={() => setCompositionEnd(false)}
             onCompositionEnd={() => setCompositionEnd(true)}
           />
@@ -143,4 +155,4 @@ const BlockInputContent: React.FC<BlockInputType> = ({ blockData }) => {
   )
 }
 
-export default React.memo(BlockInputContent)
+export default BlockInputContent

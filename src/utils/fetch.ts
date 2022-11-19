@@ -73,10 +73,10 @@ export const updateData = async <T>(
   return res.json()
 }
 
-export const deleteData = async (path: string, id: string) => {
+export const deleteData = async <T>(path: string, body: T) => {
   const res = await fetch(`/api/mutation/${path}`, {
     method: 'DELETE',
-    body: JSON.stringify({ id }),
+    body: JSON.stringify(body),
     headers: {
       'Content-type': 'application/json;',
     },

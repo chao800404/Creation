@@ -41,10 +41,9 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
       name: block.name,
       content: blockTypeSelector(block.name).initContent,
       type: block.type,
-      index: blockIndex,
       id,
     })
-  }, [blockIndex, blocksMap, focusIndex, id, updateBlock])
+  }, [blocksMap, focusIndex, id, updateBlock])
 
   useEffect(() => {
     const blockMapContent = filterBlocks.length > 0 ? filterBlocks : blocksMap

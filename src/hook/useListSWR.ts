@@ -73,17 +73,21 @@ export const useListSWR: UseListType = (pageId) => {
         }
       })
 
-      mutate(`/api/query/queryList`, deleteData('deletePage', id), {
-        populateCache: (deletePage, list: ListResDataType) => {
-          return produce(list, (draft) => {
-            draft.data = draft.data.filter((item) => item.id !== id)
-          })
-        },
+      mutate(
+        `/api/query/queryList`,
+        deleteData<{ id: string }>('deletePage', { id }),
+        {
+          populateCache: (deletePage, list: ListResDataType) => {
+            return produce(list, (draft) => {
+              draft.data = draft.data.filter((item) => item.id !== id)
+            })
+          },
 
-        revalidate: false,
-        optimisticData: deleteList,
-        rollbackOnError: true,
-      })
+          revalidate: false,
+          optimisticData: deleteList,
+          rollbackOnError: true,
+        }
+      )
     },
     updatePageItem: (id, key, value) => {
       const preUpdateItem = produce<ListResDataType>(({ data }) => {
@@ -140,7 +144,7 @@ export const useListSWR: UseListType = (pageId) => {
     },
   }
 
-  const listItem = data?.data?.find((item) => item.id === pageId)
+  const listItem = data?.data?.find((item) => item?.id === pageId)
 
   return {
     data: {

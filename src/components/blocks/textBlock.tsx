@@ -34,7 +34,7 @@ const TextBlock: React.FC<TextBlockType> = ({
     mutateFunction: { updateBlock },
   } = usePageSWR(pageId)
 
-  const { feature } = blockFeatures.blockTypeSelector(blockData.name)
+  const { feature } = blockFeatures.blockTypeSelector(blockData?.name)
 
   const editor = useEditor({
     extensions: feature,
@@ -46,12 +46,11 @@ const TextBlock: React.FC<TextBlockType> = ({
   })
 
   const handleAsync = (content: string) => {
-    updateBlock(blockData.id, {
+    updateBlock(blockData?.id, {
       name:
-        blockContentFilter(content).length > 0 ? blockData.name : 'Paragraph',
-      id: blockData.id,
-      index: blockData.index,
-      type: blockData.type,
+        blockContentFilter(content).length > 0 ? blockData?.name : 'Paragraph',
+      id: blockData?.id,
+      type: blockData?.type,
       content: blockContentFilter(content).length > 0 ? content : '',
     })
   }
@@ -72,7 +71,7 @@ const TextBlock: React.FC<TextBlockType> = ({
         'update',
         debounce(({ editor }: { editor: EditorEvents['update']['editor'] }) => {
           handleAsync(editor.getHTML())
-        }, 1000)
+        }, 500)
       )
   }, [editor, value])
 
@@ -90,9 +89,9 @@ const TextBlock: React.FC<TextBlockType> = ({
       </BubbleMenu>
       <EditorContent
         editor={editor}
-        data-name={blockData.name}
-        id={blockData.id}
-        data-type={blockData.type}
+        data-name={blockData?.name}
+        id={blockData?.id}
+        data-type={blockData?.type}
       />
     </div>
   )

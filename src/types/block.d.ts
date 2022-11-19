@@ -10,10 +10,10 @@ export type BlockSelectorType = {
 export type BlockInputType = {
   readonly blockData: {
     name: string
-    index: number
     id: string
     content: string
     type: BlocksNameType
     newBlock?: boolean
+    pageId?: string
   }
 }

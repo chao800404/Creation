@@ -82,7 +82,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
         className="add_block-icon"
         onClick={() => {
           if (!isEmpty) {
-            return addBlock()
+            return addBlock(tabIndex)
           }
           popupShowSet(true)
         }}

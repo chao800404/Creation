@@ -8,14 +8,14 @@ const keyEnum = ['text'] as const
 
 const MySchema = z.object({
   page_id: z.string().cuid({ message: 'Please provide correct ID' }),
-  name: z.string(),
+  name: z.union([z.string(), z.undefined()]),
   type: z.enum(keyEnum),
-  index: z.number(),
   id: z.union([
     z.string().cuid({ message: 'Please provide correct ID' }),
     z.undefined(),
   ]),
   content: z.union([z.string(), z.undefined()]),
+  blockToOrder: z.string().cuid().array(),
 })
 
 export default async function handler(
@@ -27,64 +27,90 @@ export default async function handler(
 
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
 
-    const { page_id, name, index, id, content, type } = MySchema.parse(data)
+    const { page_id, name, id, content, type, blockToOrder } =
+      MySchema.parse(data)
 
     try {
       const resData = await prisma.page.findUnique({
         where: {
-          id: page_id,
+          id_userId: {
+            id: page_id,
+            userId: user.id,
+          },
         },
       })
-      if (!resData || resData.userId !== user.id)
-        throw new Error("You can't be updating this file")
+      if (!resData) throw new Error("You can't be updating this file")
 
-      switch (req.method) {
-        case 'POST':
-          block = await prisma[type].create({
-            data: {
-              pageId: page_id,
-              index: index,
-              name,
-              content,
-              id,
+      if (req.method === 'POST' || req.method === 'PATCH') {
+        block = await prisma.page.update({
+          where: {
+            id: page_id,
+          },
+          data: {
+            blockToOrder,
+            [type]: {
+              upsert: {
+                where: {
+                  id,
+                },
+                create: {
+                  name,
+                  content,
+                  id,
+                },
+                update: {
+                  content: content,
+                  name,
+                  type,
+                },
+              },
             },
-            select: {
-              id: true,
-              name: true,
-              index: true,
-              type: true,
+          },
+          select: {
+            [type]: {
+              where: {
+                id,
+              },
+              select: {
+                id: true,
+                name: true,
+                content: true,
+                type: true,
+              },
             },
-          })
-          break
-        case 'PATCH':
-          block = await prisma[type].update({
-            where: {
-              id,
-            },
-            data: {
-              content: content,
-              index: index,
-              name,
-              type,
-            },
-            select: {
-              id: true,
-              name: true,
-              index: true,
-              content: true,
-              type: true,
-            },
-          })
+          },
+        })
 
-          break
-        default:
-          block = undefined
+        return res.status(200).json({
+          status: 'success',
+          data: block[type][0],
+        })
+      } else if (req.method === 'DELETE') {
+        await prisma.page.update({
+          where: {
+            id: page_id,
+          },
+          data: {
+            blockToOrder,
+            [type]: {
+              delete: {
+                pageId_id: {
+                  pageId: page_id,
+                  id: id as string,
+                },
+              },
+            },
+          },
+        })
+
+        return res.status(200).json({
+          status: 'success',
+        })
+      } else {
+        block = undefined
       }
 
-      res.status(200).json({
-        status: 'success',
-        data: block,
-      })
+      if (!block) throw new Error('Please Provide correct id')
     } catch (error) {
       console.log(error)
       const { issues } = error as ZodError

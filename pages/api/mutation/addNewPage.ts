@@ -1,8 +1,9 @@
-import { Emoji } from '@prisma/client'
+import { Emoji, Prisma } from '@prisma/client'
 import { NextApiResponse, NextApiRequest } from 'next'
 import { z, ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
+import cuid from 'cuid'
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,12 +13,13 @@ export default async function handler(
     const { id } = req.query
     if (!id) throw new Error('Please provide id')
     await validateUser(req, res, async (user) => {
+      const blockId = cuid()
       try {
         const { userId, emoji, createdAt, updatedAt, ...otherData } =
           await prisma.page.create({
             data: {
-              userId: user.id,
               id: id as string,
+              userId: user.id,
               emoji: {
                 create: {},
               },
@@ -26,11 +28,10 @@ export default async function handler(
               },
               text: {
                 create: {
-                  index: 0,
-                  type: 'text',
-                  name: 'Paragraph',
+                  id: blockId,
                 },
               },
+              blockToOrder: [blockId] as Prisma.JsonArray,
             },
             include: {
               emoji: {

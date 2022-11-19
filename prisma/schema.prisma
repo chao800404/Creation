@@ -1,7 +1,5 @@
-
 generator client {
-   provider = "prisma-client-js"
-
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -9,28 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String  @map("user_id")
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
-
-  user User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("account")
 }
-
 
 model Session {
   id           String   @id @default(cuid())
@@ -48,12 +42,10 @@ model User {
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
   image         String    @default("/static/png/default.png")
-  accounts      Account[]
-  sessions      Session[]
-  page          Page[]
-
-
   createdAt     DateTime  @default(now())
+  accounts      Account[]
+  page          Page[]
+  sessions      Session[]
 
   @@map("users")
 }
@@ -61,77 +53,94 @@ model User {
 model VerificationToken {
   id         String   @id @default(cuid())
   identifier String
-  token      String   
+  token      String
   expires    DateTime
 
   @@unique([identifier, token])
   @@map("verificationtokens")
 }
 
-
-
 model Cover {
-  id           String       @id @default(cuid())
-  image        String       @default("")
-  layoutY      Int?          
-  page         Page         @relation(fields: [pageId], references: [id],onDelete: Cascade) 
-  pageId      String        @unique @map("page_id")
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @default(now())
+  id        String   @id @default(cuid())
+  image     String   @default("")
+  layoutY   Int?
+  pageId    String   @unique @map("page_id")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
   @@map("cover")
 }
 
 model Emoji {
-  id           String       @id @default(cuid())
-  image        String       @default("")
-  page         Page         @relation(fields: [pageId], references: id , onDelete: Cascade) 
-  pageId       String       @unique @map("page_id")
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @default(now())
+  id        String   @id @default(cuid())
+  image     String   @default("")
+  pageId    String   @unique @map("page_id")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
   @@map("emoji")
 }
 
 model EmojiBaseMap {
-  id           String       @id @default(cuid())
-  name         String?
-  image        String       @default("")
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @default(now())
+  id        String   @id @default(cuid())
+  name      String?
+  image     String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   @@map("emojiBaseMap")
 }
 
-model Page  {
-  id           String       @id @default(cuid())
-  title        String?       
-  favorite     Boolean      @default(false)
-  user         User         @relation(fields: [userId], references: [id])
-  userId       String       @map("user_id")   
-  editable     Boolean      @default(true)   
+model Page {
+  id           String   @id @default(cuid())
+  title        String?
+  favorite     Boolean  @default(false)
+  userId       String   @map("user_id")
+  editable     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  blockToOrder Json?
+  parentId     String?
+  parent       Page?    @relation("ParentChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id])
   cover        Cover?
-  emoji        Emoji?       
+  emoji        Emoji?
+  list         List[]
+  children     Page[]   @relation("ParentChildren")
   text         Text[]
 
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @default(now())
-
+  @@unique([id, userId])
   @@map("page")
 }
 
+model Text {
+  id        String   @id @default(cuid())
+  name      String   @default("paragraph")
+  type      String   @default("text")
+  content   String   @default("")
+  pageId    String   @map("page_id")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
-model Text  {
-  id           String       @id @default(cuid())
-  name         String       @default("paragraph")
-  type         String       @default("text")
-  content      String       @default("")
-  page         Page         @relation(fields: [pageId], references: [id] , onDelete: Cascade)
-  pageId       String       @map("page_id")
-  index        Int          
+  @@unique([pageId, id])
+  @@index([updatedAt(sort: Desc)])
+  @@map("text")
+}
 
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @default(now())
+model List {
+  id        String   @id @default(cuid())
+  name      String
+  type      String   @default("list")
+  content   String   @default("")
+  pageId    String   @map("page_id")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
-  @@map("text") 
+  @@unique([pageId, id])
+  @@index([updatedAt(sort: Desc)])
+  @@map("list")
 }
