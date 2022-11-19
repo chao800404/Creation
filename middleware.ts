@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { withAuth } from 'next-auth/middleware'
-import { rewrite } from '@vercel/edge'
 
 export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token
+    console.log(token)
     if (token) {
       return NextResponse.rewrite(new URL('/dashboard', req.url))
     }
@@ -21,4 +21,4 @@ export default withAuth(
   }
 )
 
-export const config = { matcher: ['/', '/dashboard/:page*'] }
+export const config = { matcher: ['/'] }
