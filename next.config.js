@@ -11,12 +11,14 @@ const nextConfig = {
     domains: ['lh3.googleusercontent.com', 'res.cloudinary.com'],
   },
   async rewrites() {
-    return [
-      {
-        source: '/dashboard/:page*',
-        destination: '/',
-      },
-    ]
+    return {
+      fallback: [
+        {
+          source: '/dashboard/:page*',
+          destination: '/',
+        },
+      ],
+    }
   },
   async headers() {
     return [

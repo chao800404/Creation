@@ -5,7 +5,6 @@ import { withAuth } from 'next-auth/middleware'
 export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token
-    console.log(token)
     if (token) {
       return NextResponse.rewrite(new URL('/dashboard', req.url))
     }
