@@ -43,7 +43,7 @@ type UsePageSWRResult = {
       revalidate?: boolean
     ) => void
     addBlock: (index: number, name?: string, type?: BlocksNameType) => void
-    deleteBlock: (page_id: string, id: string) => void
+    deleteBlock: (page_id: string, id: string, index: number) => void
   }
 }
 
@@ -158,7 +158,7 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
       )
     },
 
-    deleteBlock: (page_id, id) => {
+    deleteBlock: (page_id, id, index) => {
       if (!data) return
       const cloneBlockToOrder = [...(data?.data.blockToOrder as string[])]
       const newBlockToOder = cloneBlockToOrder.filter(
@@ -167,6 +167,10 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
       const filterBlock = produce<PageResDataType>(data, (draft) => {
         draft.data.blocks = data.data.blocks.filter((block) => block.id !== id)
         draft.data.blockToOrder = newBlockToOder
+        draft.data.blocks[index - 1] = {
+          ...data.data.blocks[index - 1],
+          focus: true,
+        }
       })
       mutate<PageResDataType>(
         `/api/page/${pageId}`,

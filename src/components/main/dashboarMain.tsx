@@ -34,6 +34,8 @@ const DashboardMain = () => {
     return <Spinner />
   }
 
+  console.log(blocks)
+
   return (
     <DashboardMainWrapper
       tabIndex={0}

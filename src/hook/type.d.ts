@@ -17,5 +17,6 @@ export type BlockInputType = {
     type: BlocksNameType
     pageId?: string
     newBlock?: boolean
+    focus?: boolean
   }
 }

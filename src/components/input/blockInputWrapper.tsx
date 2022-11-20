@@ -74,6 +74,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
 
   return (
     <BlockInputBaseWrapper
+      id={blockData.id}
       onFocus={() => focusSet(true)}
       onBlur={() => !isLeave && focusSet(false)}
       tabIndex={0}

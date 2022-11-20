@@ -18,6 +18,7 @@ import { BlockInputType } from '../../hook/type'
 type TextBlockType = {
   blockData: BlockInputType['blockData']
   className: string
+  isFocus: boolean
   blockContentSet: (
     blockContent: Omit<BlockInputType['blockData'], 'pageId'>
   ) => void
@@ -26,6 +27,7 @@ type TextBlockType = {
 const TextBlock: React.FC<TextBlockType> = ({
   blockData,
   className,
+  isFocus,
   blockContentSet,
 }) => {
   const { feature } = blockFeatures.blockTypeSelector(blockData.name)
@@ -38,6 +40,12 @@ const TextBlock: React.FC<TextBlockType> = ({
     },
     content: blockData.content,
   })
+
+  useEffect(() => {
+    if (isFocus) {
+      editor && editor.commands.focus()
+    }
+  }, [isFocus])
 
   useEffect(() => {
     editor &&
