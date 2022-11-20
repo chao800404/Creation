@@ -7,19 +7,24 @@ import { clearTimeout } from 'timers'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { useRouter } from 'next/router'
 import { blockTypeSelector } from '../../lib/tiptap'
+import { BlockInputType, BlockSelectorType } from '../../hook/type'
 
 type SelectBlockContainerType = {
   id: string
   focusIndex: number
-  blockIndex: number
+  blockData: Omit<BlockInputType['blockData'], 'pageId'>
   focusIndexSet: (index: React.SetStateAction<number>) => void
+  blockDataSet: (
+    blockContent: Omit<BlockInputType['blockData'], 'pageId'>
+  ) => void
 }
 
 const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
   id,
   focusIndex,
   focusIndexSet,
-  blockIndex,
+  blockDataSet,
+  blockData,
 }) => {
   const { blocksMap, filterBlocks } = useBlocksStore(
     (state) => ({
@@ -29,21 +34,20 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
     shallow
   )
 
+  const block = blocksMap[focusIndex]
   const [keyonStart, keyonStartSet] = useState(false)
   const { page } = useRouter().query
   const {
     mutateFunction: { updateBlock },
   } = usePageSWR((page && page[0]) || '')
 
-  const updataBlockContent = useCallback(() => {
-    const block = blocksMap[focusIndex]
-    updateBlock(id, {
+  const createNewBlockContent = (block: BlockSelectorType) => {
+    return {
       name: block.name,
       content: blockTypeSelector(block.name).initContent,
       type: block.type,
-      id,
-    })
-  }, [blocksMap, focusIndex, id, updateBlock])
+    }
+  }
 
   useEffect(() => {
     const blockMapContent = filterBlocks.length > 0 ? filterBlocks : blocksMap
@@ -60,8 +64,11 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
           if (focusIndex > 0) focusIndexSet((prev) => prev - 1)
           break
         case 'Enter':
+          blockDataSet({
+            ...blockData,
+            ...createNewBlockContent(block),
+          })
           keyonStartSet(true)
-          updataBlockContent()
           break
         default:
           return
@@ -73,7 +80,15 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
     return () => {
       document.removeEventListener('keydown', handleOnKeydown, false)
     }
-  }, [blocksMap, filterBlocks, focusIndex, focusIndexSet, updataBlockContent])
+  }, [
+    block,
+    blockData,
+    blockDataSet,
+    blocksMap,
+    filterBlocks,
+    focusIndex,
+    focusIndexSet,
+  ])
 
   useEffect(() => {
     keyonStartSet(false)
@@ -89,7 +104,12 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
         <li
           className="select_block-btn"
           key={index}
-          onClick={updataBlockContent}
+          onClick={() =>
+            blockDataSet({
+              ...blockData,
+              ...createNewBlockContent(block),
+            })
+          }
           tabIndex={index}
           style={{
             backgroundColor: index === focusIndex ? '#efefef' : 'rgba(0,0,0,0)',

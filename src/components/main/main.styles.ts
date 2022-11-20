@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 type DashboardMain = {
   show: boolean | undefined | null
+  hasCover: boolean
 }
 
 export const DashboardMainWrapper = styled('div')<DashboardMain>`
@@ -31,7 +32,7 @@ export const DashboardMainWrapper = styled('div')<DashboardMain>`
       gap: 0.5rem;
 
       &-gap {
-        height: 1.5rem;
+        height: ${({ hasCover }) => (hasCover ? '1.5rem' : '2.5rem')};
       }
 
       &-header {

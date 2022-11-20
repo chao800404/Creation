@@ -25,6 +25,8 @@ export default async function handler(
   await validateUser(req, res, async (user) => {
     let block
 
+    console.log(req.body)
+
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
 
     const { page_id, name, id, content, type, blockToOrder } =

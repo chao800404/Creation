@@ -6,9 +6,10 @@ import { motion } from 'framer-motion'
 
 import { Page, Emoji } from '@prisma/client'
 import { useRouter } from 'next/router'
+import { ListDataType } from '../../hook/useListSWR'
 
 type SideContainerType = {
-  list: (Page & { emoji: Emoji })[]
+  list: ListDataType[]
   height?: string
   maxH?: string
 }

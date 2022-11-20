@@ -1,6 +1,6 @@
 import create from 'zustand'
 import produce from 'immer'
-import { BlockSelectorType } from '../types/block'
+import { BlockSelectorType } from '../hook/type'
 
 type InitialBlocksStore = {
   blocksMap: BlockSelectorType[]

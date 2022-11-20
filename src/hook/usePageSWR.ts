@@ -12,11 +12,14 @@ import produce from 'immer'
 import { findIndex } from '../utils/findIndex'
 import { insertIndex } from '../utils/inserIndex'
 import cuid from 'cuid'
-import { BlockInputType, BlocksNameType } from '../types/block'
+
+import { BlockInputType, BlocksNameType, ignoreType } from './type'
+
+type CoverType = Omit<Cover, ignoreType>
 
 type PageResDataType = {
   data: {
-    cover: Cover
+    cover: CoverType
     blocks: BlockInputType['blockData'][]
     blockToOrder: string[]
   }
@@ -25,7 +28,7 @@ type PageResDataType = {
 
 type UsePageSWRResult = {
   data: {
-    cover?: Cover['image']
+    cover?: CoverType['image']
     blocks?: BlockInputType['blockData'][]
     blockToOrder?: string[]
   }
@@ -124,7 +127,6 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
     updateBlock: (blockId, blockContent, signal, revalidate = false) => {
       if (!data) return
       const cloneBlockToOrder = [...(data?.data.blockToOrder as string[])]
-
       const updateBlock = produce<PageResDataType>(data, (draft) => {
         draft.data.blockToOrder = cloneBlockToOrder
         findIndex(data.data.blocks, blockId, (index) => {

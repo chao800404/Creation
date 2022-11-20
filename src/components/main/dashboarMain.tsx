@@ -7,7 +7,6 @@ import { DashboardMainWrapper } from './main.styles'
 import BlockInputContent from '../input/blockInputContent'
 import dynamic from 'next/dynamic'
 import { Suspense, useEffect } from 'react'
-import { BlockInputType } from '../../types/block'
 import { sortPageBlock } from '../../utils/sortPageBlock'
 const DynamicDashboardBanner = dynamic(
   () => import('../banner/dashboardBanner'),
@@ -37,8 +36,9 @@ const DashboardMain = () => {
 
   return (
     <DashboardMainWrapper
-      tabIndex={1}
+      tabIndex={0}
       show={(cover && cover.length > 0) || false}
+      hasCover={!!cover}
     >
       <div className="DashboardMain_container">
         <div className="DashboardMain_container-banner">
@@ -61,7 +61,7 @@ const DashboardMain = () => {
                   key={block?.id}
                   pageId={id}
                   blockIndex={index}
-                  bigThenOne={blocksContent.length >= 1}
+                  bigThenOne={blocksContent.length > 1}
                 />
               ))}
           </div>

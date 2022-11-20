@@ -1,3 +1,5 @@
+export type ignoreType = 'createdAt' | 'updatedAt'
+
 type BlocksNameType = 'text' | 'table' | 'list'
 
 export type BlockSelectorType = {
@@ -13,7 +15,7 @@ export type BlockInputType = {
     id: string
     content: string
     type: BlocksNameType
-    newBlock?: boolean
     pageId?: string
+    newBlock?: boolean
   }
 }

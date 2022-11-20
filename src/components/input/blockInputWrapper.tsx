@@ -10,15 +10,18 @@ import shallow from 'zustand/shallow'
 import { BLOCK_SELECTOR } from '../../utils/config'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
+import { BlockInputType } from '../../hook/type'
 
 type BlockInputWrapperType = {
-  id: string
-  tabIndex: number
   isEmpty: boolean
   children: React.ReactNode
   popupShow: boolean
   isFocus: boolean
   blockIndex: number
+  blockData: Omit<BlockInputType['blockData'], 'pageId'>
+  blockDataSet: (
+    blockContent: Omit<BlockInputType['blockData'], 'pageId'>
+  ) => void
   popupShowSet: (show: boolean) => void
   focusSet: (focus: boolean) => void
 }
@@ -30,15 +33,15 @@ const animate = (scale: number) => ({
 })
 
 const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
-  tabIndex,
   isEmpty,
   children,
   popupShow,
   popupShowSet,
   focusSet,
   isFocus,
-  id,
   blockIndex,
+  blockData,
+  blockDataSet,
 }) => {
   const [focusIndex, setFocusIndex] = useState(0)
   const { blocksMapSet } = useBlocksStore(
@@ -73,7 +76,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
     <BlockInputBaseWrapper
       onFocus={() => focusSet(true)}
       onBlur={() => !isLeave && focusSet(false)}
-      tabIndex={tabIndex}
+      tabIndex={0}
       animate={{ backgroundColor: isFocus ? '#f8f8f8' : '#ffffff' }}
       className="p_m round_sm"
     >
@@ -81,10 +84,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
         animate={{ opacity: isFocus && !popupShow ? 1 : 0 }}
         className="add_block-icon"
         onClick={() => {
-          if (!isEmpty) {
-            return addBlock(tabIndex)
-          }
-          popupShowSet(true)
+          !isEmpty ? addBlock(blockIndex) : popupShowSet(true)
         }}
         data-type="block-add-popup"
       >
@@ -109,8 +109,9 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
               <SelectBlockContainer
                 focusIndex={focusIndex}
                 focusIndexSet={memoFocusIndexSet}
-                id={id}
-                blockIndex={blockIndex}
+                id={blockData.id}
+                blockData={blockData}
+                blockDataSet={blockDataSet}
               />
             </ChangePopup>
           </motion.div>

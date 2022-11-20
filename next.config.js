@@ -15,7 +15,7 @@ const nextConfig = {
       fallback: [
         {
           source: '/dashboard/:page*',
-          destination: '/',
+          destination: '/dashboard',
         },
       ],
     }

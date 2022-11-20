@@ -5,18 +5,23 @@ import cuid from 'cuid'
 import produce from 'immer'
 import { findIndex } from '../utils/findIndex'
 
+type ignoreType = 'createdAt' | 'updatedAt'
+type PageType = Omit<Page, ignoreType>
+type emojiType = Omit<Emoji, ignoreType>
+export type ListDataType = PageType & { emoji: emojiType }
+
 type ListResDataType = {
-  data: (Page & { emoji: Emoji })[]
+  data: ListDataType[]
   status: 'success' | 'fail'
 }
 
 type UseListSWRResult = {
   data: {
-    list: (Page & { emoji: Emoji })[] | undefined
-    favorite: boolean | undefined
-    editable: boolean | undefined
-    emoji: Emoji['image'] | undefined
-    title: Page['title'] | undefined
+    list?: ListDataType[]
+    favorite?: boolean
+    editable?: boolean
+    emoji?: Emoji['image']
+    title?: Page['title']
   }
   isLoading: boolean
   mutateFunction: {
@@ -24,7 +29,7 @@ type UseListSWRResult = {
     deletePage: (id: string) => void
     updatePageItem: (
       id: string,
-      key: keyof Page,
+      key: keyof PageType,
       value: boolean | string
     ) => void
     updatePageEmoji: (id: string, src: string) => void

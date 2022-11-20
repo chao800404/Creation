@@ -16,7 +16,7 @@ const baseIcon = SIDE_OPTION.workspaceItem.icon
 type WorkspaceItemType = {
   title: string
   id: string
-  icon: Emoji
+  icon: Omit<Emoji, 'createdAt' | 'updatedAt'>
   isActive: boolean
 }
 

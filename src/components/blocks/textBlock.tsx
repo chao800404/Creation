@@ -12,29 +12,23 @@ import { debounce } from 'lodash'
 import BlockPopup from '../popup/blockPopup'
 import { TextPopupBtns } from '../../lib/tiptap'
 import * as blockFeatures from '../../lib/tiptap'
-import { BlockInputType } from '../../types/block'
 import { blockContentFilter } from '../../utils/filterFile'
+import { BlockInputType } from '../../hook/type'
 
 type TextBlockType = {
   blockData: BlockInputType['blockData']
-  value: string
   className: string
-  memoEmptySet: (toggle: boolean) => void
+  blockContentSet: (
+    blockContent: Omit<BlockInputType['blockData'], 'pageId'>
+  ) => void
 }
 
 const TextBlock: React.FC<TextBlockType> = ({
   blockData,
-  memoEmptySet,
-  value,
   className,
+  blockContentSet,
 }) => {
-  const { page } = useRouter().query
-  const pageId = (page && page[0]) || ''
-  const {
-    mutateFunction: { updateBlock },
-  } = usePageSWR(pageId)
-
-  const { feature } = blockFeatures.blockTypeSelector(blockData?.name)
+  const { feature } = blockFeatures.blockTypeSelector(blockData.name)
 
   const editor = useEditor({
     extensions: feature,
@@ -42,38 +36,31 @@ const TextBlock: React.FC<TextBlockType> = ({
     onCreate: ({ editor }) => {
       editor.commands.focus(100)
     },
-    content: value,
+    content: blockData.content,
   })
-
-  const handleAsync = (content: string) => {
-    updateBlock(blockData?.id, {
-      name:
-        blockContentFilter(content).length > 0 ? blockData?.name : 'Paragraph',
-      id: blockData?.id,
-      type: blockData?.type,
-      content: blockContentFilter(content).length > 0 ? content : '',
-    })
-  }
-
-  useEffect(() => {
-    if (editor) {
-      editor.on('update', ({ editor }) => {
-        if (editor.isEmpty) {
-          memoEmptySet(editor.isEmpty)
-        }
-      })
-    }
-  }, [editor, memoEmptySet])
 
   useEffect(() => {
     editor &&
-      editor.on(
-        'update',
-        debounce(({ editor }: { editor: EditorEvents['update']['editor'] }) => {
-          handleAsync(editor.getHTML())
-        }, 500)
-      )
-  }, [editor, value])
+      editor.on('update', ({ editor: { isEmpty } }) => {
+        // memoValueSet(editor.getHTML())
+        // if (editor.isEmpty) {
+        //   memoEmptySet(editor.isEmpty)
+        //   memoValueSet('')
+        // }
+
+        // if (editor.isEmpty) {
+        //   blockContentSet({ ...blockData, content: '' })
+        //   memoEmptySet(editor.isEmpty)
+        //   return
+        // }
+
+        blockContentSet({
+          ...blockData,
+          content: isEmpty ? '' : editor.getHTML(),
+          name: isEmpty ? 'Paragraph' : blockData.name,
+        })
+      })
+  }, [editor])
 
   if (!editor) {
     return null
@@ -89,9 +76,8 @@ const TextBlock: React.FC<TextBlockType> = ({
       </BubbleMenu>
       <EditorContent
         editor={editor}
-        data-name={blockData?.name}
+        data-name={blockData.name}
         id={blockData?.id}
-        data-type={blockData?.type}
       />
     </div>
   )

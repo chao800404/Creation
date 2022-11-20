@@ -1,4 +1,4 @@
-import { BlockInputType } from '../types/block'
+import { BlockInputType } from '../hook/type'
 
 export const sortPageBlock = ({
   blocks,
