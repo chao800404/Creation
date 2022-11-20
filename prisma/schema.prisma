@@ -99,8 +99,6 @@ model Page {
   favorite     Boolean  @default(false)
   userId       String   @map("user_id")
   editable     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
   blockToOrder Json?
   parentId     String?
   parent       Page?    @relation("ParentChildren", fields: [parentId], references: [id], onDelete: Cascade)
@@ -111,9 +109,16 @@ model Page {
   children     Page[]   @relation("ParentChildren")
   text         Text[]
 
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+
   @@unique([id, userId])
   @@map("page")
 }
+
+
+
 
 model Text {
   id        String   @id @default(cuid())
@@ -121,14 +126,19 @@ model Text {
   type      String   @default("text")
   content   String   @default("")
   pageId    String   @map("page_id")
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
 
   @@unique([pageId, id])
   @@index([updatedAt(sort: Desc)])
   @@map("text")
 }
+
+
 
 model List {
   id        String   @id @default(cuid())
@@ -136,9 +146,10 @@ model List {
   type      String   @default("list")
   content   String   @default("")
   pageId    String   @map("page_id")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
   page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  reatedAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   @@unique([pageId, id])
   @@index([updatedAt(sort: Desc)])

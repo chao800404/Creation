@@ -6,7 +6,7 @@ import Spinner from '../spinner/spinner'
 import { DashboardMainWrapper } from './main.styles'
 import BlockInputContent from '../input/blockInputContent'
 import dynamic from 'next/dynamic'
-import { Suspense, useEffect } from 'react'
+import React, { Suspense, useEffect, useRef } from 'react'
 import { sortPageBlock } from '../../utils/sortPageBlock'
 const DynamicDashboardBanner = dynamic(
   () => import('../banner/dashboardBanner'),
@@ -29,12 +29,46 @@ const DashboardMain = () => {
   } = usePageSWR(id)
 
   const blocksContent = sortPageBlock({ blocks, blockToOrder })
+  const elemRef = useRef<HTMLDivElement | null>(null)
+
+  const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const focusBlock = document.activeElement
+    if (elemRef.current?.children && focusBlock) {
+      const childrenNode: React.ReactNode[] = [
+        ...elemRef.current?.children,
+      ].map((node) => node.id)
+
+      const { id } = focusBlock.closest(
+        '[data-type="block-content"]'
+      ) as HTMLInputElement
+
+      const index = childrenNode.indexOf(id)
+
+      const curElemeFocusPos = window.getSelection()?.focusOffset
+      const focusContentLength = focusBlock.lastChild?.textContent?.length
+
+      const selectElem = (index: number) => {
+        const elemNext = elemRef.current?.querySelector(
+          `#${childrenNode[index]}`
+        ) as HTMLInputElement
+        elemNext && elemNext.focus()
+      }
+      if (curElemeFocusPos !== focusContentLength) return
+      switch (e.key) {
+        case 'ArrowDown':
+          selectElem(index + 1)
+          break
+        case 'ArrowUp':
+          selectElem(index - 1)
+        default:
+          return
+      }
+    }
+  }
 
   if (isLoading && !blocksContent) {
     return <Spinner />
   }
-
-  console.log(blocks)
 
   return (
     <DashboardMainWrapper
@@ -55,7 +89,11 @@ const DashboardMain = () => {
           <div className="DashboardMain_container-content-header pl_m pr_m">
             <HeaderEditorS />
           </div>
-          <div className="DashboardMain_container-content-add ">
+          <div
+            className="DashboardMain_container-content-add"
+            onKeyDown={handleOnKeyDown}
+            ref={elemRef}
+          >
             {blocksContent &&
               blocksContent.map((block, index) => (
                 <BlockInputContent

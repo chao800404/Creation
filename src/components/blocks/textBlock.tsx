@@ -5,7 +5,7 @@ import {
   BubbleMenu,
   EditorEvents,
 } from '@tiptap/react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { debounce } from 'lodash'
@@ -27,41 +27,31 @@ type TextBlockType = {
 const TextBlock: React.FC<TextBlockType> = ({
   blockData,
   className,
-  isFocus,
   blockContentSet,
+  isFocus,
 }) => {
   const { feature } = blockFeatures.blockTypeSelector(blockData.name)
+  const elemRef = useRef<HTMLInputElement>(null)
 
   const editor = useEditor({
     extensions: feature,
     autofocus: true,
     onCreate: ({ editor }) => {
-      editor.commands.focus(100)
+      editor.commands.focus('end')
     },
     content: blockData.content,
   })
 
   useEffect(() => {
-    if (isFocus) {
-      editor && editor.commands.focus()
+    if (isFocus && editor) {
+      const focus = editor?.isFocused
+      !focus && editor.commands.focus('end')
     }
   }, [isFocus])
 
   useEffect(() => {
     editor &&
       editor.on('update', ({ editor: { isEmpty } }) => {
-        // memoValueSet(editor.getHTML())
-        // if (editor.isEmpty) {
-        //   memoEmptySet(editor.isEmpty)
-        //   memoValueSet('')
-        // }
-
-        // if (editor.isEmpty) {
-        //   blockContentSet({ ...blockData, content: '' })
-        //   memoEmptySet(editor.isEmpty)
-        //   return
-        // }
-
         blockContentSet({
           ...blockData,
           content: isEmpty ? '' : editor.getHTML(),
@@ -75,7 +65,7 @@ const TextBlock: React.FC<TextBlockType> = ({
   }
 
   return (
-    <div className={className}>
+    <div className={className} ref={elemRef}>
       <BubbleMenu tippyOptions={{ duration: 100 }} editor={editor}>
         <BlockPopup
           editor={editor}

@@ -79,7 +79,8 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
       onBlur={() => !isLeave && focusSet(false)}
       tabIndex={0}
       animate={{ backgroundColor: isFocus ? '#f8f8f8' : '#ffffff' }}
-      className="p_m round_sm"
+      className="p_m round_sm ProseMirror"
+      data-type="block-content"
     >
       <motion.div
         animate={{ opacity: isFocus && !popupShow ? 1 : 0 }}
