@@ -34,34 +34,40 @@ const DashboardMain = () => {
   const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const focusBlock = document.activeElement
     if (elemRef.current?.children && focusBlock) {
-      const childrenNode: React.ReactNode[] = [
-        ...elemRef.current?.children,
-      ].map((node) => node.id)
-
-      const { id } = focusBlock.closest(
+      const elem = elemRef.current
+      const childrenNode: Element[] = [...elem?.children]
+      const childrenIdMap = childrenNode.map((node) => node.id)
+      const focusElem = focusBlock.closest(
         '[data-type="block-content"]'
       ) as HTMLInputElement
 
-      const index = childrenNode.indexOf(id)
+      const popupIsOpen = focusElem.className.includes('popup-open')
+      if (!childrenNode.includes(focusElem) || popupIsOpen) return
+
+      const index = childrenIdMap.indexOf(focusElem.id)
 
       const curElemeFocusPos = window.getSelection()?.focusOffset
-      const focusContentLength = focusBlock.lastChild?.textContent?.length
+      const focusContentLength =
+        focusBlock.lastChild?.lastChild?.textContent?.length
 
       const selectElem = (index: number) => {
-        const elemNext = elemRef.current?.querySelector(
-          `#${childrenNode[index]}`
+        const elemNext = elem?.querySelector(
+          `#${childrenIdMap[index]}`
         ) as HTMLInputElement
+
         elemNext && elemNext.focus()
       }
-      if (curElemeFocusPos !== focusContentLength) return
-      switch (e.key) {
-        case 'ArrowDown':
-          selectElem(index + 1)
-          break
-        case 'ArrowUp':
-          selectElem(index - 1)
-        default:
-          return
+
+      if (curElemeFocusPos === focusContentLength || !focusContentLength) {
+        switch (e.key) {
+          case 'ArrowDown':
+            selectElem(index + 1)
+            break
+          case 'ArrowUp':
+            selectElem(index - 1)
+          default:
+            return
+        }
       }
     }
   }
@@ -95,15 +101,18 @@ const DashboardMain = () => {
             ref={elemRef}
           >
             {blocksContent &&
-              blocksContent.map((block, index) => (
-                <BlockInputContent
-                  blockData={block}
-                  key={block?.id}
-                  pageId={id}
-                  blockIndex={index}
-                  bigThenOne={blocksContent.length > 1}
-                />
-              ))}
+              blocksContent.map(
+                (block, index) =>
+                  block && (
+                    <BlockInputContent
+                      blockData={block}
+                      key={block?.id}
+                      pageId={id}
+                      blockIndex={index}
+                      bigThenOne={blocksContent.length > 1}
+                    />
+                  )
+              )}
           </div>
 
           <div style={{ height: '50vh', background: '#ffffff' }}></div>

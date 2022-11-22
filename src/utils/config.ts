@@ -80,7 +80,7 @@ export const EMOJI_BASE = [
 
 type BlockSelectorType = {
   name: string
-  type: 'text' | 'table' | 'list'
+  type: 'text' | 'table' | 'list' | 'code'
   desc: string
   image: string
 }
@@ -133,5 +133,11 @@ export const BLOCK_SELECTOR: BlockSelectorType[] = [
     type: 'list',
     desc: 'Create a list with numbering.',
     image: '/static/blocks/numbered-list.png',
+  },
+  {
+    name: 'Code',
+    type: 'code',
+    desc: 'Capture a code snippet.',
+    image: '/static/blocks/code.png',
   },
 ]

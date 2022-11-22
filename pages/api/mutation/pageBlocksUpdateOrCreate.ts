@@ -2,9 +2,10 @@ import { NextApiResponse, NextApiRequest } from 'next'
 import { z, ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
+import { BlockHTML } from '@prisma/client'
 
 // type MySchema = z.infer<typeof MySchema>
-const keyEnum = ['text'] as const
+const keyEnum = ['text', 'list'] as const
 
 const MySchema = z.object({
   page_id: z.string().cuid({ message: 'Please provide correct ID' }),
@@ -23,10 +24,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await validateUser(req, res, async (user) => {
-    let block
-
-    console.log(req.body)
-
     const data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
 
     const { page_id, name, id, content, type, blockToOrder } =
@@ -44,13 +41,13 @@ export default async function handler(
       if (!resData) throw new Error("You can't be updating this file")
 
       if (req.method === 'POST' || req.method === 'PATCH') {
-        block = await prisma.page.update({
+        const block = await prisma.page.update({
           where: {
             id: page_id,
           },
           data: {
             blockToOrder,
-            [type]: {
+            blockHTML: {
               upsert: {
                 where: {
                   id,
@@ -69,7 +66,7 @@ export default async function handler(
             },
           },
           select: {
-            [type]: {
+            blockHTML: {
               where: {
                 id,
               },
@@ -84,8 +81,8 @@ export default async function handler(
         })
 
         return res.status(200).json({
-          status: 'success',
-          data: block[type][0],
+          status: block ? 'success' : 'fail',
+          data: block.blockHTML[0],
         })
       } else if (req.method === 'DELETE') {
         await prisma.page.update({
@@ -94,7 +91,7 @@ export default async function handler(
           },
           data: {
             blockToOrder,
-            [type]: {
+            blockHTML: {
               delete: {
                 pageId_id: {
                   pageId: page_id,
@@ -108,11 +105,7 @@ export default async function handler(
         return res.status(200).json({
           status: 'success',
         })
-      } else {
-        block = undefined
       }
-
-      if (!block) throw new Error('Please Provide correct id')
     } catch (error) {
       console.log(error)
       const { issues } = error as ZodError

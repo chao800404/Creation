@@ -25,7 +25,7 @@ export default async function getUserData(
           select: {
             userId: true,
             cover: true,
-            text: {
+            blockHTML: {
               select: {
                 content: true,
                 id: true,

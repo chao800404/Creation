@@ -6,7 +6,6 @@ import { useBlocksStore } from '../../store/useBlocksStore'
 import shallow from 'zustand/shallow'
 import TextBlock from '../blocks/textBlock'
 import { blockContentFilter } from '../../utils/filterFile'
-import { phoneticNotationFilter } from '../../utils/filterFile'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { BlockInputType } from '../../hook/type'
 import { useDebounce } from 'use-debounce'
@@ -25,16 +24,17 @@ const BlockInputContent: React.FC<
   const [blockContent, setBlockContent] = useState<
     Omit<BlockInputType['blockData'], 'pageId'>
   >({
-    name: blockData.name,
-    id: blockData.id,
-    content: blockData.content,
-    type: blockData.type,
+    name: blockData?.name,
+    id: blockData?.id,
+    content: blockData?.content,
+    type: blockData?.type,
   })
-  const newBlock = useRef(blockData.newBlock)
+  const newBlock = useRef(!!blockData?.newBlock || false)
   const [debounceValue] = useDebounce(blockContent, 500)
   const [compositionEnd, setCompositionEnd] = useState(true)
   const [popupShow, setPopupShow] = useState(!!newBlock.current)
-  const [isFocus, setIsFocus] = useState(!!blockData.focus)
+  const [isFocus, setIsFocus] = useState(!!blockData?.focus || false)
+
   const {
     mutateFunction: { deleteBlock },
   } = usePageSWR(pageId)
@@ -44,6 +44,7 @@ const BlockInputContent: React.FC<
     }),
     shallow
   )
+
   const {
     mutateFunction: { updateBlock },
   } = usePageSWR(pageId)
@@ -76,8 +77,6 @@ const BlockInputContent: React.FC<
     }
   }
 
-  console.log(blockContent.content)
-
   const blockContentSet = useCallback(
     (blockContent: Omit<BlockInputType['blockData'], 'pageId'>) => {
       setBlockContent((prevContent) => ({ ...prevContent, ...blockContent }))
@@ -92,10 +91,14 @@ const BlockInputContent: React.FC<
   const memoFocusSet = useCallback((focus: boolean) => setIsFocus(focus), [])
 
   useEffect(() => {
-    if (blockContent.content.startsWith('/')) return
-    updateBlock(debounceValue.id, {
-      ...debounceValue,
-    })
+    if (
+      !debounceValue?.content?.startsWith('/') &&
+      debounceValue.content !== blockData.content
+    ) {
+      updateBlock(debounceValue.id, {
+        ...debounceValue,
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceValue])
 
@@ -106,10 +109,16 @@ const BlockInputContent: React.FC<
   }, [blockData])
 
   useEffect(() => {
-    textareaRef.current?.focus()
+    if (isEmpty && isFocus) {
+      textareaRef.current?.focus()
+    }
     if (!isEmpty) newBlock.current = false
     setPopupShow(!!newBlock.current)
-  }, [isEmpty])
+  }, [isEmpty, isFocus])
+
+  useEffect(() => {
+    textareaRef.current?.focus()
+  }, [])
 
   useEffect(() => {
     if (blockContent.content.startsWith('/')) return
@@ -139,6 +148,7 @@ const BlockInputContent: React.FC<
             ref={textareaRef}
             onKeyDown={handleKeyDownOnEnter}
             onChange={(e) => {
+              filterBlocksMapSet(e.target.value.replace('/', ''))
               blockContentSet({ ...blockContent, content: e.target.value })
             }}
             onCompositionUpdate={() => setCompositionEnd(false)}

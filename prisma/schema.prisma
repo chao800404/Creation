@@ -105,9 +105,8 @@ model Page {
   user         User     @relation(fields: [userId], references: [id])
   cover        Cover?
   emoji        Emoji?
-  list         List[]
   children     Page[]   @relation("ParentChildren")
-  text         Text[]
+  blockHTML         BlockHTML[]
 
 
   createdAt    DateTime @default(now())
@@ -120,7 +119,7 @@ model Page {
 
 
 
-model Text {
+model BlockHTML {
   id        String   @id @default(cuid())
   name      String   @default("paragraph")
   type      String   @default("text")
@@ -134,24 +133,9 @@ model Text {
 
 
   @@unique([pageId, id])
-  @@index([updatedAt(sort: Desc)])
-  @@map("text")
+  @@index([id , name])
+  @@map("block_HTML")
 }
 
 
 
-model List {
-  id        String   @id @default(cuid())
-  name      String
-  type      String   @default("list")
-  content   String   @default("")
-  pageId    String   @map("page_id")
-  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
-
-  reatedAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  @@unique([pageId, id])
-  @@index([updatedAt(sort: Desc)])
-  @@map("list")
-}

@@ -1,21 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BlockReviewBtnWrapper } from './button.styles'
 
 type BlockReviewBtnTyep = {
   name: string
   id: string
+  isFocus: boolean
 }
 
-const BlockReviewBtn: React.FC<BlockReviewBtnTyep> = ({ name, id }) => {
+const BlockReviewBtn: React.FC<BlockReviewBtnTyep> = ({
+  name,
+  id,
+  isFocus,
+}) => {
   return (
     <BlockReviewBtnWrapper
       className="round_sm"
       id={id}
-      whileTap={{ y: 1, scale: 0.98 }}
+      isFocus={isFocus ? true : false}
+      onClick={() => {
+        const blocks = [
+          ...document.querySelectorAll(`[data-type="block-content"]`),
+        ] as HTMLInputElement[]
+        blocks.forEach((block) => {
+          if (block.id === id) {
+            block.focus()
+            block.scrollIntoView({ behavior: 'smooth' })
+          }
+        })
+      }}
     >
       {name}
     </BlockReviewBtnWrapper>
   )
 }
 
-export default BlockReviewBtn
+export default React.memo(BlockReviewBtn)

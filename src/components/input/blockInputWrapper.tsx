@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { BlockInputBaseWrapper } from './input.styles'
 import { BsFillPlusCircleFill } from 'react-icons/bs'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -11,6 +11,7 @@ import { BLOCK_SELECTOR } from '../../utils/config'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { BlockInputType } from '../../hook/type'
+import { usePageStore } from '../../store'
 
 type BlockInputWrapperType = {
   isEmpty: boolean
@@ -56,6 +57,12 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
     mutateFunction: { addBlock },
   } = usePageSWR((page && page[0]) || '')
 
+  const elemRef = useRef<HTMLDivElement | null>(null)
+  const focusBlockIdSet = usePageStore(
+    (state) => state.focusBlockIdSet,
+    shallow
+  )
+
   const { isLeave } = useOnClickOutside((e) => {
     const target = (e.target as HTMLElement).closest(
       '[data-type = "block-add-popup"]'
@@ -75,12 +82,16 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
   return (
     <BlockInputBaseWrapper
       id={blockData.id}
-      onFocus={() => focusSet(true)}
+      onFocus={() => {
+        focusBlockIdSet(blockData.id)
+        focusSet(true)
+      }}
       onBlur={() => !isLeave && focusSet(false)}
       tabIndex={0}
       animate={{ backgroundColor: isFocus ? '#f8f8f8' : '#ffffff' }}
-      className="p_m round_sm ProseMirror"
+      className={`p_m round_sm  ${popupShow ? 'popup-open' : ''}`}
       data-type="block-content"
+      ref={elemRef}
     >
       <motion.div
         animate={{ opacity: isFocus && !popupShow ? 1 : 0 }}
@@ -101,7 +112,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
             initial={animate(1)}
             animate={animate(1.05)}
             exit={animate(0.95)}
-            className="add_block-popup"
+            className={`add_block-popup`}
             data-type="block-add-popup"
           >
             <ChangePopup

@@ -54,9 +54,45 @@ export const EditorOptionButtonWrapper = styled('button')`
   background-color: transparent;
 `
 
-export const BlockReviewBtnWrapper = styled(motion.button)`
-  background-color: ${({ theme }) => theme.colors.primary};
+type BlockReviewBtnTyep = {
+  isFocus: boolean
+}
+
+export const BlockReviewBtnWrapper = styled('button').attrs<BlockReviewBtnTyep>(
+  (props) => ({
+    isFocus: props.isFocus,
+  })
+)<BlockReviewBtnTyep>`
+  background-color: ${({ theme, isFocus }) =>
+    isFocus ? theme.colors.primary : theme.colors.white};
   width: 100%;
+  font-weight: 800;
   height: 2.8rem;
-  color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme, isFocus }) =>
+    isFocus ? theme.colors.secondary_light : theme.colors.primary};
+  border: ${({ theme }) => `1px solid ${theme.colors.primary}`};
+  position: relative;
+  z-index: 12;
+
+  &:hover {
+    background-color: ${({ theme, isFocus }) =>
+      isFocus ? theme.colors.primary : theme.colors.secondary};
+  }
+
+  &:active {
+    transform: scale(0.98) translateY(1px);
+    transition: transform 0.1s ease;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-bottom: ${({ theme }) => `2px solid ${theme.colors.primary}`};
+    border-radius: inherit;
+    z-index: -1;
+  }
 `

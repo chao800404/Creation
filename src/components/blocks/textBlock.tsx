@@ -5,7 +5,7 @@ import {
   BubbleMenu,
   EditorEvents,
 } from '@tiptap/react'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { debounce } from 'lodash'
@@ -14,6 +14,7 @@ import { TextPopupBtns } from '../../lib/tiptap'
 import * as blockFeatures from '../../lib/tiptap'
 import { blockContentFilter } from '../../utils/filterFile'
 import { BlockInputType } from '../../hook/type'
+import { off } from 'process'
 
 type TextBlockType = {
   blockData: BlockInputType['blockData']
@@ -31,7 +32,6 @@ const TextBlock: React.FC<TextBlockType> = ({
   isFocus,
 }) => {
   const { feature } = blockFeatures.blockTypeSelector(blockData.name)
-  const elemRef = useRef<HTMLInputElement>(null)
 
   const editor = useEditor({
     extensions: feature,
@@ -45,19 +45,19 @@ const TextBlock: React.FC<TextBlockType> = ({
   useEffect(() => {
     if (isFocus && editor) {
       const focus = editor?.isFocused
-      !focus && editor.commands.focus('end')
+      !focus && editor.chain().focus().run()
     }
   }, [isFocus])
 
   useEffect(() => {
-    editor &&
-      editor.on('update', ({ editor: { isEmpty } }) => {
-        blockContentSet({
-          ...blockData,
-          content: isEmpty ? '' : editor.getHTML(),
-          name: isEmpty ? 'Paragraph' : blockData.name,
-        })
+    if (!editor) return
+    editor.on('update', ({ editor: { isEmpty } }) => {
+      blockContentSet({
+        ...blockData,
+        content: isEmpty ? '' : editor.getHTML(),
+        name: isEmpty ? 'Paragraph' : blockData.name,
       })
+    })
   }, [editor])
 
   if (!editor) {
@@ -65,7 +65,7 @@ const TextBlock: React.FC<TextBlockType> = ({
   }
 
   return (
-    <div className={className} ref={elemRef}>
+    <div className={className}>
       <BubbleMenu tippyOptions={{ duration: 100 }} editor={editor}>
         <BlockPopup
           editor={editor}

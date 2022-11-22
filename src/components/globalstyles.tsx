@@ -123,6 +123,60 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 
+  .add_block-input{
+    li {
+      font-size: 1rem;
+      margin-left: 1rem;
+      font-weight: 400;
+    }
+  }
+
+
+  div[data-name="Bullested_list"] {
+      li {
+        list-style: square;
+      }
+    }
+
+  div[data-name="Numbered_list"] {
+      li {
+        list-style: number;
+      }
+  }
+
+  ul[data-type="taskList"] {
+    list-style: none;
+    padding: 0;
+ 
+    p {
+      margin-left: .1rem;
+    }
+  
+    li {
+      display: flex;
+      align-items: center;
+      margin-left:0;
+  
+      > label {
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        user-select: none;
+
+        > input {
+          margin:auto -.2rem;
+          display:block;
+          accent-color:#1c1c1c;
+
+        }
+      }
+  
+      > div {
+        flex: 1 1 auto;
+      }
+    }
+  }
+
+
   .ProseMirror {
 
     h1.is-empty:first-child::before,
@@ -136,10 +190,26 @@ export const GlobalStyle = createGlobalStyle`
       transform: translateY(-50%);
       color: #efefef;
       width: 100%;
-      font-size:1.5rem;
       pointer-events: none;
     }
 
+    h1.is-empty:first-child::before {
+      font-size:1.5rem;
+    }
+
+    p.is-empty:first-child::before{
+      font-size:1rem;
+    }
+/* 
+    div[data-name="Bullested_list"] div[data-name="Numbered_list"] {
+      li {
+        margin-left:1rem;
+        font-size: 1rem;
+      }
+    } */
+
+
+ 
 
     p {
       font-size: 1rem;
@@ -172,7 +242,12 @@ export const GlobalStyle = createGlobalStyle`
 
 `
 
-type themeKey = 'primary' | 'secondary' | 'secondary_light' | 'secondary_dark'
+type themeKey =
+  | 'primary'
+  | 'secondary'
+  | 'secondary_light'
+  | 'secondary_dark'
+  | 'white'
 
 declare module 'styled-components' {
   export interface DefaultTheme {
@@ -188,5 +263,6 @@ export const theme: DefaultTheme = {
     secondary: '#f4f4f4',
     secondary_light: '#efefef',
     secondary_dark: '',
+    white: '#ffffff',
   },
 }

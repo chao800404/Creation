@@ -26,7 +26,7 @@ export default async function handler(
               cover: {
                 create: {},
               },
-              text: {
+              blockHTML: {
                 create: {
                   id: blockId,
                 },

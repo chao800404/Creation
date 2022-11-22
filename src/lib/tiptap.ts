@@ -13,13 +13,23 @@ import Underline from '@tiptap/extension-underline'
 import Heading from '@tiptap/extension-heading'
 import Placeholder from '@tiptap/extension-placeholder'
 import HardBreak from '@tiptap/extension-hard-break'
+import ListItem from '@tiptap/extension-list-item'
+import OrderedList from '@tiptap/extension-ordered-list'
+import BulletList from '@tiptap/extension-bullet-list'
+import TaskItem from '@tiptap/extension-task-item'
+import TaskList from '@tiptap/extension-task-list'
+import css from 'highlight.js/lib/languages/css'
+import js from 'highlight.js/lib/languages/javascript'
+import ts from 'highlight.js/lib/languages/typescript'
+import html from 'highlight.js/lib/languages/xml'
+import hljs from 'highlight.js'
+import { lowlight } from 'lowlight'
 import { BLOCK_SELECTOR } from '../utils/config'
 import { Editor } from '@tiptap/react'
 import { ImBold, ImStrikethrough, ImUnderline } from 'react-icons/im'
 import { GoItalic } from 'react-icons/go'
 import { HiOutlineCode } from 'react-icons/hi'
 import { TbBlockquote } from 'react-icons/tb'
-import { keys } from 'lodash'
 
 const basicBlockFeature = [
   Document,
@@ -36,7 +46,12 @@ const basicBlockFeature = [
   History.configure({ depth: 10 }),
 ]
 
-export const textBlockFeature = [...basicBlockFeature]
+export const textBlockFeature = (name: string) => [
+  ...basicBlockFeature,
+  Placeholder.configure({
+    placeholder: `${name}`,
+  }),
+]
 
 export const headingBlockFeature = (name: string) => [
   ...basicBlockFeature,
@@ -55,11 +70,31 @@ export const headingBlockFeature = (name: string) => [
   }),
 ]
 
+export const todoListBlockFeature = [
+  ...basicBlockFeature,
+  TaskList,
+  TaskItem.configure({
+    nested: true,
+  }),
+]
+
+export const listBlockFeature = [
+  ...basicBlockFeature,
+  BulletList,
+  OrderedList,
+  ListItem,
+]
+
+lowlight.registerLanguage('html', html)
+lowlight.registerLanguage('css', css)
+lowlight.registerLanguage('js', js)
+lowlight.registerLanguage('ts', ts)
+
 export const blockTypeSelector = (name: string) => {
   switch (name) {
     case BLOCK_SELECTOR[3].name:
       return {
-        feature: textBlockFeature,
+        feature: textBlockFeature(name),
         initContent: '<p></p>',
       }
     case BLOCK_SELECTOR[0].name:
@@ -77,9 +112,31 @@ export const blockTypeSelector = (name: string) => {
         feature: headingBlockFeature(name),
         initContent: '<h3></h3>',
       }
+    case BLOCK_SELECTOR[4].name:
+      return {
+        feature: headingBlockFeature(name),
+        initContent: '<h4></h4>',
+      }
+    case BLOCK_SELECTOR[5].name:
+      return {
+        feature: todoListBlockFeature,
+        initContent: `<ul data-type="taskList">
+        <li data-type="taskItem" data-checked="true"></li>
+        <ul>`,
+      }
+    case BLOCK_SELECTOR[6].name:
+      return {
+        feature: listBlockFeature,
+        initContent: '<ul><li></li></ul>',
+      }
+    case BLOCK_SELECTOR[7].name:
+      return {
+        feature: listBlockFeature,
+        initContent: '<ol><li></li></ol>',
+      }
     default:
       return {
-        feature: textBlockFeature,
+        feature: listBlockFeature,
         initContent: '',
       }
   }
