@@ -42,6 +42,7 @@ type UsePageSWRResult = {
       signal?: AbortSignal | null | undefined,
       revalidate?: boolean
     ) => void
+    updateOrder: (reorder: string[]) => void
     addBlock: (index: number, name?: string, type?: BlocksNameType) => void
     deleteBlock: (page_id: string, id: string, index: number) => void
   }
@@ -154,6 +155,32 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
           revalidate: false,
           rollbackOnError: true,
           optimisticData: updateBlock,
+        }
+      )
+    },
+
+    updateOrder: (reorder) => {
+      if (!data) return
+      const reorederBlock = produce<PageResDataType>(data, (draft) => {
+        draft.data.blockToOrder = reorder
+      })
+      mutate<PageResDataType>(
+        `/api/page/${pageId}`,
+        async (data) => {
+          await updateData(
+            'updateOrder',
+            {
+              page_id: pageId,
+              reorder,
+            },
+            null
+          )
+          return reorederBlock
+        },
+        {
+          revalidate: false,
+          rollbackOnError: true,
+          optimisticData: reorederBlock,
         }
       )
     },

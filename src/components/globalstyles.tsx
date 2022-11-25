@@ -50,7 +50,7 @@ export const GlobalStyle = createGlobalStyle`
     color: #1c1c1c;
   }
   
-  button,li,Ul:focus,div:focus-visible {
+  button,select,li,ul:focus,div:focus-visible {
     outline: none;
   }
 
@@ -60,6 +60,21 @@ export const GlobalStyle = createGlobalStyle`
 
   svg {
     display: block;
+    
+  }
+
+  select {
+    background: #1c1c1c;
+    border: none;
+    color:white;
+    display: flex;
+    justify-content:center;
+    
+
+    option {
+      color:inherit;
+      display: block;
+    }
   }
 
   button {
@@ -177,6 +192,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 
+
+
   .ProseMirror {
 
     h1.is-empty:first-child::before,
@@ -200,16 +217,6 @@ export const GlobalStyle = createGlobalStyle`
     p.is-empty:first-child::before{
       font-size:1rem;
     }
-/* 
-    div[data-name="Bullested_list"] div[data-name="Numbered_list"] {
-      li {
-        margin-left:1rem;
-        font-size: 1rem;
-      }
-    } */
-
-
- 
 
     p {
       font-size: 1rem;
@@ -224,7 +231,69 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'JetBrainsMono', monospace;
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
+
+    code {
+      background: none;
+      color: inherit;
+      font-size: .9rem;
+      padding: 0;
+      line-height: 1.4;
     }
+
+    .hljs-comment,
+    .hljs-quote {
+      color: #616161;
+    }
+
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-attribute,
+    .hljs-tag,
+    .hljs-name,
+    .hljs-regexp,
+    .hljs-link,
+    .hljs-name,
+    .hljs-selector-id,
+    .hljs-selector-class {
+      color: #f98181;
+    }
+
+    .hljs-number,
+    .hljs-meta,
+    .hljs-built_in,
+    .hljs-builtin-name,
+    .hljs-literal,
+    .hljs-type,
+    .hljs-params {
+      color: #fbbc88;
+    }
+
+    .hljs-string,
+    .hljs-symbol,
+    .hljs-bullet {
+      color: #b9f18d;
+    }
+
+    .hljs-title,
+    .hljs-section {
+      color: #faf594;
+    }
+
+    .hljs-keyword,
+    .hljs-selector-tag {
+      color: #70cff8;
+    }
+
+    .hljs-emphasis {
+      font-style: italic;
+    }
+
+    .hljs-strong {
+      font-weight: 700;
+    }
+  
+    }
+
 
   
 

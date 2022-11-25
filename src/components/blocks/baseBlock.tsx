@@ -4,19 +4,15 @@ import {
   useEditor,
   BubbleMenu,
   EditorEvents,
+  Extensions,
 } from '@tiptap/react'
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { usePageSWR } from '../../hook/usePageSWR'
-import { debounce } from 'lodash'
+import React, { useEffect } from 'react'
 import BlockPopup from '../popup/blockPopup'
 import { TextPopupBtns } from '../../lib/tiptap'
 import * as blockFeatures from '../../lib/tiptap'
-import { blockContentFilter } from '../../utils/filterFile'
 import { BlockInputType } from '../../hook/type'
-import { off } from 'process'
 
-type TextBlockType = {
+type BaseBlockType = {
   blockData: BlockInputType['blockData']
   className: string
   isFocus: boolean
@@ -25,16 +21,19 @@ type TextBlockType = {
   ) => void
 }
 
-const TextBlock: React.FC<TextBlockType> = ({
+const BaseBlock: React.FC<BaseBlockType> = ({
   blockData,
   className,
   blockContentSet,
   isFocus,
 }) => {
-  const { feature } = blockFeatures.blockTypeSelector(blockData.name)
+  const { feature } = blockFeatures.blockTypeSelector(
+    blockData.name,
+    blockData.id
+  )
 
   const editor = useEditor({
-    extensions: feature,
+    extensions: feature as Extensions,
     autofocus: true,
     onCreate: ({ editor }) => {
       editor.commands.focus('end')
@@ -42,12 +41,15 @@ const TextBlock: React.FC<TextBlockType> = ({
     content: blockData.content,
   })
 
-  useEffect(() => {
-    if (isFocus && editor) {
-      const focus = editor?.isFocused
-      !focus && editor.chain().focus().run()
-    }
-  }, [isFocus])
+  // console.log(document.activeElement)
+
+  // useEffect(() => {
+  //   const focus = editor?.isFocused
+  //   if (focus) return
+  //   if (isFocus !== focus && editor) {
+  //     editor.chain().focus().run()
+  //   }
+  // }, [isFocus])
 
   useEffect(() => {
     if (!editor) return
@@ -80,4 +82,4 @@ const TextBlock: React.FC<TextBlockType> = ({
     </div>
   )
 }
-export default TextBlock
+export default BaseBlock

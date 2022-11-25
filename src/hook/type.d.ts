@@ -1,6 +1,6 @@
 export type ignoreType = 'createdAt' | 'updatedAt'
 
-type BlocksNameType = 'text' | 'table' | 'list'
+type BlocksNameType = 'text' | 'table' | 'list' | 'code'
 
 export type BlockSelectorType = {
   name: string

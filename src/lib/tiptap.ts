@@ -18,14 +18,16 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import BulletList from '@tiptap/extension-bullet-list'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import css from 'highlight.js/lib/languages/css'
 import js from 'highlight.js/lib/languages/javascript'
 import ts from 'highlight.js/lib/languages/typescript'
 import html from 'highlight.js/lib/languages/xml'
+
 import hljs from 'highlight.js'
 import { lowlight } from 'lowlight'
 import { BLOCK_SELECTOR } from '../utils/config'
-import { Editor } from '@tiptap/react'
+import { Editor, ReactNodeViewRenderer } from '@tiptap/react'
 import { ImBold, ImStrikethrough, ImUnderline } from 'react-icons/im'
 import { GoItalic } from 'react-icons/go'
 import { HiOutlineCode } from 'react-icons/hi'
@@ -33,8 +35,6 @@ import { TbBlockquote } from 'react-icons/tb'
 
 const basicBlockFeature = [
   Document,
-  Paragraph,
-  Text,
   Blockquote,
   Strike,
   Italic,
@@ -43,46 +43,8 @@ const basicBlockFeature = [
   Color,
   TextStyle,
   Underline,
+  Text,
   History.configure({ depth: 10 }),
-]
-
-export const textBlockFeature = (name: string) => [
-  ...basicBlockFeature,
-  Placeholder.configure({
-    placeholder: `${name}`,
-  }),
-]
-
-export const headingBlockFeature = (name: string) => [
-  ...basicBlockFeature,
-  Placeholder.configure({
-    placeholder: `${name}`,
-  }),
-  Heading.configure({
-    levels: [1, 2, 3],
-  }),
-  HardBreak.extend({
-    addKeyboardShortcuts() {
-      return {
-        Enter: () => true,
-      }
-    },
-  }),
-]
-
-export const todoListBlockFeature = [
-  ...basicBlockFeature,
-  TaskList,
-  TaskItem.configure({
-    nested: true,
-  }),
-]
-
-export const listBlockFeature = [
-  ...basicBlockFeature,
-  BulletList,
-  OrderedList,
-  ListItem,
 ]
 
 lowlight.registerLanguage('html', html)
@@ -90,53 +52,126 @@ lowlight.registerLanguage('css', css)
 lowlight.registerLanguage('js', js)
 lowlight.registerLanguage('ts', ts)
 
-export const blockTypeSelector = (name: string) => {
+export const textBlockFeature = (name: string, id: string) => [
+  ...basicBlockFeature,
+  Paragraph.configure({
+    HTMLAttributes: {
+      ['data-type']: 'block-content',
+      id,
+      tabIndex: 0,
+    },
+  }),
+  Placeholder.configure({
+    placeholder: `${name}`,
+  }),
+]
+
+export const headingBlockFeature = (name: string, id: string) => [
+  ...basicBlockFeature,
+  Paragraph,
+  Placeholder.configure({
+    placeholder: `${name}`,
+  }),
+  Heading.configure({
+    levels: [1, 2, 3],
+    HTMLAttributes: {
+      ['data-type-name']: 'block-content',
+      id,
+      tabIndex: 0,
+    },
+  }),
+]
+
+export const todoListBlockFeature = (id: string) => [
+  ...basicBlockFeature,
+  Paragraph,
+  TaskList.configure({
+    HTMLAttributes: {
+      ['data-type-name']: 'block-content',
+      id,
+      tabIndex: 0,
+    },
+  }),
+  TaskItem.configure({
+    nested: true,
+  }),
+]
+
+export const listBlockFeature = (id: string) => [
+  ...basicBlockFeature,
+  Paragraph,
+  BulletList,
+  OrderedList.configure({
+    HTMLAttributes: {
+      ['data-type-name']: 'block-content',
+      id,
+      tabIndex: 0,
+    },
+  }),
+  ListItem.configure({
+    HTMLAttributes: {
+      ['data-type-name']: 'block-content',
+      id,
+      tabIndex: 0,
+    },
+  }),
+  ,
+]
+
+export const codeBlockFeature = (id: string) => [Document, Paragraph, Text]
+
+export const blockTypeSelector = (name: string, id: string) => {
   switch (name) {
     case BLOCK_SELECTOR[3].name:
       return {
-        feature: textBlockFeature(name),
+        feature: textBlockFeature(name, id),
         initContent: '<p></p>',
       }
     case BLOCK_SELECTOR[0].name:
       return {
-        feature: headingBlockFeature(name),
+        feature: headingBlockFeature(name, id),
         initContent: '<h1></h1>',
       }
     case BLOCK_SELECTOR[1].name:
       return {
-        feature: headingBlockFeature(name),
+        feature: headingBlockFeature(name, id),
         initContent: '<h2></h2>',
       }
     case BLOCK_SELECTOR[2].name:
       return {
-        feature: headingBlockFeature(name),
+        feature: headingBlockFeature(name, id),
         initContent: '<h3></h3>',
       }
     case BLOCK_SELECTOR[4].name:
       return {
-        feature: headingBlockFeature(name),
+        feature: headingBlockFeature(name, id),
         initContent: '<h4></h4>',
       }
     case BLOCK_SELECTOR[5].name:
       return {
-        feature: todoListBlockFeature,
+        feature: todoListBlockFeature(id),
         initContent: `<ul data-type="taskList">
         <li data-type="taskItem" data-checked="true"></li>
         <ul>`,
       }
     case BLOCK_SELECTOR[6].name:
       return {
-        feature: listBlockFeature,
+        feature: listBlockFeature(id),
         initContent: '<ul><li></li></ul>',
       }
     case BLOCK_SELECTOR[7].name:
       return {
-        feature: listBlockFeature,
+        feature: listBlockFeature(id),
         initContent: '<ol><li></li></ol>',
+      }
+    case BLOCK_SELECTOR[8].name:
+      return {
+        feature: codeBlockFeature(id),
+        initContent: '<pre><code class="language-html"></code></pre>',
       }
     default:
       return {
-        feature: listBlockFeature,
+        feature: listBlockFeature(id),
         initContent: '',
       }
   }

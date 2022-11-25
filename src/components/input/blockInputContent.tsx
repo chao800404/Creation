@@ -4,11 +4,33 @@ import { AddBlocknputWrapper } from './input.styles'
 import BlockInputWrapper from './blockInputWrapper'
 import { useBlocksStore } from '../../store/useBlocksStore'
 import shallow from 'zustand/shallow'
-import TextBlock from '../blocks/textBlock'
+import BaseBlock from '../blocks/baseBlock'
 import { blockContentFilter } from '../../utils/filterFile'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { BlockInputType } from '../../hook/type'
 import { useDebounce } from 'use-debounce'
+import CodeBlockContent from '../blocks/codeBlockContent'
+import { BLOCK_SELECTOR } from '../../utils/config'
+
+type BaseBlockType = {
+  blockData: BlockInputType['blockData']
+  className: string
+  isFocus: boolean
+  blockContentSet: (
+    blockContent: Omit<BlockInputType['blockData'], 'pageId'>
+  ) => void
+  isFocusSet: (foucs: boolean) => void
+}
+
+const BlockContent = ({ blockData, ...otherProps }: BaseBlockType) => {
+  switch (blockData.name) {
+    case BLOCK_SELECTOR[8].name:
+      return <CodeBlockContent blockData={blockData} {...otherProps} />
+
+    default:
+      return <BaseBlock blockData={blockData} {...otherProps} />
+  }
+}
 
 const BlockInputContent: React.FC<
   BlockInputType & {
@@ -138,14 +160,13 @@ const BlockInputContent: React.FC<
       blockIndex={blockIndex}
       blockDataSet={blockContentSet}
     >
-      <AddBlocknputWrapper
-        isFocus={document.activeElement === textareaRef.current}
-      >
+      <AddBlocknputWrapper isFocus={isFocus}>
         {isEmpty ? (
           <ReactTextareaAutosize
             placeholder={popupShow ? 'Type to filter' : "Type '/'for commands"}
             className="add_block-input"
             ref={textareaRef}
+            data-type-name="block-content"
             onKeyDown={handleKeyDownOnEnter}
             onChange={(e) => {
               filterBlocksMapSet(e.target.value.replace('/', ''))
@@ -155,11 +176,12 @@ const BlockInputContent: React.FC<
             onCompositionEnd={() => setCompositionEnd(true)}
           />
         ) : (
-          <TextBlock
+          <BlockContent
             blockData={blockContent}
             className="add_block-input"
             blockContentSet={blockContentSet}
             isFocus={isFocus}
+            isFocusSet={memoFocusSet}
           />
         )}
       </AddBlocknputWrapper>

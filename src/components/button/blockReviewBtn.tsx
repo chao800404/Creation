@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { BlockReviewBtnWrapper } from './button.styles'
+import { MdOutlineDragHandle } from 'react-icons/md'
 
 type BlockReviewBtnTyep = {
   name: string
@@ -14,7 +15,7 @@ const BlockReviewBtn: React.FC<BlockReviewBtnTyep> = ({
 }) => {
   return (
     <BlockReviewBtnWrapper
-      className="round_sm"
+      className="round_sm "
       id={id}
       isFocus={isFocus ? true : false}
       onClick={() => {
@@ -24,12 +25,16 @@ const BlockReviewBtn: React.FC<BlockReviewBtnTyep> = ({
         blocks.forEach((block) => {
           if (block.id === id) {
             block.focus()
-            block.scrollIntoView({ behavior: 'smooth' })
+            block.scrollIntoView({ behavior: 'smooth', block: 'center' })
           }
         })
       }}
     >
-      {name}
+      <span></span>
+      <span>{name}</span>
+      <span className="drag-icon">
+        <MdOutlineDragHandle color="inherit" />
+      </span>
     </BlockReviewBtnWrapper>
   )
 }

@@ -48,7 +48,7 @@ const DashboardMain = () => {
 
       const curElemeFocusPos = window.getSelection()?.focusOffset
       const focusContentLength =
-        focusBlock.lastChild?.lastChild?.textContent?.length
+        focusBlock.lastChild?.lastChild?.lastChild?.textContent?.length
 
       const selectElem = (index: number) => {
         const elemNext = elem?.querySelector(
@@ -58,7 +58,11 @@ const DashboardMain = () => {
         elemNext && elemNext.focus()
       }
 
-      if (curElemeFocusPos === focusContentLength || !focusContentLength) {
+      if (
+        curElemeFocusPos === focusContentLength ||
+        !focusContentLength ||
+        curElemeFocusPos === 0
+      ) {
         switch (e.key) {
           case 'ArrowDown':
             selectElem(index + 1)

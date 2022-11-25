@@ -73,10 +73,45 @@ export const BlockReviewBtnWrapper = styled('button').attrs<BlockReviewBtnTyep>(
   border: ${({ theme }) => `1px solid ${theme.colors.primary}`};
   position: relative;
   z-index: 12;
+  display: flex;
+  align-items: center;
+
+  & > span {
+    display: inline-block;
+    align-items: center;
+  }
+
+  & > span:nth-child(1) {
+    background-color: red;
+    flex: 1;
+  }
+
+  & > span:nth-child(2) {
+    flex: 3;
+  }
+
+  & > span:nth-child(3) {
+    flex: 1;
+    visibility: hidden;
+    opacity: 0;
+    & > svg {
+      width: 100%;
+    }
+  }
+
+  /* .drag-icon {
+    display: block;
+  } */
 
   &:hover {
     background-color: ${({ theme, isFocus }) =>
       isFocus ? theme.colors.primary : theme.colors.secondary};
+
+    & > span:nth-child(3) {
+      visibility: visible;
+      opacity: 1;
+      cursor: grab;
+    }
   }
 
   &:active {

@@ -82,11 +82,16 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
   return (
     <BlockInputBaseWrapper
       id={blockData.id}
-      onFocus={() => {
+      onFocusCapture={(e) => {
+        e.stopPropagation()
         focusBlockIdSet(blockData.id)
         focusSet(true)
       }}
-      onBlur={() => !isLeave && focusSet(false)}
+      onBlur={(e) => {
+        if (e.target.id !== 'code-language') {
+          !isLeave && focusSet(false)
+        }
+      }}
       tabIndex={0}
       animate={{ backgroundColor: isFocus ? '#f8f8f8' : '#ffffff' }}
       className={`p_m round_sm  ${popupShow ? 'popup-open' : ''}`}

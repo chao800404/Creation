@@ -23,3 +23,6 @@ export const phoneticNotationFilter = (word: string) => {
 
 export const rgbToHex = (r: number, g: number, b: number) =>
   '#' + [r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('')
+
+export const replaceClassName = (content: string, className: string) =>
+  content.replace(/class="(.*?)"/i, className)

@@ -9,6 +9,7 @@ import Spinner from '../../src/components/spinner/spinner'
 import { fetcher } from '../../src/utils/fetch'
 import { useCoverStore } from '../../src/store'
 import shallow from 'zustand/shallow'
+import Script from 'next/script'
 
 const Dashboard = () => {
   const coverImageMapSet = useCoverStore(
