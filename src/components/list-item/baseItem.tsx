@@ -21,14 +21,19 @@ const BaseItem: React.FC<BaseItemProps> = ({
 }) => {
   return (
     <BaseItemWrapper>
-      {icon && (
+      {icon ? (
         <div className="base_item-icon">
           <IconContainer color="inherit" icon={icon} />
         </div>
+      ) : (
+        <div className="base_item-icon"></div>
       )}
       {children}
       <p
-        style={{ width: `${width}px`, fontWeight: fontWeight }}
+        style={{
+          width: `${width}px`,
+          fontWeight: fontWeight,
+        }}
         className="base_item-header"
       >
         {text}

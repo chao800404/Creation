@@ -192,6 +192,32 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 
+  .tableWrapper {
+    padding: 0;
+    overflow-x: auto;
+    cursor: default!important;
+  
+
+
+    &::-webkit-scrollbar {
+      width: 100%;
+      height:.5rem;
+    }
+
+
+    &::-webkit-scrollbar-thumb {
+      background: #555;
+
+      &:hover {
+        background: #1c1c1c;
+      }
+    }
+  }
+
+  .resize-cursor {
+    cursor: ew-resize;
+    cursor: col-resize;
+  }
 
 
   .ProseMirror {
@@ -200,7 +226,7 @@ export const GlobalStyle = createGlobalStyle`
     h2.is-empty:first-child::before,
     h3.is-empty:first-child::before,
     p.is-empty:first-child::before
-     {
+    {
       content: attr(data-placeholder);
       position: absolute;
       top:50%;
@@ -226,82 +252,144 @@ export const GlobalStyle = createGlobalStyle`
 
 
     pre {
-    background: #0D0D0D;
-    color: #FFF;
-    font-family: 'JetBrainsMono', monospace;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-
-    code {
-      background: none;
-      color: inherit;
-      font-size: .9rem;
-      padding: 0;
-      line-height: 1.4;
-    }
-
-    .hljs-comment,
-    .hljs-quote {
-      color: #616161;
-    }
-
-    .hljs-variable,
-    .hljs-template-variable,
-    .hljs-attribute,
-    .hljs-tag,
-    .hljs-name,
-    .hljs-regexp,
-    .hljs-link,
-    .hljs-name,
-    .hljs-selector-id,
-    .hljs-selector-class {
-      color: #f98181;
-    }
-
-    .hljs-number,
-    .hljs-meta,
-    .hljs-built_in,
-    .hljs-builtin-name,
-    .hljs-literal,
-    .hljs-type,
-    .hljs-params {
-      color: #fbbc88;
-    }
-
-    .hljs-string,
-    .hljs-symbol,
-    .hljs-bullet {
-      color: #b9f18d;
-    }
-
-    .hljs-title,
-    .hljs-section {
-      color: #faf594;
-    }
-
-    .hljs-keyword,
-    .hljs-selector-tag {
-      color: #70cff8;
-    }
-
-    .hljs-emphasis {
-      font-style: italic;
-    }
-
-    .hljs-strong {
-      font-weight: 700;
-    }
+      background: #0D0D0D;
+      color: #FFF;
+      font-family: 'JetBrainsMono', monospace;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      code {
+        background: none;
+        color: inherit;
+        font-size: .9rem;
+        padding: 0;
+        line-height: 1.5;
+      }
   
+      .hljs-comment,
+      .hljs-quote {
+        color: #616161;
+      }
+  
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-attribute,
+      .hljs-tag,
+      .hljs-name,
+      .hljs-regexp,
+      .hljs-link,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: #f98181;
+      }
+  
+      .hljs-number,
+      .hljs-meta,
+      .hljs-built_in,
+      .hljs-builtin-name,
+      .hljs-literal,
+      .hljs-type,
+      .hljs-params {
+        color: #fbbc88;
+      }
+  
+      .hljs-string,
+      .hljs-symbol,
+      .hljs-bullet {
+        color: #b9f18d;
+      }
+  
+      .hljs-title,
+      .hljs-section {
+        color: #faf594;
+      }
+  
+      .hljs-keyword,
+      .hljs-selector-tag {
+        color: #70cff8;
+      }
+  
+      .hljs-emphasis {
+        font-style: italic;
+      }
+  
+      .hljs-strong {
+        font-weight: 700;
+      }
+
     }
 
 
+    table {
+    border-collapse: collapse;
+    margin: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
+      tr {
+        min-height: 2rem;
+      }    
+    
   
+      td,
+      th {
+        border: 2px solid #ced4da;
+        box-sizing: border-box;
+        width: 10rem;
+        padding: 3px 5px;
+        position: relative;
+        vertical-align: top;
+        cursor:text;
+        
+
+        > * {
+          margin-bottom: 0;
+        }
+
+        &:focus {
+          background: red;
+        }
+      }
+  
+      th {
+        background-color: #f1f3f5;
+        font-weight: bold;
+        text-align: left;
+      }
+  
+      .selectedCell:after {
+        background: rgba(87, 104, 93, 0.4);
+        content: "";
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        pointer-events: none;
+        position: absolute;
+        z-index: 2;
+      }
+
+      
+  
+      .column-resize-handle {
+        background-color: rgba(0,0,0,.5);
+        bottom: -2px;
+        position: absolute;
+        right: -2px;
+        pointer-events: none;
+        top: 0;
+        width: 4px;
+        cursor: ew-resize;
+        cursor: col-resize;
+      }
+
+    }
 
   
     hr {
-    border: none;
-    border-top: 2px solid rgba(#0D0D0D, 0.1);
-    margin: 2rem 0;
+      border: none;
+      border-top: 2px solid rgba(#0D0D0D, 0.1);
+      margin: 2rem 0;
     }
   
     
@@ -313,6 +401,7 @@ export const GlobalStyle = createGlobalStyle`
 
 type themeKey =
   | 'primary'
+  | 'primary_high'
   | 'secondary'
   | 'secondary_light'
   | 'secondary_dark'
@@ -329,6 +418,7 @@ declare module 'styled-components' {
 export const theme: DefaultTheme = {
   colors: {
     primary: '#1c1c1c',
+    primary_high: '#cccccc',
     secondary: '#f4f4f4',
     secondary_light: '#efefef',
     secondary_dark: '',

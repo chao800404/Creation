@@ -11,6 +11,7 @@ import { BlockInputType } from '../../hook/type'
 import { useDebounce } from 'use-debounce'
 import CodeBlockContent from '../blocks/codeBlockContent'
 import { BLOCK_SELECTOR } from '../../utils/config'
+import TableBlock from '../blocks/tableBlock'
 
 type BaseBlockType = {
   blockData: BlockInputType['blockData']
@@ -26,7 +27,8 @@ const BlockContent = ({ blockData, ...otherProps }: BaseBlockType) => {
   switch (blockData.name) {
     case BLOCK_SELECTOR[8].name:
       return <CodeBlockContent blockData={blockData} {...otherProps} />
-
+    case BLOCK_SELECTOR[4].name:
+      return <TableBlock blockData={blockData} {...otherProps} />
     default:
       return <BaseBlock blockData={blockData} {...otherProps} />
   }

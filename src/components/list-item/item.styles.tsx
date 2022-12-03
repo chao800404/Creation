@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
 export type BaseItem = {
@@ -71,9 +72,17 @@ export const ItemWrapper = styled('div').attrs<Item>((props) => {
   }
 `
 
-export const PopupItemWrapper = styled('div')`
+type PopupItemType = {
+  width: number
+}
+
+export const PopupItemWrapper = styled('div').attrs<PopupItemType>(
+  ({ width }) => width
+)<PopupItemType>`
   border-top: 1px solid;
   border-bottom: 1px solid;
+  font-size: 0.8rem;
+  width: ${({ width }) => `${width}rem`};
   border-color: ${({ theme }) => theme.colors.primary};
 
   &:hover {
@@ -128,7 +137,7 @@ export const WorkspaceItemWrapper = styled('div').attrs<WorkspaceItemWrapper>(
     color: ${({ color }) => color};
     cursor: pointer;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     background-color: ${({ backgroundColor }) => backgroundColor};
   }
 
@@ -156,5 +165,34 @@ export const UserPopupItemWrapper = styled('div')`
     font-size: inherit;
     color: ${({ theme }) => theme.colors.primary};
     font-weight: inherit;
+  }
+`
+
+export const GroupItemWrapper = styled(motion.div)`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.4rem 1fr 1rem;
+  padding: 0.4rem 0.2rem;
+  position: relative;
+  gap: 0.2rem;
+  z-index: 10;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary_high};
+  }
+
+  & > p {
+    font-size: 0.8rem;
+    align-self: center;
+  }
+
+  & > .grop_item-children {
+    position: absolute;
+    right: calc(-100% - 2rem);
+    z-index: -1;
+    background-color: ${({ theme }) => theme.colors.secondary};
+    padding: 0.3rem 0.5rem;
+    border: 2px solid ${({ theme }) => theme.colors.primary};
   }
 `

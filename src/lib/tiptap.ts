@@ -23,6 +23,11 @@ import css from 'highlight.js/lib/languages/css'
 import js from 'highlight.js/lib/languages/javascript'
 import ts from 'highlight.js/lib/languages/typescript'
 import html from 'highlight.js/lib/languages/xml'
+import Gapcursor from '@tiptap/extension-gapcursor'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
 
 import hljs from 'highlight.js'
 import { lowlight } from 'lowlight'
@@ -31,7 +36,28 @@ import { Editor, ReactNodeViewRenderer } from '@tiptap/react'
 import { ImBold, ImStrikethrough, ImUnderline } from 'react-icons/im'
 import { GoItalic } from 'react-icons/go'
 import { HiOutlineCode } from 'react-icons/hi'
-import { TbBlockquote } from 'react-icons/tb'
+import {
+  TbBlockquote,
+  TbColumnInsertLeft,
+  TbColumnInsertRight,
+  TbRowInsertBottom,
+  TbRowInsertTop,
+} from 'react-icons/tb'
+import { BiColumns, BiTrash } from 'react-icons/bi'
+import { RiLayoutColumnFill } from 'react-icons/ri'
+import {
+  MdInvertColors,
+  MdInvertColorsOff,
+  MdOutlineDeleteForever,
+} from 'react-icons/md'
+import {
+  AiOutlineInsertRowAbove,
+  AiOutlineInsertRowLeft,
+  AiOutlineMergeCells,
+  AiOutlineTable,
+} from 'react-icons/ai'
+import { BsTvFill } from 'react-icons/bs'
+import { chain } from 'lodash'
 
 const basicBlockFeature = [
   Document,
@@ -118,6 +144,18 @@ export const listBlockFeature = (id: string) => [
   ,
 ]
 
+export const tableBlockFeature = [
+  ...basicBlockFeature,
+  Paragraph,
+  Gapcursor,
+  Table.configure({
+    resizable: true,
+  }),
+  TableRow,
+  TableHeader,
+  TableCell,
+]
+
 export const codeBlockFeature = (id: string) => [Document, Paragraph, Text]
 
 export const blockTypeSelector = (name: string, id: string) => {
@@ -145,7 +183,24 @@ export const blockTypeSelector = (name: string, id: string) => {
     case BLOCK_SELECTOR[4].name:
       return {
         feature: headingBlockFeature(name, id),
-        initContent: '<h4></h4>',
+        initContent: `
+        <table>
+          <tbody>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+      </table>
+        `,
       }
     case BLOCK_SELECTOR[5].name:
       return {
@@ -219,5 +274,116 @@ export const TextPopupBtns = (editor: Editor) => ({
     disabled: !editor.can().chain().focus().toggleBlockquote().run(),
     className: editor.isActive('blockquote') ? 'is-active' : '',
     icon: TbBlockquote,
+  },
+})
+
+export const TableBlockBtns = (editor: Editor) => ({
+  toggleHeaderColumn: {
+    desc: 'Toggle_header_column',
+    onClick: () => editor.chain().focus().toggleHeaderColumn().run(),
+    disabled: !editor.can().toggleHeaderColumn(),
+    icon: RiLayoutColumnFill,
+  },
+  toggleHeaderRow: {
+    desc: 'Toggle_header_row',
+    onClick: () => editor.chain().focus().toggleHeaderRow().run(),
+    disabled: !editor.can().toggleHeaderRow(),
+    icon: BiColumns,
+  },
+  toggleHeaderCell: {
+    desc: 'Toggle_header_cell',
+    onClick: () => editor.chain().focus().toggleHeaderCell().run(),
+    disabled: !editor.can().toggleHeaderCell(),
+    icon: !editor.can().toggleHeaderCell().valueOf()
+      ? MdInvertColorsOff
+      : MdInvertColors,
+  },
+  addColumnBefore: {
+    desc: 'Add_column_before',
+    onClick: () => editor.chain().focus().addColumnBefore().run(),
+    disabled: !editor.can().addColumnBefore(),
+    icon: TbColumnInsertLeft,
+  },
+  addColumnAfter: {
+    desc: 'Add_column_after',
+    onClick: () => editor.chain().focus().addColumnAfter().run(),
+    disabled: !editor.can().addColumnAfter(),
+    icon: TbColumnInsertRight,
+  },
+  addRowBefore: {
+    desc: 'Add_row_before',
+    onClick: () => editor.chain().focus().addRowBefore().run(),
+    disabled: !editor.can().addRowBefore(),
+    icon: TbRowInsertTop,
+  },
+  addRowAfter: {
+    desc: 'Add_row_after',
+    onClick: () => editor.chain().focus().addRowAfter().run(),
+    disabled: !editor.can().addRowAfter(),
+    icon: TbRowInsertBottom,
+  },
+  mergeOrSplit: {
+    desc: 'MergeOrSplit',
+    onClick: () => editor.chain().focus().mergeOrSplit().run(),
+    disabled: !editor.can().mergeCells(),
+    icon: AiOutlineMergeCells,
+  },
+  deleteColumn: {
+    desc: 'Delete_column',
+    onClick: () => editor.chain().focus().deleteColumn().run(),
+    disabled: !editor.can().deleteColumn(),
+    icon: AiOutlineInsertRowLeft,
+  },
+  deleteRow: {
+    desc: 'Delete_row',
+    onClick: () => editor.chain().focus().deleteRow().run(),
+    disabled: !editor.can().deleteRow(),
+    icon: AiOutlineInsertRowAbove,
+  },
+  deleteTable: {
+    desc: 'Delete_table',
+    onClick: () => editor.chain().focus().deleteTable().run(),
+    disabled: !editor.can().deleteTable(),
+    icon: AiOutlineTable,
+  },
+})
+
+export const TableBlockBtnsS = (editor: Editor) => ({
+  addHeader: {
+    desc: 'Add_Header',
+    children: [
+      TableBlockBtns(editor).toggleHeaderColumn,
+      TableBlockBtns(editor).toggleHeaderRow,
+    ],
+  },
+  addColumn: {
+    desc: 'Add_column',
+    children: [
+      TableBlockBtns(editor).addColumnAfter,
+      TableBlockBtns(editor).addColumnBefore,
+    ],
+  },
+  toggleHeaderCell: {
+    ...TableBlockBtns(editor).toggleHeaderCell,
+  },
+  addRow: {
+    desc: 'Add_row',
+    children: [
+      TableBlockBtns(editor).addRowAfter,
+      TableBlockBtns(editor).addRowBefore,
+    ],
+  },
+  mergeOrSplit: {
+    ...TableBlockBtns(editor).mergeOrSplit,
+    desc: editor.can().splitCell() ? 'Split' : 'Merge',
+  },
+  delete: {
+    desc: 'Delete',
+    icon: BiTrash,
+    children: [
+      TableBlockBtns(editor).deleteColumn,
+      TableBlockBtns(editor).deleteRow,
+      TableBlockBtns(editor).deleteTable,
+    ],
   },
 })

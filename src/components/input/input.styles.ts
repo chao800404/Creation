@@ -22,7 +22,15 @@ export const InputWrapper = styled('div')`
   }
 `
 
-export const BlockInputBaseWrapper = styled(motion.div)`
+type BlockInputBaseType = {
+  overThenWindowMiddleH: boolean
+}
+
+export const BlockInputBaseWrapper = styled(
+  motion.div
+).attrs<BlockInputBaseType>(
+  ({ overThenWindowMiddleH }) => overThenWindowMiddleH
+)<BlockInputBaseType>`
   width: 100%;
   position: relative;
 
@@ -50,7 +58,8 @@ export const BlockInputBaseWrapper = styled(motion.div)`
     left: 0;
     width: fit-content;
     z-index: 300;
-    bottom: -20.5rem;
+    bottom: ${({ overThenWindowMiddleH }) =>
+      overThenWindowMiddleH ? '4.5rem' : ' -20.5rem'};
   }
 `
 
@@ -64,10 +73,6 @@ export const AddBlocknputWrapper = styled('div').attrs<AddBlocknputWrapperTyep>(
   position: relative;
   min-height: 28px;
   height: auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  cursor: text;
 
   .add_block-input {
     font-size: 1.1rem;

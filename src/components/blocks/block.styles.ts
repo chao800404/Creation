@@ -51,3 +51,8 @@ export const CodeBlockWrapper = styled.div`
     }
   }
 `
+
+export const TableBlockWrapper = styled.div`
+  width: 100%;
+  position: relative;
+`

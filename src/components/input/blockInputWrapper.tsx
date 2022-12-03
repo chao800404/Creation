@@ -45,6 +45,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
   blockDataSet,
 }) => {
   const [focusIndex, setFocusIndex] = useState(0)
+  const [overThenWindowMiddleH, setOverThenWindowMiddleH] = useState(false)
   const { blocksMapSet } = useBlocksStore(
     (state) => ({
       blocksMapSet: state.blocksMapSet,
@@ -74,6 +75,14 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
     blocksMapSet(BLOCK_SELECTOR)
   }, [blocksMapSet])
 
+  useEffect(() => {
+    const rect = elemRef.current?.getBoundingClientRect()
+    if (rect && popupShow) {
+      const { y } = rect
+      setOverThenWindowMiddleH(y >= window.innerHeight / 2)
+    }
+  }, [popupShow])
+
   const memoFocusIndexSet = useCallback(
     (index: React.SetStateAction<number>) => setFocusIndex(index),
     []
@@ -81,6 +90,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
 
   return (
     <BlockInputBaseWrapper
+      overThenWindowMiddleH={overThenWindowMiddleH}
       id={blockData.id}
       onFocusCapture={(e) => {
         e.stopPropagation()

@@ -4,15 +4,26 @@ import { IconType } from 'react-icons'
 import { PopupItemWrapper } from './item.styles'
 
 type PopupItemTyep = {
-  icon: IconType
+  icon: IconType | undefined
+  width: number
   desc: string
-  color?: string
-  onClick: () => void
+  dataType: string
+  onClick?: (() => void) | boolean
 }
 
-const PopupItem: React.FC<PopupItemTyep> = ({ icon, color, desc, onClick }) => {
+const PopupItem: React.FC<PopupItemTyep> = ({
+  icon,
+  dataType,
+  desc,
+  onClick,
+  width,
+}) => {
   return (
-    <PopupItemWrapper onClick={onClick}>
+    <PopupItemWrapper
+      width={width}
+      data-type={dataType}
+      onClick={onClick as () => void}
+    >
       <div className="container">
         <BaseItem fontSize=".8rem" text={desc} icon={icon} />
       </div>

@@ -9,7 +9,7 @@ import Spinner from '../../src/components/spinner/spinner'
 import { fetcher } from '../../src/utils/fetch'
 import { useCoverStore } from '../../src/store'
 import shallow from 'zustand/shallow'
-import Script from 'next/script'
+import { MenuPopup } from '../../src/components/popup/menuPopup'
 
 const Dashboard = () => {
   const coverImageMapSet = useCoverStore(
@@ -42,6 +42,7 @@ const Dashboard = () => {
         <link rel="icon" href={emoji ? emoji : '/favicon.ico'} />
       </Head>
 
+      <MenuPopup />
       <DashboardLayout>
         <DashboardMain />
       </DashboardLayout>

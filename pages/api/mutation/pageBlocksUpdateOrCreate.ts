@@ -5,7 +5,7 @@ import validateUser from '../../../src/utils/validate'
 import { BlockHTML } from '@prisma/client'
 
 // type MySchema = z.infer<typeof MySchema>
-const keyEnum = ['text', 'list', 'code'] as const
+const keyEnum = ['text', 'list', 'code', 'table'] as const
 
 const MySchema = z.object({
   page_id: z.string().cuid({ message: 'Please provide correct ID' }),

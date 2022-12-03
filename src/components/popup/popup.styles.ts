@@ -70,14 +70,14 @@ export const SearchPopupWrapper = styled('div')`
 
 export const WorkspaceItemPopupWrapper = styled(motion.div)`
   position: absolute;
-  width: 9.5rem;
+  width: auto;
   height: auto;
   border-radius: 0.3rem;
   background: #f4f4f4;
   box-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.2);
   border: 2px solid ${({ theme }) => theme.colors.primary};
   z-index: 10001;
-  padding: 1px;
+  padding: 0.3rem 0.5rem;
 `
 
 export const UserPopupWrapper = styled(motion.div)`
@@ -424,4 +424,16 @@ export const ColorPickerWrapper = styled.div.attrs<ColorPickerWrapperType>(
   .color-picker-content {
     width: auto;
   }
+`
+
+export const MenuPopupWrapper = styled.div`
+  position: absolute;
+  width: 9.5rem;
+  height: auto;
+  border-radius: 0.3rem;
+  background: #f4f4f4;
+  box-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.2);
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+  z-index: 10001;
+  padding: 1px;
 `
