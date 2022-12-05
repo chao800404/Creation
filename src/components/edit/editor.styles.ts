@@ -20,7 +20,6 @@ export const HeaderEditorSWrapper = styled('div').attrs<HeaderEditorType>(
 
   &:hover {
     .headierEditor_popup {
-      opacity: ${({ popupOpen }) => (popupOpen ? 0 : 1)};
       transition: 0.5s ease-out;
     }
   }

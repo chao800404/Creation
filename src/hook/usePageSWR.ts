@@ -194,10 +194,10 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
       const filterBlock = produce<PageResDataType>(data, (draft) => {
         draft.data.blocks = data.data.blocks.filter((block) => block.id !== id)
         draft.data.blockToOrder = newBlockToOder
-        draft.data.blocks[index - 1] = {
-          ...data.data.blocks[index - 1],
-          focus: true,
-        }
+        // draft.data.blocks[index - 1] = {
+        //   ...data.data.blocks[index - 1],
+        //   focus: true,
+        // }
       })
       mutate<PageResDataType>(
         `/api/page/${pageId}`,

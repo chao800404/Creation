@@ -90,7 +90,6 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
 
   return (
     <BlockInputBaseWrapper
-      overThenWindowMiddleH={overThenWindowMiddleH}
       id={blockData.id}
       onFocusCapture={(e) => {
         e.stopPropagation()
@@ -127,8 +126,9 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
             initial={animate(1)}
             animate={animate(1.05)}
             exit={animate(0.95)}
-            className={`add_block-popup`}
+            className="add_block-popup"
             data-type="block-add-popup"
+            style={{ bottom: overThenWindowMiddleH ? '4.5rem' : ' -20.5rem' }}
           >
             <ChangePopup
               tabs={['All', 'Basic', 'Table']}

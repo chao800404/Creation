@@ -36,18 +36,17 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
 
   const block = blocksMap[focusIndex]
   const [keyonStart, keyonStartSet] = useState(false)
-  const { page } = useRouter().query
-  const {
-    mutateFunction: { updateBlock },
-  } = usePageSWR((page && page[0]) || '')
 
-  const createNewBlockContent = (block: BlockSelectorType) => {
-    return {
-      name: block.name,
-      content: blockTypeSelector(block.name).initContent,
-      type: block.type,
-    }
-  }
+  const createNewBlockContent = useCallback(
+    (block: BlockSelectorType) => {
+      return {
+        name: block.name,
+        content: blockTypeSelector(block.name, id).initContent,
+        type: block.type,
+      }
+    },
+    [id]
+  )
 
   useEffect(() => {
     const blockMapContent = filterBlocks.length > 0 ? filterBlocks : blocksMap
@@ -85,6 +84,7 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
     blockData,
     blockDataSet,
     blocksMap,
+    createNewBlockContent,
     filterBlocks,
     focusIndex,
     focusIndexSet,
@@ -110,14 +110,16 @@ const SelectBlockContainer: React.FC<SelectBlockContainerType> = ({
               ...createNewBlockContent(block),
             })
           }
-          tabIndex={index}
+          tabIndex={0}
+          data-index={index}
           style={{
             backgroundColor: index === focusIndex ? '#efefef' : 'rgba(0,0,0,0)',
           }}
           onMouseEnter={(e) => {
             if (!keyonStart) {
-              const targetIndex = e.currentTarget.tabIndex
-              focusIndexSet(targetIndex)
+              e.preventDefault()
+              const targetIndex = e.currentTarget.getAttribute('data-index')
+              focusIndexSet(Number(targetIndex))
             }
           }}
         >

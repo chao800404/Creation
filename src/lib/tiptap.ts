@@ -12,13 +12,12 @@ import TextStyle from '@tiptap/extension-text-style'
 import Underline from '@tiptap/extension-underline'
 import Heading from '@tiptap/extension-heading'
 import Placeholder from '@tiptap/extension-placeholder'
-import HardBreak from '@tiptap/extension-hard-break'
 import ListItem from '@tiptap/extension-list-item'
 import OrderedList from '@tiptap/extension-ordered-list'
 import BulletList from '@tiptap/extension-bullet-list'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import Link from '@tiptap/extension-link'
 import css from 'highlight.js/lib/languages/css'
 import js from 'highlight.js/lib/languages/javascript'
 import ts from 'highlight.js/lib/languages/typescript'
@@ -28,8 +27,6 @@ import Table from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
-
-import hljs from 'highlight.js'
 import { lowlight } from 'lowlight'
 import { BLOCK_SELECTOR } from '../utils/config'
 import { Editor, ReactNodeViewRenderer } from '@tiptap/react'
@@ -45,19 +42,14 @@ import {
 } from 'react-icons/tb'
 import { BiColumns, BiTrash } from 'react-icons/bi'
 import { RiLayoutColumnFill } from 'react-icons/ri'
-import {
-  MdInvertColors,
-  MdInvertColorsOff,
-  MdOutlineDeleteForever,
-} from 'react-icons/md'
+import { MdInvertColors, MdInvertColorsOff, MdLink } from 'react-icons/md'
 import {
   AiOutlineInsertRowAbove,
   AiOutlineInsertRowLeft,
   AiOutlineMergeCells,
   AiOutlineTable,
 } from 'react-icons/ai'
-import { BsTvFill } from 'react-icons/bs'
-import { chain } from 'lodash'
+import NextLink from 'next/link'
 
 const basicBlockFeature = [
   Document,
@@ -70,6 +62,7 @@ const basicBlockFeature = [
   TextStyle,
   Underline,
   Text,
+  Link,
   History.configure({ depth: 10 }),
 ]
 
@@ -233,6 +226,32 @@ export const blockTypeSelector = (name: string, id: string) => {
 }
 
 export const TextPopupBtns = (editor: Editor) => ({
+  // link: {
+  //   name: 'link',
+  //   onClick: () => {
+  //     const previousUrl = editor.getAttributes('link').href
+  //     const url = window.prompt('URL', previousUrl)
+
+  //     if (url === null) {
+  //       return
+  //     }
+
+  //     if (url === '') {
+  //       editor.chain().focus().extendMarkRange('link').unsetLink().run()
+  //       return
+  //     }
+
+  //     return editor
+  //       .chain()
+  //       .focus()
+  //       .extendMarkRange('link')
+  //       .setLink({ href: url, target: null as unknown as undefined })
+  //       .run()
+  //   },
+  //   disabled: !editor.can().chain().focus().toggleBold().run(),
+  //   className: editor.isActive('link') ? 'is-active' : '',
+  //   icon: MdLink,
+  // },
   bold: {
     name: 'bold',
     onClick: () => editor.chain().focus().toggleBold().run(),

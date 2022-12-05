@@ -9,7 +9,7 @@ import { ColorPickerWrapper } from './popup.styles'
 
 type BlockMunuBtn = {
   name: string
-  onClick: () => boolean
+  onClick: () => boolean | '' | null | undefined
   disabled: boolean
   className: string
   icon: IconType
@@ -79,7 +79,6 @@ const BlockPopup = ({
   const [displayColor, setDisplayColor] = useState(
     (editor && editor.getAttributes('textStyle').color) || ''
   )
-  const [isOverThenMiddleWindow, setIsOverThenMiddleWindow] = useState(false)
 
   useEffect(() => {
     editor && editor.chain().focus().setColor(color).run()
@@ -106,7 +105,7 @@ const BlockPopup = ({
     <div
       onClick={() => {
         const { y } = elemRef.current?.getBoundingClientRect() as DOMRect
-        setIsOverThenMiddleWindow(y > window.innerHeight / 3)
+
         editor.chain().focus().run()
       }}
       ref={elemRef}
@@ -120,10 +119,7 @@ const BlockPopup = ({
       />
 
       {toggle && (
-        <ColorPickerWrapper
-          id="color-picker"
-          isOverThenMiddleWindow={isOverThenMiddleWindow}
-        >
+        <ColorPickerWrapper id="color-picker">
           <HexAlphaColorPicker
             className="color-picker-content"
             color={displayColor}

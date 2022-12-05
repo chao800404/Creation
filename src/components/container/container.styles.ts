@@ -49,7 +49,7 @@ export const DashboardContainerWrapper = styled('main')`
   }
 
   .dashboard_footer {
-    width: 100%;
+    width: inherit;
     height: 3.1rem;
     border-top: 2px solid;
     bottom: 0;

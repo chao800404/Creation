@@ -12,6 +12,7 @@ import {
 } from 'react-icons/hi'
 import { BsFillGridFill, BsCaretRightFill } from 'react-icons/bs'
 import { TbGridDots } from 'react-icons/tb'
+import { StatusType } from '../store'
 
 const SIDE_MAX_WIDTH = 450
 const SIDE_MIN_WIDTH = 250
@@ -141,3 +142,33 @@ export const BLOCK_SELECTOR: BlockSelectorType[] = [
     image: '/static/blocks/code.png',
   },
 ]
+
+export const STATUS_CONFIG = (status: StatusType) => {
+  switch (status) {
+    case 'success':
+      return {
+        color: '#00CB6A',
+        desc: status,
+      }
+    case 'error':
+      return {
+        color: '#CB0000',
+        desc: status,
+      }
+    case 'normal':
+      return {
+        color: '#00BFCB',
+        desc: status,
+      }
+    case 'pending':
+      return {
+        color: '#CB9200',
+        desc: status,
+      }
+    default:
+      return {
+        color: '#CB0000',
+        desc: status,
+      }
+  }
+}

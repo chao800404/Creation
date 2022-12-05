@@ -22,15 +22,7 @@ export const InputWrapper = styled('div')`
   }
 `
 
-type BlockInputBaseType = {
-  overThenWindowMiddleH: boolean
-}
-
-export const BlockInputBaseWrapper = styled(
-  motion.div
-).attrs<BlockInputBaseType>(
-  ({ overThenWindowMiddleH }) => overThenWindowMiddleH
-)<BlockInputBaseType>`
+export const BlockInputBaseWrapper = styled(motion.div)`
   width: 100%;
   position: relative;
 
@@ -58,8 +50,6 @@ export const BlockInputBaseWrapper = styled(
     left: 0;
     width: fit-content;
     z-index: 300;
-    bottom: ${({ overThenWindowMiddleH }) =>
-      overThenWindowMiddleH ? '4.5rem' : ' -20.5rem'};
   }
 `
 

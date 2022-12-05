@@ -35,7 +35,10 @@ export const BlockCodeComponent = ({
 }: NodeViewProps) => {
   return (
     <NodeViewWrapper as={CodeBlockWrapper}>
-      <div className="code-block-option center round_sm">
+      <div
+        className="code-block-option center round_sm"
+        contentEditable={false}
+      >
         <FiCopy
           onClick={() => navigator.clipboard.writeText(editor.getText())}
           className="code-copy-btn"

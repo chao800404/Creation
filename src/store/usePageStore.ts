@@ -1,6 +1,8 @@
 import create from 'zustand'
 import produce from 'immer'
 
+export type StatusType = 'success' | 'error' | 'pending' | 'normal' | undefined
+
 type InitialPageStore = {
   focusId: string
   focusBlockId: string

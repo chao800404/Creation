@@ -1,16 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  EditorContent,
-  useEditor,
-  BubbleMenu,
-  EditorEvents,
-  Extensions,
-} from '@tiptap/react'
-import React, { useEffect } from 'react'
+import { EditorContent, useEditor, BubbleMenu, Extensions } from '@tiptap/react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import BlockPopup from '../popup/blockPopup'
 import { TextPopupBtns } from '../../lib/tiptap'
 import * as blockFeatures from '../../lib/tiptap'
 import { BlockInputType } from '../../hook/type'
+import { HexAlphaColorPicker } from 'react-colorful'
+import BubblePopup from '../popup/bubblePopup'
 
 type BaseBlockType = {
   blockData: BlockInputType['blockData']
@@ -33,15 +29,13 @@ const BaseBlock: React.FC<BaseBlockType> = ({
   )
 
   const editor = useEditor({
-    extensions: feature as Extensions,
+    extensions: [...feature] as Extensions,
     autofocus: true,
     onCreate: ({ editor }) => {
       editor.commands.focus('end')
     },
     content: blockData.content,
   })
-
-  // console.log(document.activeElement)
 
   // useEffect(() => {
   //   const focus = editor?.isFocused
@@ -68,17 +62,23 @@ const BaseBlock: React.FC<BaseBlockType> = ({
 
   return (
     <div className={className}>
-      <BubbleMenu tippyOptions={{ duration: 100 }} editor={editor}>
-        <BlockPopup
+      <BubbleMenu
+        tippyOptions={{ duration: 100 }}
+        pluginKey="bubbleMenuOne"
+        editor={editor}
+      >
+        <BubblePopup
           editor={editor}
           blockMenuBtns={Object.values(TextPopupBtns(editor))}
         />
       </BubbleMenu>
+
       <EditorContent
         editor={editor}
         data-name={blockData.name}
         id={blockData?.id}
       />
+      {/* <SecondBubble {...secondBubble} /> */}
     </div>
   )
 }

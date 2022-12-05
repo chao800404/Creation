@@ -12,6 +12,7 @@ import { useDebounce } from 'use-debounce'
 import CodeBlockContent from '../blocks/codeBlockContent'
 import { BLOCK_SELECTOR } from '../../utils/config'
 import TableBlock from '../blocks/tableBlock'
+import { useStatusStore } from '../../../src/store/useStatusStore'
 
 type BaseBlockType = {
   blockData: BlockInputType['blockData']
@@ -58,6 +59,7 @@ const BlockInputContent: React.FC<
   const [compositionEnd, setCompositionEnd] = useState(true)
   const [popupShow, setPopupShow] = useState(!!newBlock.current)
   const [isFocus, setIsFocus] = useState(!!blockData?.focus || false)
+  const setStatus = useStatusStore((state) => state.statusSet, shallow)
 
   const {
     mutateFunction: { deleteBlock },
@@ -103,8 +105,10 @@ const BlockInputContent: React.FC<
 
   const blockContentSet = useCallback(
     (blockContent: Omit<BlockInputType['blockData'], 'pageId'>) => {
+      setStatus('pending', '')
       setBlockContent((prevContent) => ({ ...prevContent, ...blockContent }))
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   )
 

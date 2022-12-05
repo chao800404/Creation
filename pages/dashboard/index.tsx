@@ -10,6 +10,7 @@ import { fetcher } from '../../src/utils/fetch'
 import { useCoverStore } from '../../src/store'
 import shallow from 'zustand/shallow'
 import { MenuPopup } from '../../src/components/popup/menuPopup'
+import { useStatusStore } from '../../src/store/useStatusStore'
 
 const Dashboard = () => {
   const coverImageMapSet = useCoverStore(

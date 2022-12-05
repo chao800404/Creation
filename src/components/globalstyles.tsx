@@ -45,9 +45,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   a,a:active,a:focus {
-    text-decoration: none;
-    outline:none;
     color: #1c1c1c;
+    cursor: pointer;
   }
   
   button,select,li,ul:focus,div:focus-visible {
@@ -221,6 +220,11 @@ export const GlobalStyle = createGlobalStyle`
 
 
   .ProseMirror {
+    p,h1,h2,h3,h4,h5,h6,div{
+      outline: none;
+      border: none;
+    }
+
 
     h1.is-empty:first-child::before,
     h2.is-empty:first-child::before,
@@ -234,6 +238,7 @@ export const GlobalStyle = createGlobalStyle`
       color: #efefef;
       width: 100%;
       pointer-events: none;
+    
     }
 
     h1.is-empty:first-child::before {

@@ -8,6 +8,7 @@ import BlockInputContent from '../input/blockInputContent'
 import dynamic from 'next/dynamic'
 import React, { Suspense, useEffect, useRef } from 'react'
 import { sortPageBlock } from '../../utils/sortPageBlock'
+
 const DynamicDashboardBanner = dynamic(
   () => import('../banner/dashboardBanner'),
   {

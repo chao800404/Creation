@@ -7,6 +7,7 @@ import { tableBlockFeature } from '../../lib/tiptap'
 import BlockPopup from '../popup/blockPopup'
 import { ButtonMapType } from '../../store/useMenuPopupStore'
 import { BlockInputType } from '../../hook/type'
+import BubblePopup from '../popup/bubblePopup'
 
 type BaseBlockType = {
   blockData: BlockInputType['blockData']
@@ -78,7 +79,7 @@ const TableBlock: React.FC<BaseBlockType> = ({
       onPointerDown={handleOnPointerDown}
     >
       <BubbleMenu tippyOptions={{ duration: 100 }} editor={editor}>
-        <BlockPopup
+        <BubblePopup
           editor={editor}
           blockMenuBtns={Object.values(TextPopupBtns(editor))}
         />

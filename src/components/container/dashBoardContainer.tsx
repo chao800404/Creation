@@ -6,6 +6,7 @@ import { DashboardContainerWrapper } from './container.styles'
 import BoundLine from '../line/boundLine'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import BlockReviewContainer from '../container/blockReviewContainer'
+import DashboardFooter from '../footer/dashboardFooter'
 
 const DashBoardContainr = ({ children }: { children: ReactNode }) => {
   const sideWidth = usePageControllerStore((state) => state.sideWidth, shallow)
@@ -71,7 +72,9 @@ const DashBoardContainr = ({ children }: { children: ReactNode }) => {
         </div>
       </div>
 
-      <div className="dashboard_footer">Footer</div>
+      <footer className="dashboard_footer">
+        <DashboardFooter />
+      </footer>
     </DashboardContainerWrapper>
   )
 }

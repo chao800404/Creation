@@ -373,6 +373,7 @@ export const BlockPopupWrapper = styled('div')`
   font-size: 0.8rem;
   padding: 0.5rem 0;
   border-radius: 5px;
+  position: relative;
 
   button.is-active {
     color: #ffffff;
@@ -401,28 +402,39 @@ export const BlockPopupWrapper = styled('div')`
       color: #ffffff;
     }
   }
+
+  & > .bubble {
+    position: absolute;
+  }
 `
 
-type ColorPickerWrapperType = {
-  isOverThenMiddleWindow?: boolean
-}
+export const SecondBubbleWrapper = styled.div`
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 0.7rem;
+  width: 16.5rem;
+  background-color: ${({ theme }) => theme.colors.white};
 
-export const ColorPickerWrapper = styled.div.attrs<ColorPickerWrapperType>(
-  (props) => ({
-    isOverThenMiddleWindow: props.isOverThenMiddleWindow,
-  })
-)<ColorPickerWrapperType>`
-  position: absolute;
-  top: ${({ isOverThenMiddleWindow }) =>
-    isOverThenMiddleWindow ? '-13rem' : '2.5rem'};
-  /* right: -10rem; */
-  width: 100%;
-  outline: 2px solid ${({ theme }) => theme.colors.primary};
-  border-radius: 6px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  .color-picker {
+    width: 100%;
+    height: 10rem;
+    cursor: pointer;
+  }
 
-  .color-picker-content {
-    width: auto;
+  & > input {
+    height: 2rem;
+    margin: 0.5rem;
+    font-size: 0.8rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  & > button {
+    width: 4.5rem;
+    height: 2rem;
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.white};
   }
 `
 
