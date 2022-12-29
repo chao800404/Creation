@@ -11,7 +11,6 @@ import { BLOCK_SELECTOR } from '../../utils/config'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { BlockInputType } from '../../hook/type'
-import { usePageStore } from '../../store'
 
 type BlockInputWrapperType = {
   isEmpty: boolean
@@ -59,10 +58,10 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
   } = usePageSWR((page && page[0]) || '')
 
   const elemRef = useRef<HTMLDivElement | null>(null)
-  const focusBlockIdSet = usePageStore(
-    (state) => state.focusBlockIdSet,
-    shallow
-  )
+  // const focusBlockIdSet = usePageStore(
+  //   (state) => state.focusBlockIdSet,
+  //   shallow
+  // )
 
   const { isLeave } = useOnClickOutside((e) => {
     const target = (e.target as HTMLElement).closest(
@@ -93,7 +92,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
       id={blockData.id}
       onFocusCapture={(e) => {
         e.stopPropagation()
-        focusBlockIdSet(blockData.id)
+        // focusBlockIdSet(blockData.id)
         focusSet(true)
       }}
       onBlur={(e) => {
@@ -102,7 +101,7 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
         }
       }}
       tabIndex={0}
-      animate={{ backgroundColor: isFocus ? '#f8f8f8' : '#ffffff' }}
+      // animate={{ backgroundColor: isFocus ? '#f8f8f8' : '#ffffff' }}
       className={`p_m round_sm  ${popupShow ? 'popup-open' : ''}`}
       data-type="block-content"
       ref={elemRef}

@@ -19,7 +19,14 @@ const showMenuPopup = ({
 }
 
 const hiddenMenuPopup = () => {
-  showSet({ show: false, x: 0, y: 0, buttonsMap: null, dataType: '', width: 0 })
+  showSet({
+    show: false,
+    x: 0,
+    y: 0,
+    buttonsMap: null,
+    dataType: '',
+    width: 0,
+  })
 }
 
 const MenuPopup = () => {
@@ -39,7 +46,7 @@ const MenuPopup = () => {
     const target = (e.target as HTMLElement).closest(
       `[data-type="${dataType}"]`
     )
-    if (!target) hiddenMenuPopup()
+    if (!target && show) return hiddenMenuPopup()
   })
 
   return (
@@ -70,8 +77,8 @@ const MenuPopup = () => {
                   key={index}
                   desc={button.desc.replaceAll('_', ' ')}
                   icon={button.icon}
-                  onClick={() => {
-                    if (button.onClick) button.onClick()
+                  onClick={(e) => {
+                    if (button.onClick) button.onClick(e)
                     hiddenMenuPopup()
                   }}
                   dataType={dataType}

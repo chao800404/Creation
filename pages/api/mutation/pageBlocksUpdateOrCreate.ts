@@ -46,7 +46,11 @@ export default async function handler(
             id: page_id,
           },
           data: {
-            blockToOrder,
+            pageConfig: {
+              update: {
+                blockToOrder,
+              },
+            },
             blockHTML: {
               upsert: {
                 where: {
@@ -90,7 +94,11 @@ export default async function handler(
             id: page_id,
           },
           data: {
-            blockToOrder,
+            pageConfig: {
+              update: {
+                blockToOrder,
+              },
+            },
             blockHTML: {
               delete: {
                 pageId_id: {

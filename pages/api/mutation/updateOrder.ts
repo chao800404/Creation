@@ -33,7 +33,11 @@ export default async function handler(
                   },
                 },
                 data: {
-                  blockToOrder: reorder,
+                  pageConfig: {
+                    update: {
+                      blockToOrder: reorder,
+                    },
+                  },
                 },
               },
             },

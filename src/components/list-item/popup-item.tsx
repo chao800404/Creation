@@ -8,7 +8,7 @@ type PopupItemTyep = {
   width: number
   desc: string
   dataType: string
-  onClick?: (() => void) | boolean
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
 
 const PopupItem: React.FC<PopupItemTyep> = ({
@@ -19,11 +19,7 @@ const PopupItem: React.FC<PopupItemTyep> = ({
   width,
 }) => {
   return (
-    <PopupItemWrapper
-      width={width}
-      data-type={dataType}
-      onClick={onClick as () => void}
-    >
+    <PopupItemWrapper width={width} data-type={dataType} onClick={onClick}>
       <div className="container">
         <BaseItem fontSize=".8rem" text={desc} icon={icon} />
       </div>

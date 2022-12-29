@@ -158,10 +158,10 @@ const BlockInputContent: React.FC<
   return (
     <BlockInputWrapper
       isEmpty={isEmpty}
-      popupShowSet={memoPopupShowSet}
-      popupShow={popupShow}
-      focusSet={memoFocusSet}
       isFocus={isFocus}
+      popupShow={popupShow}
+      popupShowSet={memoPopupShowSet}
+      focusSet={memoFocusSet}
       blockData={blockContent}
       blockIndex={blockIndex}
       blockDataSet={blockContentSet}
@@ -183,10 +183,10 @@ const BlockInputContent: React.FC<
           />
         ) : (
           <BlockContent
+            isFocus={isFocus}
             blockData={blockContent}
             className="add_block-input"
             blockContentSet={blockContentSet}
-            isFocus={isFocus}
             isFocusSet={memoFocusSet}
           />
         )}

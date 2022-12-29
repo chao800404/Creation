@@ -10,7 +10,7 @@ type AccordionType = {
   sideWidth?: number
   open?: boolean
   children?: JSX.Element
-  onClick?: () => void
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
   id?: string
 }
 
@@ -23,9 +23,12 @@ const Accordion: React.FC<AccordionType> = ({
   id,
 }) => {
   return (
-    <AccordionWrapper id={id} onClick={onClick}>
+    <AccordionWrapper id={id}>
       <BaseItem text={text} width={((sideWidth as number) * 45) / 100}>
-        <motion.div animate={{ rotate: open ? '90deg' : '0deg' }}>
+        <motion.div
+          onClick={onClick}
+          animate={{ rotate: open ? '90deg' : '0deg' }}
+        >
           <IconContainer icon={SIDE_OPTION.base.icon} />
         </motion.div>
         {children || <></>}

@@ -30,10 +30,10 @@ const BaseBlock: React.FC<BaseBlockType> = ({
 
   const editor = useEditor({
     extensions: [...feature] as Extensions,
-    autofocus: true,
-    onCreate: ({ editor }) => {
-      editor.commands.focus('end')
-    },
+    // autofocus: true,
+    // onCreate: ({ editor }) => {
+    //   editor.commands.focus('end')
+    // },
     content: blockData.content,
   })
 

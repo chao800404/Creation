@@ -30,6 +30,7 @@ export const DashboardMainWrapper = styled('div')<DashboardMain>`
       width: 100%;
       padding: 0 3rem;
       gap: 0.5rem;
+      background-color: ${({ theme }) => theme.colors.white};
 
       &-gap {
         height: ${({ hasCover }) => (hasCover ? '1.5rem' : '2.5rem')};

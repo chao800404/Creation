@@ -6,7 +6,7 @@ export const SearchBtnWrapper = styled.button`
   font-size: 0.8rem;
   font-weight: 600;
   width: 100%;
-  height: 2.5rem;
+  min-height: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,10 +36,18 @@ export const SearchBtnWrapper = styled.button`
   }
 `
 
-export const FeatureBtnWrapper = styled('button')`
+type FeatureBtnType = {
+  pd?: string
+}
+
+export const FeatureBtnWrapper = styled('button').attrs<FeatureBtnType>(
+  ({ pd }) => pd
+)<FeatureBtnType>`
   display: flex;
-  padding: 0.5rem 1rem;
   flex: 1;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: ${({ pd }) => pd};
 `
 
 export const EditorOptionButtonWrapper = styled('button')`

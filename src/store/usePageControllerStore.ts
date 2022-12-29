@@ -1,32 +1,39 @@
 import produce from 'immer'
+import { CSSProperties } from 'react'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
 type InitialPageController = {
   sideWidth: number
+  favoriteTagHeight: number
   dragStart: boolean
   favoriteTagOpen: boolean
   userPopupOpen: boolean
   dashboardMainWidth: number
   focusId: string | undefined
+  cursorType: CSSProperties['cursor']
 }
 
 type Action = {
   sideWidthSet: (x: number) => void
+  favoriteTagHeightSet: (y: number) => void
   favoriteTagToggle: (toggle: boolean) => void
   userPopupToggle: (toggle: boolean) => void
   dashboardMainWidthSet: (width: number) => void
   onDragSet: (toggle: boolean) => void
   focusIdSet: (id: string) => void
+  cursorTypeSet: (cursor: CSSProperties['cursor']) => void
 }
 
 const initialPageController = {
   sideWidth: 350,
+  favoriteTagHeight: 150,
   dashboardMainWidth: 1135,
   favoriteTagOpen: false,
   userPopupOpen: false,
   dragStart: false,
   focusId: undefined,
+  cursorType: 'default',
 }
 
 export const usePageControllerStore = create<InitialPageController & Action>()(
@@ -40,6 +47,14 @@ export const usePageControllerStore = create<InitialPageController & Action>()(
             state.dragStart = true
           })
         ),
+
+      favoriteTagHeightSet: (y) =>
+        set(
+          produce<InitialPageController>((state) => {
+            state.favoriteTagHeight = y
+          })
+        ),
+
       favoriteTagToggle: (toggle) =>
         set(
           produce<InitialPageController>((state) => {
@@ -74,12 +89,16 @@ export const usePageControllerStore = create<InitialPageController & Action>()(
           })
         )
       },
+      cursorTypeSet: (cursor) => {
+        set(
+          produce<InitialPageController>((state) => {
+            state.cursorType = cursor
+          })
+        )
+      },
     }),
     {
       name: 'page-controller',
     }
   )
 )
-
-process.env.NODE_ENV !== 'production' &&
-  usePageControllerStore.subscribe(console.log)

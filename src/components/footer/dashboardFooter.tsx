@@ -6,6 +6,7 @@ import { useStatusStore } from '../../../src/store/useStatusStore'
 import shallow from 'zustand/shallow'
 import { STATUS_CONFIG } from '../../utils/config'
 import ClipLoader from 'react-spinners/ClipLoader'
+import { AiOutlineFieldTime } from 'react-icons/ai'
 
 const DashboardFooter = () => {
   const { status, statusSet } = useStatusStore(
@@ -25,7 +26,12 @@ const DashboardFooter = () => {
 
   return (
     <DashboardFooterWrapper>
-      <div>fhefihei</div>
+      <div className="footer_user_info round_sm">
+        <span className="center">
+          <AiOutlineFieldTime color="inherit" />
+        </span>
+        <span>12min..</span>
+      </div>
       <motion.div
         whileTap={{ scale: 0.98, y: 1 }}
         className="footer_info round_sm"

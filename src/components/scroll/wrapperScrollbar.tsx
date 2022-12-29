@@ -1,10 +1,9 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react'
-import { ScrollbarProps, Scrollbars } from 'react-custom-scrollbars-2'
+import React, { ReactNode, useRef, useState } from 'react'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 import { motion } from 'framer-motion'
 import { usePageControllerStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { SrollWrappr } from './scroll.styles'
-import { isNumber } from 'lodash'
 
 const opacityMotion = {
   rest: {
@@ -27,24 +26,13 @@ const opacityMotion = {
 
 type WrapperScrollbarType = {
   children: ReactNode
-  isSide?: boolean
   scrollTop?: number
 }
 
-const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
-  children,
-  isSide = false,
-  scrollTop,
-}) => {
+const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({ children }) => {
   const dragStart = usePageControllerStore((state) => state.dragStart, shallow)
   const [isCeiling, setCeiling] = useState(true)
   const scrollElem = useRef<null | Scrollbars>(null)
-
-  useEffect(() => {
-    if (scrollElem && scrollElem.current && isNumber(scrollTop)) {
-      scrollElem.current.scrollTop(scrollTop)
-    }
-  }, [scrollTop])
 
   return (
     <SrollWrappr whileHover="hover" initial="rest">
@@ -83,7 +71,7 @@ const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
           )
         }}
         renderView={(props) => {
-          return isSide ? (
+          return (
             <motion.div
               {...props}
               className="view"
@@ -97,8 +85,6 @@ const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
                     }
               }
             />
-          ) : (
-            <motion.div {...props} className="view" />
           )
         }}
       >
@@ -108,4 +94,4 @@ const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
   )
 }
 
-export default WrapperScrollbar
+export default React.memo(WrapperScrollbar)

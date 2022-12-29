@@ -73,17 +73,12 @@ export const BlockCodeComponent = ({
 
 const CodeBlockContent: React.FC<BaseBlockType> = ({
   blockData,
-  className,
   blockContentSet,
-  isFocus,
-  isFocusSet,
 }) => {
   const { feature } = blockFeatures.blockTypeSelector(
     blockData.name,
     blockData.id
   )
-
-  const [open, setOpen] = useState(false)
 
   const editor = useEditor({
     extensions: [
@@ -96,10 +91,10 @@ const CodeBlockContent: React.FC<BaseBlockType> = ({
         lowlight,
       }),
     ] as Extensions,
-    autofocus: true,
-    onCreate: ({ editor }) => {
-      editor.commands.focus('end')
-    },
+    // autofocus: true,
+    // onCreate: ({ editor }) => {
+    //   editor.commands.focus('end')
+    // },
     content: blockData.content,
   })
 

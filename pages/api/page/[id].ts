@@ -6,6 +6,7 @@ import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
 
 type BlockType = 'id' | 'content' | 'name' | 'type'
+type SortBlocksType = Record<string, Record<BlockType, string>>
 
 export default async function getUserData(
   req: NextApiRequest,
@@ -34,22 +35,33 @@ export default async function getUserData(
               },
               orderBy: {},
             },
-            blockToOrder: true,
+            pageConfig: {
+              select: {
+                blockToOrder: true,
+              },
+            },
           },
         })
 
         if (!resData) throw new Error('You are not allowed to query these data')
 
-        const { userId, cover, blockToOrder, ...otherData } = resData
+        const { cover, pageConfig, blockHTML } = resData
 
-        const blocks = Object.values(otherData).flatMap((block) => block)
+        const blockHtmlMap = blockHTML.reduce((acc, next) => {
+          acc[next.id] = next
+          return acc
+        }, {} as SortBlocksType)
+
+        const sortBlocks = (pageConfig?.blockToOrder as [])?.map(
+          (id) => blockHtmlMap[id]
+        )
 
         res.status(200).json({
           status: 'success',
           data: {
             cover,
-            blocks,
-            blockToOrder,
+            blocks: sortBlocks,
+            blockToOrder: pageConfig?.blockToOrder,
           },
         })
       } catch (error) {

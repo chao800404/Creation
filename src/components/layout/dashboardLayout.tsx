@@ -1,36 +1,36 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import useOnClickOutside from '../../utils/useOnClickOutside'
+import React, { useCallback, useEffect } from 'react'
 
 import SearchBarBtn from '../button/searchBar-button'
-import FavoriteTag from '../tag/favoriteTag'
 import Accordion from '../accordion/accordion'
 import WorkspaceControl from '../control/workspaceControl'
-import SideContainer from '../container/sideContainer'
 import FeaturesBtn from '../button/featuresBtn'
 import { SIDE_OPTION } from '../../utils/config'
 import { DashboardLayoutWrapper } from './dashboard.styles'
-import dynamic from 'next/dynamic'
-import { ListDataType, useListSWR } from '../../hook/useListSWR'
-import { useRouter } from 'next/router'
+import { ResDataType, useListSWR } from '../../hook/useListSWR'
 import { IoTrashOutline } from 'react-icons/io5'
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import { MdOutlineDriveFileRenameOutline } from 'react-icons/md'
+import { hiddenMenuPopup } from '../../../src/components/popup/menuPopup'
+import { HandleRename } from '../drop/treeView/type'
+import DashBoardContainer from '../container/dashBoardContainer'
+import SideWrapper from '../side/sideWrapper'
+import router from 'next/router'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { getBackendOptions } from '@minoru/react-dnd-treeview'
+import { TreeView, FavoriteTag } from '../drop'
+import { MenuType } from './dashboard'
 
-import {
-  showMenuPopup,
-  hiddenMenuPopup,
-} from '../../../src/components/popup/menuPopup'
+// const DynamicSideWrapper = dynamic(() => import('../side/sideWrapper'), {
+//   ssr: false,
+// })
 
-const DynamicSideWrapper = dynamic(() => import('../side/sideWrapper'), {
-  ssr: false,
-})
-
-const DynamicDashBoardContainer = dynamic(
-  () => import('../container/dashBoardContainer'),
-  {
-    ssr: false,
-  }
-)
+// const DynamicDashBoardContainer = dynamic(
+//   () => import('../container/dashBoardContainer'),
+//   {
+//     ssr: false,
+//   }
+// )
 
 type DashboardLayoutType = {
   children: JSX.Element | JSX.Element[]
@@ -40,36 +40,33 @@ const { searchBarBtn, interfaces, workspaces, importFile, trash, newPage } =
   SIDE_OPTION
 
 const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
-  const router = useRouter()
   const { page } = router.query
   const id = (page && (page[0] as string)) || ''
+
   const {
-    data: { list, favorite },
+    data: { list },
     mutateFunction,
   } = useListSWR(id)
 
-  const findFavorite = (list: ListDataType[] | undefined, id: string) =>
-    list?.find((item) => item.id === id)?.favorite
-
-  const menuMap = useCallback(
-    (id: string) => [
+  const menuMap: MenuType<ResDataType, HandleRename> = useCallback(
+    (node, renameFn) => [
       {
         icon: IoTrashOutline,
         desc: 'Delete',
         onClick: () => {
-          const index = list?.findIndex((item) => item.id === id)
-          index && list
-            ? router.push(`dashboard/${list[index - 1].id}`)
-            : router.push('/')
-          mutateFunction.deletePage(id as string)
+          mutateFunction.deletePage(node.id as string)
           hiddenMenuPopup()
         },
       },
       {
-        icon: findFavorite(list, id) ? AiFillStar : AiOutlineStar,
-        desc: findFavorite(list, id) ? 'Unfavorite' : 'Favorite',
+        icon: node.data?.favorite ? AiFillStar : AiOutlineStar,
+        desc: node.data?.favorite ? 'Unfavorite' : 'Favorite',
         onClick: () => {
-          mutateFunction.updatePageItem(id, 'favorite', !findFavorite(list, id))
+          mutateFunction.updatePageConfig(
+            node.id as string,
+            'favorite',
+            !node.data?.favorite
+          )
           hiddenMenuPopup()
         },
       },
@@ -77,80 +74,62 @@ const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
         icon: MdOutlineDriveFileRenameOutline,
         desc: 'Rename',
         onClick: () => {
-          mutateFunction.updatePageItem(id, 'favorite', !favorite)
+          renameFn()
           hiddenMenuPopup()
         },
       },
     ],
-
-    [favorite, list, mutateFunction, router]
+    [mutateFunction]
   )
 
-  // useOnClickOutside((e) => {
-  //   const target = (e.target as HTMLElement).closest(
-  //     '[data-type="workspace-item-container"]'
-  //   )
-  //   const popupBtn = (e.target as HTMLElement).closest(
-  //     '[data-type="popup-btn"]'
-  //   )
-
-  //   if (target && e.button === 2) {
-  //     console.log('run')
-  //     return showMenuPopup({
-  //       x: e.pageX,
-  //       y: e.pageY,
-  //       buttonsMap: menuMap(target.id),
-  //       dataType: 'popup-btn',
-  //     })
-  //   }
-  //   return hiddenMenuPopup()
-  // })
+  if (!list) return null
 
   return (
-    <DashboardLayoutWrapper>
-      <DynamicSideWrapper
-        onPointerDown={(e) => {
-          const target = (e.target as HTMLElement).closest(
-            '[data-type="workspace-item-container"]'
-          )
+    <DndProvider
+      backend={HTML5Backend}
+      context={window}
+      options={getBackendOptions()}
+    >
+      <DashboardLayoutWrapper>
+        <SideWrapper>
+          <SearchBarBtn desc={searchBarBtn.text} />
+          <div className="dashboard_side-feature">
+            {list && (
+              <FavoriteTag
+                list={list}
+                id={id}
+                menuMap={menuMap}
+                updateFavorite={(id) =>
+                  mutateFunction.updatePageConfig(id, 'favorite', true)
+                }
+              />
+            )}
 
-          if (target && e.button === 2) {
-            return showMenuPopup({
-              x: e.pageX,
-              y: e.pageY,
-              buttonsMap: menuMap(target.id),
-              dataType: 'workspace-item-container',
-              width: 7.5,
-            })
-          }
-        }}
-      >
-        <SearchBarBtn desc={searchBarBtn.text} />
-        <div className="dashboard_side-feature">
-          {list && (
-            <FavoriteTag list={list?.filter((item) => item?.favorite)} />
-          )}
-
-          <div className="caption">
-            <Accordion text={interfaces.text} />
+            <div className="caption">
+              <Accordion text={interfaces.text} />
+            </div>
           </div>
-        </div>
 
-        <div className="dashboard_side_controller">
-          <WorkspaceControl text={workspaces.text} />
-        </div>
+          <div className="dashboard_side-controller">
+            <WorkspaceControl text={workspaces.text} />
+          </div>
+          <div className="dashboard_side-container">
+            {list && <TreeView list={list} id={id} menuMap={menuMap} />}
+          </div>
 
-        {list && <SideContainer list={list} height="100%" />}
+          <div className="dashboard_side-option">
+            <FeaturesBtn icon={importFile.icon} text={importFile.text} />
+            <FeaturesBtn icon={trash.icon} text={trash.text} />
+            <FeaturesBtn icon={newPage.icon} text={newPage.text} />
+          </div>
+        </SideWrapper>
 
-        <div className="dashboard_side-option">
-          <FeaturesBtn icon={importFile.icon} text={importFile.text} />
-          <FeaturesBtn icon={trash.icon} text={trash.text} />
-          <FeaturesBtn icon={newPage.icon} text={newPage.text} />
-        </div>
-      </DynamicSideWrapper>
-      <DynamicDashBoardContainer>{children}</DynamicDashBoardContainer>
-    </DashboardLayoutWrapper>
+        <DashBoardContainer id={id} list={list}>
+          {children}
+        </DashBoardContainer>
+      </DashboardLayoutWrapper>
+    </DndProvider>
   )
 }
 
-export default DashboardLayout
+export default React.memo(DashboardLayout)

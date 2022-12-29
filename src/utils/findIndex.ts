@@ -1,7 +1,7 @@
-type MapType = { id: string }[]
+type MapType = { id: string | number }[]
 
-export const findIndex = (
-  map: MapType,
+export const findIndex = <T extends MapType>(
+  map: T,
   id: string,
   callback: (index: number) => void
 ) => {

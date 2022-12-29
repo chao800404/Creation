@@ -32,7 +32,7 @@ const HeaderEditorS = () => {
   } = usePageSWR(id)
 
   const {
-    mutateFunction: { updatePageEmoji, updatePageItem },
+    mutateFunction: { updatePageEmoji, updatePageConfig },
     data: { emoji, title: dataTitle },
   } = useListSWR(id)
 
@@ -79,15 +79,19 @@ const HeaderEditorS = () => {
   }
 
   useEffect(() => {
-    if (!firstLoad.current && dataTitle !== title) {
+    if (!firstLoad.current && dataTitle !== title && title) {
       const timeout = setTimeout(() => {
-        updatePageItem(id, 'title', title as string)
+        updatePageConfig(id, 'title', title)
       }, 1000)
 
       return () => clearTimeout(timeout)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title])
+
+  useEffect(() => {
+    setTitle(dataTitle)
+  }, [dataTitle])
 
   useOnClickOutside((e) => {
     const target = (e.target as HTMLDivElement).closest(

@@ -5,15 +5,14 @@ import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import BlockReviewBtn from '../button/blockReviewBtn'
 import { sortPageBlock } from '../../utils/sortPageBlock'
-import { usePageStore } from '../../store'
+// import { usePageStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { BlockInputType } from '../../hook/type'
-import { ReactSortable } from 'react-sortablejs'
 
 const BlockReviewContainer = () => {
   const router = useRouter()
   const [reordered, setReordered] = useState(false)
-  const focusBlockId = usePageStore((state) => state.focusBlockId, shallow)
+  // const focusBlockId = usePageStore((state) => state.focusBlockId, shallow)
   const { page } = router.query
   const id = (page && (page[0] as string)) || ''
   const {
@@ -43,7 +42,7 @@ const BlockReviewContainer = () => {
       </div>
 
       <WrapperScrollbar>
-        {items && (
+        {/* {items && (
           <ReactSortable
             list={items.map((item) => ({ ...item, chosen: true }))}
             setList={setItems}
@@ -55,17 +54,17 @@ const BlockReviewContainer = () => {
           >
             {items?.map((block) => (
               <BlockReviewBtn
-                isFocus={focusBlockId === block?.id}
+                // isFocus={focusBlockId === block?.id}
                 id={block?.id}
                 name={block?.name}
                 key={block?.id}
               />
             ))}
           </ReactSortable>
-        )}
+        )} */}
       </WrapperScrollbar>
     </BlockReviewWrapper>
   )
 }
 
-export default BlockReviewContainer
+export default React.memo(BlockReviewContainer)

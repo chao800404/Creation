@@ -43,10 +43,3 @@ const BaseItem: React.FC<BaseItemProps> = ({
 }
 
 export default React.memo(BaseItem)
-// <Flex cursor="pointer" align="center" p="2px 0">
-//   {icon && <IconContainer color={color} icon={icon} />}
-//   {children}
-//   <Text ml="2" fontSize={`${fontSize ? fontSize : 'sm'}`} {...otherProps}>
-//     {text}
-//   </Text>
-// </Flex>

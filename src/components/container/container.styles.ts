@@ -5,7 +5,33 @@ export const SideContainerWrapper = styled('div')`
   flex-direction: column;
   height: fit-content;
   align-items: center;
-  gap: 0.1rem;
+`
+type SideContainerType = {
+  left?: number | string
+}
+
+export const SideContainerWrapperS = styled.div.attrs<SideContainerType>(
+  (props) => ({
+    left: props.left,
+  })
+)<SideContainerType>`
+  position: relative;
+  z-index: 1;
+
+  .active {
+    &::after {
+      content: '';
+      width: fit-content;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: ${({ left }) =>
+        Number(left) > 0 ? `${Number(left) + 1.5}rem` : '1.2rem'};
+      border-left: ${({ theme }) => `1.5px solid ${theme.colors.primary_high}`};
+      z-index: 300;
+      pointer-events: none;
+    }
+  }
 `
 
 export const DashboardContainerWrapper = styled('main')`
@@ -46,6 +72,14 @@ export const DashboardContainerWrapper = styled('main')`
       flex: 1;
       position: relative;
     }
+  }
+
+  .dashboardContainer_label {
+    height: 2rem;
+    width: 100%;
+    position: sticky;
+    display: flex;
+    border-bottom: 2px solid ${({ theme }) => theme.colors.primary};
   }
 
   .dashboard_footer {
@@ -231,15 +265,15 @@ export const BlockReviewWrapper = styled.aside`
 
   .blockReview-header {
     width: inherit;
-    /* background-color: ${({ theme }) => theme.colors.primary}; */
-    border-bottom: thick double ${({ theme }) => theme.colors.primary};
+    height: 2rem;
+    border-bottom: 2px solid ${({ theme }) => theme.colors.primary};
 
     p {
       inset: 80%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding: 0.5rem;
+      padding: 0.4rem 0.5rem;
       font-size: 0.5rem;
       font-weight: bold;
       text-align: center;

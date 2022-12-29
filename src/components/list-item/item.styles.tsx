@@ -11,7 +11,6 @@ export const BaseItemWrapper = styled('div').attrs<BaseItem>((props) => {
   }
 })<BaseItem>`
   display: flex;
-  cursor: pointer;
   align-items: center;
   padding: 2px 0;
   height: fit-content;
@@ -50,7 +49,6 @@ export const ItemWrapper = styled('div').attrs<Item>((props) => {
   }
 })<Item>`
   display: flex;
-  cursor: pointer;
   align-items: center;
   padding: 2px 0;
   height: fit-content;
@@ -96,63 +94,76 @@ export const PopupItemWrapper = styled('div').attrs<PopupItemType>(
   }
 `
 
-type WorkspaceItemWrapper = {
-  hoverColor: string
-  color: string
-  backgroundColor: string
+type WorkspaceItemType = {
+  isSelected: boolean
 }
 
-export const WorkspaceItemWrapper = styled('div').attrs<WorkspaceItemWrapper>(
-  (props) => {
-    return {
-      color: props.color,
-      hoverColor: props.hoverColor,
-      backgroundColor: props.backgroundColor,
-    }
-  }
-)<WorkspaceItemWrapper>`
+export const WorkspaceItemWrapper = styled('div').attrs<WorkspaceItemType>(
+  ({ isSelected }) => isSelected
+)<WorkspaceItemType>`
   width: 100%;
+  min-height: 1.8rem;
+  display: flex;
+  align-items: center;
   position: relative;
-  height: 1.8rem;
-  font-family: 'Roboto', sans-serif;
+  cursor: pointer;
+  font-weight: 700;
+  background-color: ${({ isSelected, theme }) =>
+    isSelected ? theme.colors.primary : theme.colors.white};
+
+  input {
+    outline: none;
+    border: none;
+    font-size: 0.8rem;
+    background-color: transparent;
+    font-weight: 700;
+    color: ${({ isSelected, theme }) =>
+      isSelected ? theme.colors.white : theme.colors.primary};
+  }
+
+  .add-page-icon {
+    position: absolute;
+    right: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
 
   &:hover {
-    .workspaceItem_content {
-      color: ${({ hoverColor, theme }) => hoverColor || theme.colors.primary};
-      background-color: ${({ backgroundColor, theme }) =>
-        backgroundColor === theme.colors.primary
-          ? theme.colors.primary
-          : '#c3c3c3'};
+    background-color: ${({ theme, isSelected }) =>
+      isSelected ? theme.colors.primary : theme.colors.secondary_light};
+    color: ${({ theme, isSelected }) =>
+      isSelected ? theme.colors.white : theme.colors.primary};
+
+    .add-page-icon {
+      opacity: 1;
+      visibility: visible;
     }
   }
 
-  .workspaceItem_content {
+  .root {
+    padding: 0 0.5rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: inherit;
-    height: inherit;
-    position: relative;
-    z-index: 300;
-    color: ${({ color }) => color};
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 0.8rem;
-    background-color: ${({ backgroundColor }) => backgroundColor};
-  }
+    gap: 0.2rem;
+    width: 100%;
+    text-decoration: none;
+    color: ${({ isSelected, theme }) =>
+      isSelected ? theme.colors.white : theme.colors.primary};
+    min-height: inherit;
 
-  .WorkspaceItem_feature {
-    visibility: hidden;
-    margin-right: 0.5rem;
-    display: flex;
-
-    .WorkspaceItem_feature-grab {
-      cursor: grab;
+    .workspace-item-icon {
+      padding: 0.2rem;
     }
-  }
 
-  &:hover .WorkspaceItem_feature {
-    visibility: visible;
+    p {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 5rem;
+      font-size: 0.8rem;
+      color: inherit;
+    }
   }
 `
 

@@ -3,7 +3,7 @@ import create from 'zustand'
 
 export type ButtonMapType = {
   icon?: IconType
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void
   desc: string
   disabled?: boolean
 }

@@ -1,35 +1,51 @@
-import { Emoji, Page } from '@prisma/client'
+import { Emoji, Page, PageConfig } from '@prisma/client'
 import useSWR, { useSWRConfig } from 'swr'
 import { createData, deleteData, fetcher, updateData } from '../utils/fetch'
 import cuid from 'cuid'
 import produce from 'immer'
 import { findIndex } from '../utils/findIndex'
+import { TreeDataType } from '../components/drop/treeView/type'
+import { getDescendants } from '@minoru/react-dnd-treeview'
+import { useLabelStore } from '../store/useLabelStore'
 
-type ignoreType = 'createdAt' | 'updatedAt'
-type PageType = Omit<Page, ignoreType>
-type emojiType = Omit<Emoji, ignoreType>
-export type ListDataType = PageType & { emoji: emojiType }
+export type ListData = {
+  favorite: boolean | undefined
+  editable: boolean | undefined
+  shouldShow: boolean | undefined
+  emoji: {
+    id: string
+    image: string
+  }
+}
+
+export type ResDataType = TreeDataType<ListData>
 
 type ListResDataType = {
-  data: ListDataType[]
+  data: ResDataType[]
   status: 'success' | 'fail'
 }
 
 type UseListSWRResult = {
   data: {
-    list?: ListDataType[]
+    list?: ResDataType[]
     favorite?: boolean
     editable?: boolean
     emoji?: Emoji['image']
-    title?: Page['title']
+    title?: ResDataType['text'] | null
+    parent?: ResDataType['parent'] | number
   }
   isLoading: boolean
   mutateFunction: {
-    addNewPage: () => void
+    addNewPage: (parentId?: string) => void
+    reorderPage: (
+      data: ResDataType[],
+      dragSourceId: string,
+      dropTargetId: string
+    ) => void
     deletePage: (id: string) => void
-    updatePageItem: (
+    updatePageConfig: (
       id: string,
-      key: keyof PageType,
+      key: keyof Omit<ListData & { title: string }, 'emoji'>,
       value: boolean | string
     ) => void
     updatePageEmoji: (id: string, src: string) => void
@@ -37,6 +53,98 @@ type UseListSWRResult = {
 }
 
 type UseListType = (id?: string) => UseListSWRResult
+
+const createNewPage = function (parentId?: string): ResDataType {
+  return {
+    id: cuid(),
+    parent: parentId || 0,
+    text: '',
+    droppable: true,
+    data: {
+      editable: true,
+      favorite: false,
+      shouldShow: false,
+      emoji: {
+        id: '',
+        image: '',
+      },
+    },
+  }
+}
+
+// function createForLoop(
+//   data: ListDataType[],
+//   id: string,
+//   callback: (item?: ListDataType) => void
+// ) {
+//   data?.forEach((item) => {
+//     if (item.id === id) {
+//       return callback(item)
+//     } else {
+//       createForLoop(item.children, id, callback)
+//     }
+//   })
+// }
+
+// function filterIdForLoop(data: ListDataType[], id: string) {
+//   return data.filter((item) => {
+//     if (item.id === id) {
+//       return false
+//     }
+//     if (item.children && item.children.length > 0) {
+//       item.children = filterIdForLoop(item.children, id)
+//       return true
+//     }
+//     return true
+//   })
+// }
+
+// function findIdForLoop(
+//   data?: ListDataType[],
+//   id?: string
+// ): ListDataType | undefined {
+//   if (!data || data?.length <= 0 || !id) return undefined
+//   let result
+//   let end = false
+
+//   const loop = (data: ListDataType[], id: string) => {
+//     data?.forEach((item) => {
+//       if (item.id === id) {
+//         result = item
+//         end = true
+//       } else {
+//         loop(item.children, id)
+//       }
+//     })
+//   }
+
+//   loop(data, id)
+//   if (end) return result
+// }
+
+// function updateForLoop<T>(
+//   data: ListDataType[],
+//   id: string,
+//   key: keyof pageConfigType,
+//   value: T
+// ): void {
+//   data?.forEach((item) => {
+//     if (item.id === id) {
+//       ;(item.pageConfig[key] as unknown) = value
+//     } else {
+//       if (item.children && item.children.length > 0) {
+//         updateForLoop<typeof value>(item.children, id, key, value)
+//       } else {
+//         return
+//       }
+//     }
+//   })
+// }
+
+const filterList = (id: string, data: ResDataType[]) => {
+  const deleteList = [id, ...getDescendants(data, id).map((node) => node.id)]
+  return data.filter((node) => !deleteList.includes(node.id))
+}
 
 export const useListSWR: UseListType = (pageId) => {
   const { mutate } = useSWRConfig()
@@ -46,45 +154,81 @@ export const useListSWR: UseListType = (pageId) => {
   )
 
   const mutateFunction: UseListSWRResult['mutateFunction'] = {
-    addNewPage: () => {
-      const newPage = {
-        editable: true,
-        favorite: false,
-        id: cuid(),
-        title: null,
-      }
+    addNewPage: (parentId) => {
+      const newPage = createNewPage(parentId)
+      const newList = produce(data, (draft) => {
+        draft?.data?.push(newPage)
+      })
 
-      const addList = produce(data, (draft) => {
-        if (draft) {
-          draft?.data.push(newPage as Page & { emoji: Emoji })
+      mutate(
+        `/api/query/queryList`,
+        createData(`addNewPage`, { id: newPage.id as string, parentId }),
+        {
+          populateCache: (resPage, list: ListResDataType) => {
+            return produce(list, (draft) => {
+              draft?.data.push(resPage.data)
+            })
+          },
+          revalidate: false,
+          optimisticData: newList,
+          rollbackOnError: true,
         }
-      })
-
-      mutate(`/api/query/queryList`, createData(`addNewPage`, newPage.id), {
-        populateCache: (resPage, list: ListResDataType) => {
-          return produce(list, (draft) => {
-            draft?.data.push(resPage.data)
-          })
-        },
-        revalidate: false,
-        optimisticData: addList,
-        rollbackOnError: true,
-      })
+      )
     },
-    deletePage: (id) => {
-      const deleteList = produce(data, (draft) => {
+
+    reorderPage: (list, dragSourceId, dropTargetId) => {
+      const newList = produce(data, (draft) => {
         if (draft) {
-          draft.data = draft.data.filter((item) => item.id !== id)
+          const index = draft.data.findIndex((item) => item.id === dragSourceId)
+          draft.data[index].parent = dropTargetId
         }
+      })
+
+      mutate(
+        `/api/query/queryList`,
+        updateData(
+          `updateListOrder`,
+          {
+            data: {
+              dragSourceId,
+              dropTargetId: Number(dropTargetId) === 0 ? null : dropTargetId,
+            },
+          },
+          null
+        ),
+        {
+          populateCache: (resPage, list: ListResDataType) => {
+            return produce(list, (draft) => {
+              const index = draft.data.findIndex(
+                (item) => item.id === resPage.data?.dragSourceId
+              )
+              draft.data[index].parent =
+                resPage.data?.dropTargetId === null
+                  ? 0
+                  : resPage.data?.dropTargetId
+            })
+          },
+          revalidate: false,
+          optimisticData: newList,
+          rollbackOnError: true,
+        }
+      )
+    },
+
+    deletePage: (id) => {
+      const { removeLabel } = useLabelStore.getState()
+      removeLabel(id)
+      const deleteList = produce(data, (draft) => {
+        if (draft && data) draft.data = filterList(id, data.data)
       })
 
       mutate(
         `/api/query/queryList`,
         deleteData<{ id: string }>('deletePage', { id }),
         {
-          populateCache: (deletePage, list: ListResDataType) => {
+          populateCache: (resPage, list: ListResDataType) => {
             return produce(list, (draft) => {
-              draft.data = draft.data.filter((item) => item.id !== id)
+              draft.data = resPage.data
             })
           },
 
@@ -94,24 +238,35 @@ export const useListSWR: UseListType = (pageId) => {
         }
       )
     },
-    updatePageItem: (id, key, value) => {
+
+    updatePageConfig: (id, key, value) => {
+      const { updateLabel } = useLabelStore.getState()
+      updateLabel(id, key, value)
       const preUpdateItem = produce<ListResDataType>(({ data }) => {
-        if (data) {
-          findIndex(data, id, (index) => {
-            data[index][key] = value as never
-          })
+        const index = data.findIndex((item) => item.id === id)
+        if (index !== -1) {
+          if (key !== 'title') {
+            ;(data[index].data as ListData)[key] = value as boolean
+          } else if (typeof value === 'string' && key === 'title') {
+            data[index].text = value
+          }
         }
       })
 
       mutate(
         `/api/query/queryList`,
-        updateData('updateList', { id, key, value }, null),
+        updateData('updatePageConfig', { id, key, value }, null),
         {
           populateCache: (updateItem, list: ListResDataType) => {
-            return produce(list, ({ data }) => {
-              findIndex(data, id, (index) => {
-                data[index][key] = updateItem.data[key] as never
-              })
+            return produce<ListResDataType>(list, ({ data }) => {
+              const index = data.findIndex((item) => item.id === id)
+              if (index !== -1) {
+                if (key !== 'title') {
+                  ;(data[index].data as ListData)[key] = value as boolean
+                } else if (typeof value === 'string' && key === 'title') {
+                  data[index].text = value
+                }
+              }
             })
           },
           revalidate: false,
@@ -125,7 +280,7 @@ export const useListSWR: UseListType = (pageId) => {
       const preUpdateEmoji = produce<ListResDataType>(({ data }) => {
         if (data) {
           findIndex(data, id, (index) => {
-            data[index].emoji.image = src
+            ;(data[index].data as ListData).emoji.image = src
           })
         }
       })
@@ -137,7 +292,7 @@ export const useListSWR: UseListType = (pageId) => {
           populateCache: (updateEmoji, list: ListResDataType) => {
             return produce(list, ({ data }) => {
               findIndex(data, id, (index) => {
-                data[index].emoji.image = updateEmoji.data.image
+                ;(data[index].data as ListData).emoji.image = src
               })
             })
           },
@@ -149,15 +304,16 @@ export const useListSWR: UseListType = (pageId) => {
     },
   }
 
-  const listItem = data?.data?.find((item) => item?.id === pageId)
+  const listItem = data?.data?.find((item) => item.id === pageId)
 
   return {
     data: {
       list: data?.data,
-      favorite: listItem?.favorite,
-      editable: listItem?.editable,
-      emoji: listItem?.emoji?.image,
-      title: listItem?.title,
+      favorite: listItem?.data?.favorite,
+      editable: listItem?.data?.editable,
+      emoji: listItem?.data?.emoji?.image,
+      title: listItem?.text,
+      parent: listItem?.parent,
     },
     isLoading: !error && !data,
     mutateFunction,

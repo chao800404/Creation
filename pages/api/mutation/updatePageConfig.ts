@@ -4,7 +4,7 @@ import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
 
 type MySchema = z.infer<typeof MySchema>
-const keyEnum = ['favorite', 'editable', 'title'] as const
+const keyEnum = ['favorite', 'editable', 'title', 'shouldShow'] as const
 
 const MySchema = z.object({
   id: z.string().cuid({ message: 'Please provide correct ID' }),
@@ -31,20 +31,34 @@ export default async function handler(
         if (!resData || resData.userId !== user.id)
           throw new Error("You can't be updating this file")
 
-        const { userId, ...otherData } = await prisma.page.update({
+        const { id: pageId, pageConfig } = await prisma.page.update({
           where: {
             id,
           },
           data: {
-            [key]: value,
+            pageConfig: {
+              update: {
+                [key]: value,
+              },
+            },
+          },
+          select: {
+            id: true,
+            pageConfig: {
+              select: {
+                [key]: true,
+              },
+            },
           },
         })
+
+        console.log(pageConfig)
 
         res.status(200).json({
           status: 'success',
           data: {
-            id: otherData.id,
-            [key]: otherData[key],
+            id: pageId,
+            ...pageConfig,
           },
         })
       }

@@ -129,4 +129,4 @@ const DashboardMain = () => {
   )
 }
 
-export default DashboardMain
+export default React.memo(DashboardMain)

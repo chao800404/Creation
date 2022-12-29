@@ -40,6 +40,22 @@ import prisma from '../../src/lib/prisma'
 //   })
 // }
 
+// export default async function handler(req, res) {
+//   const paths = await readFilePath(filePath)
+//   if (paths) {
+//     const goodPath = tranferPath(paths)
+//     console.log(goodPath)
+//     await prisma.emojiBaseMap.createMany({
+//       data: goodPath,
+//     })
+//     // await prisma.emojiBaseMap.createMany({
+//     //   data: paths,
+//     // })
+//   }
+
+//   res.send('good')
+// }
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

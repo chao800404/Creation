@@ -4,8 +4,8 @@ import { BlockPopupWrapper } from './popup.styles'
 import { MdFormatColorText } from 'react-icons/md'
 import { IconType } from 'react-icons'
 import useOnClickOutside from '../../utils/useOnClickOutside'
-import { HexAlphaColorPicker } from 'react-colorful'
-import { ColorPickerWrapper } from './popup.styles'
+// import { HexAlphaColorPicker } from 'react-colorful'
+// import { ColorPickerWrapper } from './popup.styles'
 
 type BlockMunuBtn = {
   name: string
@@ -118,7 +118,7 @@ const BlockPopup = ({
         blockMenuBtns={blockMenuBtns}
       />
 
-      {toggle && (
+      {/* {toggle && (
         <ColorPickerWrapper id="color-picker">
           <HexAlphaColorPicker
             className="color-picker-content"
@@ -129,7 +129,7 @@ const BlockPopup = ({
             }}
           />
         </ColorPickerWrapper>
-      )}
+      )} */}
     </div>
   )
 }

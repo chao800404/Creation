@@ -1,0 +1,78 @@
+import { ListData, ResDataType } from './../hook/useListSWR'
+import produce, { setAutoFreeze } from 'immer'
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
+import { findIndex } from '../utils/findIndex'
+
+type InitialLabelState = {
+  labels: ResDataType[]
+  curLabel: string
+}
+
+type Action = {
+  addLabel: (item: ResDataType) => void
+  removeLabel: (id: string) => void
+  setLabels: (labels: ResDataType[]) => void
+  updateLabel: (
+    id: string,
+    key: keyof Omit<ListData & { title: string }, 'emoji'>,
+    value: boolean | string
+  ) => void
+}
+
+const initialLabelState = {
+  labels: [],
+  curLabel: '',
+}
+
+export const useLabelStore = create<InitialLabelState & Action>()(
+  persist(
+    (set) => ({
+      ...initialLabelState,
+      addLabel: (item) =>
+        set(
+          produce<InitialLabelState>((state) => {
+            const index = state.labels.findIndex(
+              (label) => label.id === item.id
+            )
+            if (index === -1) state.labels.push(item)
+          })
+        ),
+      removeLabel: (id) =>
+        set(
+          produce<InitialLabelState>((state) => {
+            findIndex(state.labels, id, (index) => {
+              if (index !== -1) state.labels.splice(index, 1)
+            })
+          })
+        ),
+      setLabels: (labels) =>
+        set(
+          produce<InitialLabelState>((state) => {
+            state.labels = labels
+          })
+        ),
+      updateLabel: (id, key, value) =>
+        set(
+          produce<InitialLabelState>((state) => {
+            findIndex(state.labels, id, (index) => {
+              if (index !== -1) {
+                if (key === 'title' && typeof value === 'string') {
+                  state.labels[index].text = value
+                } else if (key !== 'title' && typeof value === 'boolean') {
+                  console.log(key, value)
+                  ;(state.labels[index].data as Omit<ListData, 'emoji'>)[key] =
+                    value
+                }
+              }
+            })
+          })
+        ),
+    }),
+    {
+      name: 'lables-content',
+    }
+  )
+)
+
+setAutoFreeze(false)

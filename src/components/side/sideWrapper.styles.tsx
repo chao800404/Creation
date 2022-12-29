@@ -1,12 +1,6 @@
 import styled from 'styled-components'
 
-type Props = {
-  width: number
-}
-
-export const SideWrapperLayout = styled('aside').attrs<Props>((props) => ({
-  width: props.width,
-}))<Props>`
+export const SideWrapperLayout = styled('aside')`
   height: inherit;
   position: sticky;
   top: 0;
@@ -15,6 +9,7 @@ export const SideWrapperLayout = styled('aside').attrs<Props>((props) => ({
   padding: 0.5rem 0 0.5rem 0;
   background-color: #ffffff;
   position: relative;
+  max-height: 100vh;
 
   .sideWrapperContainer {
     flex-direction: column;
@@ -24,7 +19,6 @@ export const SideWrapperLayout = styled('aside').attrs<Props>((props) => ({
     border: 2px solid #1c1c1c;
     background-color: #ffffff;
     display: flex;
-    width: ${({ width }) => `${width || 350}px`};
 
     &::before {
       position: absolute;

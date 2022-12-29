@@ -7,11 +7,10 @@ export const GlobalStyle = createGlobalStyle`
       box-sizing:inherit;
   }
  
-  html{ 
-    font-family: 'Robot', sans-serif;
+  html,input{ 
+    font-family: 'Exo',sans-serif;
   } 
 
-  
   
   body { 
       box-sizing: border-box;
@@ -177,7 +176,6 @@ export const GlobalStyle = createGlobalStyle`
         user-select: none;
 
         > input {
-          margin:auto -.2rem;
           display:block;
           accent-color:#1c1c1c;
 
@@ -257,7 +255,7 @@ export const GlobalStyle = createGlobalStyle`
 
 
     pre {
-      background: #0D0D0D;
+      background: rgb(25, 25, 25);
       color: #FFF;
       font-family: 'JetBrainsMono', monospace;
       padding: 1.5rem;
@@ -306,12 +304,12 @@ export const GlobalStyle = createGlobalStyle`
   
       .hljs-title,
       .hljs-section {
-        color: #faf594;
+        color: #ff4a32;
       }
   
       .hljs-keyword,
       .hljs-selector-tag {
-        color: #70cff8;
+        color: #dd93ff;
       }
   
       .hljs-emphasis {
@@ -407,9 +405,11 @@ export const GlobalStyle = createGlobalStyle`
 type themeKey =
   | 'primary'
   | 'primary_high'
+  | 'primary_2'
   | 'secondary'
   | 'secondary_light'
   | 'secondary_dark'
+  | 'tertiary'
   | 'white'
 
 declare module 'styled-components' {
@@ -423,10 +423,12 @@ declare module 'styled-components' {
 export const theme: DefaultTheme = {
   colors: {
     primary: '#1c1c1c',
+    primary_2: '#747474',
     primary_high: '#cccccc',
     secondary: '#f4f4f4',
     secondary_light: '#efefef',
     secondary_dark: '',
+    tertiary: '#e8f0fe',
     white: '#ffffff',
   },
 }

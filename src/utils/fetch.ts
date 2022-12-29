@@ -42,15 +42,22 @@ export const uploadFile = async (
   return resData
 }
 
-export const createData = async <T>(path: string, id: string): Promise<T> => {
+export const createData = async <T>(
+  path: string,
+  data: { id: string; parentId?: string }
+): Promise<T> => {
+  const { id, parentId } = data
   setStatus('pending', '')
-  const res = await fetch(`/api/mutation/${path}?id=${id}`, {
-    method: 'POST',
-  })
+  const res = await fetch(
+    `/api/mutation/${path}?id=${id}&parentId=${parentId}`,
+    {
+      method: 'POST',
+    }
+  )
   if (res.ok) setStatus('success', '')
-  const data = await res.json()
-  if (data.status === 'fail') setStatus('error', data.message)
-  return data
+  const resData = await res.json()
+  if (resData.status === 'fail') setStatus('error', resData.message)
+  return resData
 }
 
 export const createBlock = async <T>(

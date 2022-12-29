@@ -8,13 +8,7 @@ import { SideWrapperLayout } from './sideWrapper.styles'
 
 export type PositionTypes = Record<string, number>
 
-const SideWrapper = ({
-  children,
-  onPointerDown,
-}: {
-  children: React.ReactNode
-  onPointerDown: React.PointerEventHandler<HTMLElement>
-}) => {
+const SideWrapper = ({ children }: { children: React.ReactNode }) => {
   const [originWidth, setOriginWidth] = useState(0)
   const { sideWidth, sideWidthSet, dragStart } = usePageControllerStore(
     (state) => ({
@@ -39,10 +33,9 @@ const SideWrapper = ({
       style={{
         maxWidth: `${SIDE_MAX_WIDTH}px`,
         minWidth: `${SIDE_MIN_WIDTH}px`,
+        width: `${sideWidth}px`,
       }}
-      width={sideWidth}
       ref={elemRef}
-      onPointerDown={onPointerDown}
     >
       <div className="sideWrapperContainer round_m">{children}</div>
       <BoundLine

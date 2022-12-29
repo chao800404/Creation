@@ -7,8 +7,19 @@ import BoundLine from '../line/boundLine'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import BlockReviewContainer from '../container/blockReviewContainer'
 import DashboardFooter from '../footer/dashboardFooter'
+import { useLabelStore } from '../../store/useLabelStore'
+import { LabelContainer } from '../drop'
+import { ResDataType } from '../../hook/useListSWR'
 
-const DashBoardContainr = ({ children }: { children: ReactNode }) => {
+const DashBoardContainr = ({
+  children,
+  id,
+  list,
+}: {
+  children: ReactNode
+  id: string
+  list: ResDataType[]
+}) => {
   const sideWidth = usePageControllerStore((state) => state.sideWidth, shallow)
   const [originWidth, setOriginWidth] = useState(0)
   const dashboardMainElem = useRef<HTMLDivElement | null>(null)
@@ -21,6 +32,14 @@ const DashBoardContainr = ({ children }: { children: ReactNode }) => {
       }),
       shallow
     )
+  const { removeLabel, labels, setLabels } = useLabelStore(
+    (state) => ({
+      removeLabel: state.removeLabel,
+      labels: state.labels,
+      setLabels: state.setLabels,
+    }),
+    shallow
+  )
 
   useEffect(() => {
     if (dashboardMainElem && dashboardMainElem.current && dragStart) {
@@ -30,13 +49,10 @@ const DashBoardContainr = ({ children }: { children: ReactNode }) => {
   }, [dragStart])
 
   return (
-    <DashboardContainerWrapper
-      style={{ width: `calc(100% - ${sideWidth}px)`, marginLeft: '1rem' }}
-    >
+    <DashboardContainerWrapper style={{ width: `calc(100% - ${sideWidth}px)` }}>
       <div className="dashboard_nav">
         <DashBoardNav />
       </div>
-
       <div className="dashboardContainer_container">
         <div className="dashboardContainer_container-left">
           <BlockReviewContainer />
@@ -46,6 +62,16 @@ const DashBoardContainr = ({ children }: { children: ReactNode }) => {
           style={{ width: `${dashboardMainWidth}px` }}
           ref={dashboardMainElem}
         >
+          <div className="dashboardContainer_label">
+            <LabelContainer
+              id={id}
+              list={list}
+              labels={labels}
+              setLabels={setLabels}
+              removeLabel={removeLabel}
+            />
+          </div>
+
           <WrapperScrollbar>{children}</WrapperScrollbar>
           <BoundLine
             widthSet={dashboardMainWidthSet}

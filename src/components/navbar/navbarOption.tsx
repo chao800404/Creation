@@ -35,7 +35,7 @@ const NavbarOption = () => {
       >
         <ControllDataIcon
           onClick={() =>
-            mutateFunction.updatePageItem(id, 'editable', !editable)
+            mutateFunction.updatePageConfig(id, 'editable', !editable)
           }
           toggle={editable as boolean}
           openIcon={FiUnlock}
@@ -47,7 +47,7 @@ const NavbarOption = () => {
 
         <ControllDataIcon
           onClick={() => {
-            mutateFunction.updatePageItem(id, 'favorite', !favorite)
+            mutateFunction.updatePageConfig(id, 'favorite', !favorite)
           }}
           toggle={favorite as boolean}
           openIcon={AiFillStar}

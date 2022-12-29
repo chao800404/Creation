@@ -8,7 +8,31 @@ export const DashboardFooterWrapper = styled.div`
   height: 100%;
   align-items: center;
 
-  .footer_info {
+  & > .footer_user_info {
+    border: 1px solid;
+    height: 2rem;
+    width: 10rem;
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    padding: 0.5rem 0;
+    gap: 0.5rem;
+    box-shadow: 0rem 0.2rem ${({ theme }) => theme.colors.primary};
+
+    & > span:nth-child(1) {
+      grid-column: 1 / 2;
+      color: ${({ theme }) => theme.colors.primary};
+      border-right: 2px solid ${({ theme }) => theme.colors.primary};
+    }
+
+    & > span:nth-child(2) {
+      grid-column: 2 / -1;
+      font-size: 0.8rem;
+      align-self: center;
+      font-weight: bold;
+    }
+  }
+
+  & > .footer_info {
     width: 8rem;
     height: 2rem;
     margin-right: 0.5rem;

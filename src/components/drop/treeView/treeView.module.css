@@ -1,0 +1,38 @@
+.treeRoot {
+  height: 100%;
+}
+
+.draggingSource {
+  opacity: 0.3;
+}
+
+.dropTarget {
+  background-color: #e8f0fe;
+}
+
+.placeholderContainer {
+  position: relative;
+}
+
+.listContainer {
+  position: relative;
+  height: 100%;
+}
+
+.listContainer::not(first-child) {
+  height: fit-content;
+}
+
+.listContainer::after {
+  width: 5px;
+  position: absolute;
+  content: '';
+  height: 100%;
+  top: 0;
+  margin-left: -3px;
+  left: var(--left);
+  border-left: 1.5px dashed #1c1c1c;
+  z-index: 10;
+  visibility: var(--visible);
+  opacity: 0.5;
+}

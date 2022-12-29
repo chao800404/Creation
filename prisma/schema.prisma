@@ -95,18 +95,15 @@ model EmojiBaseMap {
 
 model Page {
   id           String   @id @default(cuid())
-  title        String?
-  favorite     Boolean  @default(false)
   userId       String   @map("user_id")
-  editable     Boolean  @default(true)
-  blockToOrder Json?
-  parentId     String?
+  parentId     String?  @map("parent_id") @default("0")
+  pageConfig   PageConfig?
   parent       Page?    @relation("ParentChildren", fields: [parentId], references: [id], onDelete: Cascade)
   user         User     @relation(fields: [userId], references: [id])
   cover        Cover?
   emoji        Emoji?
   children     Page[]   @relation("ParentChildren")
-  blockHTML         BlockHTML[]
+  blockHTML    BlockHTML[]
 
 
   createdAt    DateTime @default(now())
@@ -114,6 +111,25 @@ model Page {
 
   @@unique([id, userId])
   @@map("page")
+}
+
+model PageConfig {
+  id           String   @id @default(cuid())        
+  favorite     Boolean  @default(false)
+  editable     Boolean  @default(true)
+  blockToOrder Json?
+  title        String?       
+  shouldShow   Boolean  @default(false)
+  droppable    Boolean  @default(true)
+  pageToOrder  Json?
+  pageId       String   @unique @map("page_id")
+  page         Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+
+  @@unique([id, pageId])
+  @@map("page_config")
 }
 
 

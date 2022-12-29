@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import { IconType } from 'react-icons'
 import IconContainer from '../iconContainer/iconContainer'
 import { GroupItemWrapper } from './item.styles'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MenuPopup } from '../popup/menuPopup'
 import { GroupButtonType } from '../../store/useMenuPopupStore'
 import PopupItem from './popup-item'
 
@@ -61,7 +59,7 @@ const GroupItem = (
                 desc={button.desc.replaceAll('_', ' ')}
                 icon={button.icon}
                 onClick={() => {
-                  if (button.onClick) button.onClick()
+                  // if (button.onClick) button.onClick()
                   hiddenMenuPopup()
                 }}
                 dataType={dataType}
