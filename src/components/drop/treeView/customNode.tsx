@@ -11,8 +11,9 @@ import WrapperRename from '../../wrapper/wrapperRename'
 import useWindowPointerToggle from '../../../utils/useWindowPointerToggle'
 
 import Link from 'next/link'
-import { useLabelStore } from '../../../store/useLabelStore'
+import { useLabelStore, addLabel } from '../../../store/useLabelStore'
 import shallow from 'zustand/shallow'
+import { useRouter } from 'next/router'
 
 export const CustomNode: React.FC<CustomNodeType> = (props) => {
   const {
@@ -29,11 +30,11 @@ export const CustomNode: React.FC<CustomNodeType> = (props) => {
     updatePageConfig,
   } = props
 
+  const router = useRouter()
   const indent = depth * 22
   const text = node.text && node.text.length > 0 ? node.text : 'Untitled'
   const [nextText, setNextText] = useState(text)
   const elemRef = useRef<HTMLDivElement | null>(null)
-  const addLabel = useLabelStore((state) => state.addLabel, shallow)
 
   const { toggle, handleToggleSet } = useWindowPointerToggle(
     'tree-node',
@@ -64,7 +65,6 @@ export const CustomNode: React.FC<CustomNodeType> = (props) => {
   }
 
   const targetProps = (e: React.PointerEvent): ShowMenuProps => {
-    if (e.buttons === 1) addLabel(node)
     if (e.button === 2) {
       const x = e.pageX
       const y = e.pageY
@@ -106,9 +106,11 @@ export const CustomNode: React.FC<CustomNodeType> = (props) => {
         isParent={node.parent === 0}
         ref={elemRef}
         onPointerDown={(e) => showMenu && showMenu(targetProps(e))}
+        onPointerUp={(e) => e.buttons === 0 && addLabel(node)}
+        onMouseEnter={() => router.prefetch(`dashboard/${node.id}`)}
       >
         <Link href={`/dashboard/${node.id}`}>
-          <a className="root">
+          <div className="root">
             <div
               className={`expand ${isOpen ? 'isOpen' : ''}`}
               onClick={handleToggle}
@@ -125,9 +127,7 @@ export const CustomNode: React.FC<CustomNodeType> = (props) => {
                 text={text}
                 width={`calc(100% - ${indent + 30}px)`}
                 onChange={(e) => setNextText(e.target.value)}
-                onKeyDown={(e) => {
-                  e.key === 'Enter' && updateText()
-                }}
+                onKeyDown={(e) => e.key === 'Enter' && updateText()}
                 showInput={toggle}
               />
             </div>
@@ -145,7 +145,7 @@ export const CustomNode: React.FC<CustomNodeType> = (props) => {
                 </div>
               </div>
             )}
-          </a>
+          </div>
         </Link>
       </CustomNodeWrapper>
       {!hasChild && isOpen && (

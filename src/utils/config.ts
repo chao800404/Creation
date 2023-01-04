@@ -81,7 +81,7 @@ export const EMOJI_BASE = [
 
 type BlockSelectorType = {
   name: string
-  type: 'text' | 'table' | 'list' | 'code'
+  type: 'text' | 'table' | 'list' | 'code' | 'button'
   desc: string
   image: string
 }
@@ -140,6 +140,12 @@ export const BLOCK_SELECTOR: BlockSelectorType[] = [
     type: 'code',
     desc: 'Capture a code snippet.',
     image: '/static/blocks/code.png',
+  },
+  {
+    name: 'Link_button',
+    type: 'button',
+    desc: 'Shortcut type(button).',
+    image: '/static/block/link-button.png',
   },
 ]
 

@@ -72,75 +72,6 @@ const createNewPage = function (parentId?: string): ResDataType {
   }
 }
 
-// function createForLoop(
-//   data: ListDataType[],
-//   id: string,
-//   callback: (item?: ListDataType) => void
-// ) {
-//   data?.forEach((item) => {
-//     if (item.id === id) {
-//       return callback(item)
-//     } else {
-//       createForLoop(item.children, id, callback)
-//     }
-//   })
-// }
-
-// function filterIdForLoop(data: ListDataType[], id: string) {
-//   return data.filter((item) => {
-//     if (item.id === id) {
-//       return false
-//     }
-//     if (item.children && item.children.length > 0) {
-//       item.children = filterIdForLoop(item.children, id)
-//       return true
-//     }
-//     return true
-//   })
-// }
-
-// function findIdForLoop(
-//   data?: ListDataType[],
-//   id?: string
-// ): ListDataType | undefined {
-//   if (!data || data?.length <= 0 || !id) return undefined
-//   let result
-//   let end = false
-
-//   const loop = (data: ListDataType[], id: string) => {
-//     data?.forEach((item) => {
-//       if (item.id === id) {
-//         result = item
-//         end = true
-//       } else {
-//         loop(item.children, id)
-//       }
-//     })
-//   }
-
-//   loop(data, id)
-//   if (end) return result
-// }
-
-// function updateForLoop<T>(
-//   data: ListDataType[],
-//   id: string,
-//   key: keyof pageConfigType,
-//   value: T
-// ): void {
-//   data?.forEach((item) => {
-//     if (item.id === id) {
-//       ;(item.pageConfig[key] as unknown) = value
-//     } else {
-//       if (item.children && item.children.length > 0) {
-//         updateForLoop<typeof value>(item.children, id, key, value)
-//       } else {
-//         return
-//       }
-//     }
-//   })
-// }
-
 const filterList = (id: string, data: ResDataType[]) => {
   const deleteList = [id, ...getDescendants(data, id).map((node) => node.id)]
   return data.filter((node) => !deleteList.includes(node.id))
@@ -244,7 +175,7 @@ export const useListSWR: UseListType = (pageId) => {
       updateLabel(id, key, value)
       const preUpdateItem = produce<ListResDataType>(({ data }) => {
         const index = data.findIndex((item) => item.id === id)
-        if (index !== -1) {
+        if (index !== -1 && data) {
           if (key !== 'title') {
             ;(data[index].data as ListData)[key] = value as boolean
           } else if (typeof value === 'string' && key === 'title') {

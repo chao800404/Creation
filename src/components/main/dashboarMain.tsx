@@ -5,8 +5,9 @@ import HeaderEditorS from '../edit/headerEditorS'
 import Spinner from '../spinner/spinner'
 import { DashboardMainWrapper } from './main.styles'
 import BlockInputContent from '../input/blockInputContent'
+import { ButtonBlock } from '../blocks'
 import dynamic from 'next/dynamic'
-import React, { Suspense, useEffect, useRef } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 import { sortPageBlock } from '../../utils/sortPageBlock'
 
 const DynamicDashboardBanner = dynamic(
@@ -23,7 +24,7 @@ const DashboardMain = () => {
   } = router
 
   const id = (page && (page[0] as string)) || ''
-
+  // const [changeRouter, setChangeRouter] = useState(false)
   const {
     data: { cover, blocks, blockToOrder },
     isLoading,
@@ -32,54 +33,64 @@ const DashboardMain = () => {
   const blocksContent = sortPageBlock({ blocks, blockToOrder })
   const elemRef = useRef<HTMLDivElement | null>(null)
 
-  const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const focusBlock = document.activeElement
-    if (elemRef.current?.children && focusBlock) {
-      const elem = elemRef.current
-      const childrenNode: Element[] = [...elem?.children]
-      const childrenIdMap = childrenNode.map((node) => node.id)
-      const focusElem = focusBlock.closest(
-        '[data-type="block-content"]'
-      ) as HTMLInputElement
+  // const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   const focusBlock = document.activeElement
+  //   if (elemRef.current?.children && focusBlock) {
+  //     const elem = elemRef.current
+  //     const childrenNode: Element[] = [...elem?.children]
+  //     const childrenIdMap = childrenNode.map((node) => node.id)
+  //     const focusElem = focusBlock.closest(
+  //       '[data-type="block-content"]'
+  //     ) as HTMLInputElement
 
-      const popupIsOpen = focusElem.className.includes('popup-open')
-      if (!childrenNode.includes(focusElem) || popupIsOpen) return
+  //     const popupIsOpen = focusElem.className.includes('popup-open')
+  //     if (!childrenNode.includes(focusElem) || popupIsOpen) return
 
-      const index = childrenIdMap.indexOf(focusElem.id)
+  //     const index = childrenIdMap.indexOf(focusElem.id)
 
-      const curElemeFocusPos = window.getSelection()?.focusOffset
-      const focusContentLength =
-        focusBlock.lastChild?.lastChild?.lastChild?.textContent?.length
+  //     const curElemeFocusPos = window.getSelection()?.focusOffset
+  //     const focusContentLength =
+  //       focusBlock.lastChild?.lastChild?.lastChild?.textContent?.length
 
-      const selectElem = (index: number) => {
-        const elemNext = elem?.querySelector(
-          `#${childrenIdMap[index]}`
-        ) as HTMLInputElement
+  //     const selectElem = (index: number) => {
+  //       const elemNext = elem?.querySelector(
+  //         `#${childrenIdMap[index]}`
+  //       ) as HTMLInputElement
 
-        elemNext && elemNext.focus()
-      }
+  //       elemNext && elemNext.focus()
+  //     }
 
-      if (
-        curElemeFocusPos === focusContentLength ||
-        !focusContentLength ||
-        curElemeFocusPos === 0
-      ) {
-        switch (e.key) {
-          case 'ArrowDown':
-            selectElem(index + 1)
-            break
-          case 'ArrowUp':
-            selectElem(index - 1)
-          default:
-            return
-        }
-      }
-    }
-  }
+  //     if (
+  //       curElemeFocusPos === focusContentLength ||
+  //       !focusContentLength ||
+  //       curElemeFocusPos === 0
+  //     ) {
+  //       switch (e.key) {
+  //         case 'ArrowDown':
+  //           selectElem(index + 1)
+  //           break
+  //         case 'ArrowUp':
+  //           selectElem(index - 1)
+  //         default:
+  //           return
+  //       }
+  //     }
+  //   }
+  // }
 
-  if (isLoading && !blocksContent) {
-    return <Spinner />
-  }
+  // useEffect(() => {
+  //   const handlerLoad = () => setChangeRouter((load) => !load)
+  //   router.events.on('routeChangeStart', handlerLoad)
+  //   router.events.on('routeChangeComplete', handlerLoad)
+
+  //   return () => {
+  //     router.events.off('routeChangeStart', handlerLoad)
+  //     router.events.off('routeChangeComplete', handlerLoad)
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
+
+  // if (changeRouter) return null
 
   return (
     <DashboardMainWrapper
@@ -102,7 +113,8 @@ const DashboardMain = () => {
           </div>
           <div
             className="DashboardMain_container-content-add"
-            onKeyDown={handleOnKeyDown}
+            // onKeyDown={handleOnKeyDown}
+
             ref={elemRef}
           >
             {blocksContent &&
@@ -119,7 +131,7 @@ const DashboardMain = () => {
                   )
               )}
           </div>
-
+          <ButtonBlock />
           <div style={{ height: '50vh', background: '#ffffff' }}></div>
         </div>
 

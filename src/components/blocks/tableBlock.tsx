@@ -27,7 +27,7 @@ const TableBlock: React.FC<BaseBlockType> = ({
   const elemRef = useRef<null | HTMLDivElement>(null)
 
   const editor = useEditor({
-    // autofocus: true,
+    autofocus: true,
     extensions: tableBlockFeature,
     content: blockData.content,
   })

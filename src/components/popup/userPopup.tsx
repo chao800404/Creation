@@ -4,7 +4,6 @@ import { AiFillSetting } from 'react-icons/ai'
 import { RiArrowDropDownLine } from 'react-icons/ri'
 
 import Image from 'next/image'
-import { truncatedText } from '../../utils/truncatedText'
 import { signOut, useSession } from 'next-auth/react'
 import UserPopupItem from '../list-item/UserPopupItem'
 import { useUserStore } from '../../store'
@@ -75,9 +74,7 @@ const UserPopup: React.FC = () => {
           <div className="userpopup_container-image">
             {image && <Image src={image} width="40" height="40" alt={email} />}
           </div>
-          <div className="userpopup_container-name">
-            {name ? name : truncatedText(email, 10)}
-          </div>
+          <div className="userpopup_container-name">{name ? name : email}</div>
           <div className="userpopup_container-icon">
             <RiArrowDropDownLine fontSize="1.5rem" />
           </div>

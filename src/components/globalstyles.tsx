@@ -7,8 +7,8 @@ export const GlobalStyle = createGlobalStyle`
       box-sizing:inherit;
   }
  
-  html,input{ 
-    font-family: 'Exo',sans-serif;
+  html,input , button { 
+    font-family: 'Exo', sans-serif;
   } 
 
   
@@ -50,6 +50,11 @@ export const GlobalStyle = createGlobalStyle`
   
   button,select,li,ul:focus,div:focus-visible {
     outline: none;
+    border: none;
+  }
+
+  button {
+    cursor:pointer;
   }
 
   img,h1,h2,h3,h4,h5,h6,p,button {
@@ -75,10 +80,6 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  button {
-    border:none;
-    cursor: pointer;
-  }
 
   h1 {
     font-weight: bold;
@@ -220,7 +221,6 @@ export const GlobalStyle = createGlobalStyle`
   .ProseMirror {
     p,h1,h2,h3,h4,h5,h6,div{
       outline: none;
-      border: none;
     }
 
 
@@ -406,6 +406,8 @@ type themeKey =
   | 'primary'
   | 'primary_high'
   | 'primary_2'
+  | 'primary_dark'
+  | 'primary_high_2'
   | 'secondary'
   | 'secondary_light'
   | 'secondary_dark'
@@ -425,10 +427,12 @@ export const theme: DefaultTheme = {
     primary: '#1c1c1c',
     primary_2: '#747474',
     primary_high: '#cccccc',
+    primary_high_2: '#393939',
+    primary_dark: '#000000',
     secondary: '#f4f4f4',
     secondary_light: '#efefef',
     secondary_dark: '',
-    tertiary: '#e8f0fe',
+    tertiary: '#e8f0fe', // #e8f0fe
     white: '#ffffff',
   },
 }

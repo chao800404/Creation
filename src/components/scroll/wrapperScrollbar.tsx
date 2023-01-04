@@ -75,15 +75,15 @@ const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({ children }) => {
             <motion.div
               {...props}
               className="view"
-              animate={
-                isCeiling
-                  ? { backgroundColor: 'rgba(0,0,0,0)' }
-                  : {
-                      backgroundColor: '#FFFFFF',
-                      boxShadow: 'inset 0px -63px 23px -67px rgba(0,0,0,0.59)',
-                      borderBottom: '1px solid black',
-                    }
-              }
+              // animate={
+              //   isCeiling
+              //     ? { backgroundColor: 'rgba(0,0,0,0)' }
+              //     : {
+              //         backgroundColor: '#FFFFFF',
+              //         boxShadow: 'inset 0px -63px 23px -67px rgba(0,0,0,0.59)',
+              //         borderBottom: '1px solid black',
+              //       }
+              // }
             />
           )
         }}

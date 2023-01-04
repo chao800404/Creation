@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AiOutlineCloseSquare } from 'react-icons/ai'
 import { ResDataType } from '../../../hook/useListSWR'
 import { TypeIcon } from '../treeView/typeIcon'
 import { LabelItemWrapper } from './label.styles'
 import { LabelBaseType } from './type'
 
-const LabelItem = (props: LabelBaseType<ResDataType>) => {
+const LabelItem: React.FC<LabelBaseType<ResDataType>> = (props) => {
   const router = useRouter()
 
   const handleOnClick = (e: React.MouseEvent) => {
@@ -16,7 +16,11 @@ const LabelItem = (props: LabelBaseType<ResDataType>) => {
     if (props.isSelected) {
       const index = props.labels.findIndex((label) => label.id === props.id)
       const preLabel = props.labels[index - 1]
-      router.push(`dashboard/${preLabel.id}`)
+      const nextLabel = props.labels[index + 1]
+
+      if (preLabel) router.push(`dashboard/${preLabel.id}`)
+      else if (nextLabel) router.push(`dashboard/${nextLabel.id}`)
+      else router.push('/')
     }
   }
 
@@ -37,7 +41,7 @@ const LabelItem = (props: LabelBaseType<ResDataType>) => {
             </p>
           </div>
 
-          <div className="label-close" onClick={handleOnClick}>
+          <div className="label-close center" onClick={handleOnClick}>
             <AiOutlineCloseSquare />
           </div>
         </a>

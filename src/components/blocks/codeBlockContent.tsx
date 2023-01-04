@@ -14,16 +14,7 @@ import * as blockFeatures from '../../lib/tiptap'
 import { NodeViewWrapper, NodeViewContent, NodeViewProps } from '@tiptap/react'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { lowlight } from 'lowlight'
-
-type BaseBlockType = {
-  blockData: BlockInputType['blockData']
-  className: string
-  isFocus: boolean
-  blockContentSet: (
-    blockContent: Omit<BlockInputType['blockData'], 'pageId'>
-  ) => void
-  isFocusSet: (focus: boolean) => void
-}
+import { BaseBlockType } from './type'
 
 export const BlockCodeComponent = ({
   node: {
@@ -91,10 +82,7 @@ const CodeBlockContent: React.FC<BaseBlockType> = ({
         lowlight,
       }),
     ] as Extensions,
-    // autofocus: true,
-    // onCreate: ({ editor }) => {
-    //   editor.commands.focus('end')
-    // },
+    autofocus: true,
     content: blockData.content,
   })
 

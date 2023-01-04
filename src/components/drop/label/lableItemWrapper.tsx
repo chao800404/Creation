@@ -3,10 +3,10 @@ import type { FC } from 'react'
 import { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import LabelItem from './labelItem'
-import { LabelType } from './type'
-import { DragItem } from './type'
+import { LabelType, DragItem } from './type'
 import { ItemTypes } from '../itemTypes'
 import { ResDataType } from '../../../hook/useListSWR'
+import { ItemTypes as TreeType } from '@minoru/react-dnd-treeview'
 
 export const LabelItemWrapper: FC<LabelType<ResDataType>['item']> = ({
   label,
@@ -16,27 +16,37 @@ export const LabelItemWrapper: FC<LabelType<ResDataType>['item']> = ({
   isSelected,
   labels,
   removeLabel,
+  insertLabel,
 }) => {
   const ref = useRef<HTMLDivElement>(null)
+  const accept = [ItemTypes.Label, TreeType.TREE_ITEM]
   const [{ handlerId }, drop] = useDrop<
-    DragItem,
+    DragItem<ResDataType>,
     void,
     { handlerId: Identifier | null }
   >({
-    accept: ItemTypes.Label,
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId(),
-      }
-    },
-    drop(item: DragItem) {
+    accept,
+    collect: (monitor) => ({
+      handlerId: monitor.getHandlerId(),
+    }),
+    drop(item: DragItem<ResDataType>, monitor) {
       if (ref.current) {
         const dragIndex = item.index
         const hoverIndex = index
 
-        if (dragIndex !== hoverIndex) {
-          moveLabel(dragIndex, hoverIndex)
-          item.index = hoverIndex
+        const draggingItem = monitor.getItemType()
+
+        switch (draggingItem) {
+          case ItemTypes.Label:
+            if (dragIndex !== hoverIndex) {
+              moveLabel(dragIndex, hoverIndex)
+              item.index = hoverIndex
+            }
+            break
+          case TreeType.TREE_ITEM:
+            const { ref, ..._item } = monitor.getItem()
+            insertLabel(_item, dragIndex, hoverIndex)
+            break
         }
       }
     },

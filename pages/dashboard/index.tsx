@@ -17,8 +17,11 @@ const Dashboard = () => {
     (state) => state.coverImageMapSet,
     shallow
   )
+  const router = useRouter()
+  const {
+    query: { page },
+  } = router
 
-  const { page } = useRouter().query
   const { cache } = useSWRConfig()
   const {
     data: { emoji, title },
@@ -29,6 +32,7 @@ const Dashboard = () => {
     fetcher('/api/getImageCover').then((coverImagePath) =>
       coverImageMapSet(coverImagePath?.path)
     )
+    router.prefetch('/')
   }, [])
 
   if (isLoading) {

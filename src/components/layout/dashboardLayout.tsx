@@ -14,12 +14,13 @@ import { hiddenMenuPopup } from '../../../src/components/popup/menuPopup'
 import { HandleRename } from '../drop/treeView/type'
 import DashBoardContainer from '../container/dashBoardContainer'
 import SideWrapper from '../side/sideWrapper'
-import router from 'next/router'
+import { useRouter } from 'next/router'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { getBackendOptions } from '@minoru/react-dnd-treeview'
 import { TreeView, FavoriteTag } from '../drop'
 import { MenuType } from './dashboard'
+import { MainDropWrapper } from '../drop'
 
 // const DynamicSideWrapper = dynamic(() => import('../side/sideWrapper'), {
 //   ssr: false,
@@ -40,7 +41,10 @@ const { searchBarBtn, interfaces, workspaces, importFile, trash, newPage } =
   SIDE_OPTION
 
 const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
-  const { page } = router.query
+  const router = useRouter()
+  const {
+    query: { page },
+  } = router
   const id = (page && (page[0] as string)) || ''
 
   const {
@@ -81,6 +85,10 @@ const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
     ],
     [mutateFunction]
   )
+
+  // const handleDrop = (item) => {
+
+  // }
 
   if (!list) return null
 
@@ -125,7 +133,8 @@ const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
         </SideWrapper>
 
         <DashBoardContainer id={id} list={list}>
-          {children}
+          <MainDropWrapper>{children}</MainDropWrapper>
+          {/* {children} */}
         </DashBoardContainer>
       </DashboardLayoutWrapper>
     </DndProvider>

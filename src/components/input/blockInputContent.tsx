@@ -4,36 +4,12 @@ import { AddBlocknputWrapper } from './input.styles'
 import BlockInputWrapper from './blockInputWrapper'
 import { useBlocksStore } from '../../store/useBlocksStore'
 import shallow from 'zustand/shallow'
-import BaseBlock from '../blocks/baseBlock'
 import { blockContentFilter } from '../../utils/filterFile'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { BlockInputType } from '../../hook/type'
 import { useDebounce } from 'use-debounce'
-import CodeBlockContent from '../blocks/codeBlockContent'
-import { BLOCK_SELECTOR } from '../../utils/config'
-import TableBlock from '../blocks/tableBlock'
 import { useStatusStore } from '../../../src/store/useStatusStore'
-
-type BaseBlockType = {
-  blockData: BlockInputType['blockData']
-  className: string
-  isFocus: boolean
-  blockContentSet: (
-    blockContent: Omit<BlockInputType['blockData'], 'pageId'>
-  ) => void
-  isFocusSet: (foucs: boolean) => void
-}
-
-const BlockContent = ({ blockData, ...otherProps }: BaseBlockType) => {
-  switch (blockData.name) {
-    case BLOCK_SELECTOR[8].name:
-      return <CodeBlockContent blockData={blockData} {...otherProps} />
-    case BLOCK_SELECTOR[4].name:
-      return <TableBlock blockData={blockData} {...otherProps} />
-    default:
-      return <BaseBlock blockData={blockData} {...otherProps} />
-  }
-}
+import { BlockContent } from '../blocks'
 
 const BlockInputContent: React.FC<
   BlockInputType & {

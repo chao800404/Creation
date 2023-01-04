@@ -10,7 +10,7 @@ import { showMenuPopup } from '../popup/menuPopup'
 import useWindowPointerToggle from '../../utils/useWindowPointerToggle'
 import { useMenuPopupStore } from '../../store/useMenuPopupStore'
 import WrapperRename from '../wrapper/wrapperRename'
-import { useLabelStore } from '../../store/useLabelStore'
+import { addLabel } from '../../store/useLabelStore'
 import shallow from 'zustand/shallow'
 
 const WorkspaceItem: React.FC<
@@ -38,7 +38,6 @@ const WorkspaceItem: React.FC<
   } = props
 
   const [nextText, setNextText] = useState(node.text)
-  const addLabel = useLabelStore((state) => state.addLabel, shallow)
 
   const updateText = () => {
     if (nextText?.length > 0 && node?.text !== nextText) {

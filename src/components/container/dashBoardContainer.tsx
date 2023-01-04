@@ -7,7 +7,7 @@ import BoundLine from '../line/boundLine'
 import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import BlockReviewContainer from '../container/blockReviewContainer'
 import DashboardFooter from '../footer/dashboardFooter'
-import { useLabelStore } from '../../store/useLabelStore'
+import { useLabelStore, addLabel } from '../../store/useLabelStore'
 import { LabelContainer } from '../drop'
 import { ResDataType } from '../../hook/useListSWR'
 
@@ -62,15 +62,18 @@ const DashBoardContainr = ({
           style={{ width: `${dashboardMainWidth}px` }}
           ref={dashboardMainElem}
         >
-          <div className="dashboardContainer_label">
-            <LabelContainer
-              id={id}
-              list={list}
-              labels={labels}
-              setLabels={setLabels}
-              removeLabel={removeLabel}
-            />
-          </div>
+          {labels && labels.length > 0 && (
+            <div className="dashboardContainer_label">
+              <LabelContainer
+                id={id}
+                list={list}
+                labels={labels}
+                setLabels={setLabels}
+                removeLabel={removeLabel}
+                addLabel={addLabel}
+              />
+            </div>
+          )}
 
           <WrapperScrollbar>{children}</WrapperScrollbar>
           <BoundLine

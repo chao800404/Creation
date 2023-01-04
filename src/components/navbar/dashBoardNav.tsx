@@ -32,12 +32,14 @@ const DashBoardNav = () => {
   const linkGroup: ResDataType[] = getDescendants<ResDataType>(list, id).filter(
     (item) => item.parent === id
   )
-
   const checkHasChild = (id: string) =>
     linkGroup.some((item) => item.parent === id)
 
   const currentLinkItem = list.find((item) => item.id === id)
-  if (currentLinkItem) linkGroup.unshift({ ...currentLinkItem })
+  if (linkGroup) {
+    currentLinkItem && linkGroup.unshift(currentLinkItem)
+    linkGroup.unshift({ id: 0, parent: 'Home', text: 'Home' })
+  }
   const linkGroupMiddle = linkGroup.filter((_, index) => index !== 0)
 
   return (
@@ -47,7 +49,7 @@ const DashBoardNav = () => {
         whileTap={{ scale: 0.98, y: 1 }}
       >
         <ul>
-          {linkGroup.map((item, index) => (
+          {linkGroup?.map((item, index) => (
             <DashBoardNavBarLinkItem
               key={item.id}
               hasChild={checkHasChild(item.id as string)}
