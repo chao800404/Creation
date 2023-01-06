@@ -13,15 +13,17 @@ const style = (color: string) => {
 type ChangePopupType = {
   children: JSX.Element[] | JSX.Element
   tabs: string[]
-  scrollTop?: number
+  move?: number
+  newIndex?: number
 }
 
 const ChangePopup: React.FC<ChangePopupType> = ({
   children,
   tabs,
-  scrollTop,
+  move,
+  newIndex,
 }) => {
-  const [tabIndex, setTabIndex] = useState(0)
+  const [tabIndex, setTabIndex] = useState(newIndex || 0)
 
   const validateDataSet = (targetIndex: string) => {
     if (targetIndex?.startsWith('tab-')) {
@@ -29,6 +31,14 @@ const ChangePopup: React.FC<ChangePopupType> = ({
     }
     return 0
   }
+
+  useEffect(() => {
+    const isArray = Array.isArray(children)
+    newIndex !== undefined &&
+      isArray &&
+      newIndex < children.length &&
+      setTabIndex(newIndex)
+  }, [newIndex, children])
 
   return (
     <ChangePopupWrapper
@@ -73,7 +83,7 @@ const ChangePopup: React.FC<ChangePopupType> = ({
         initial="rest"
         animate="rest"
       >
-        <WrapperScrollbar scrollTop={scrollTop}>
+        <WrapperScrollbar move={move}>
           {React.Children?.map(children, (child, i) => {
             return i === tabIndex && React.cloneElement(child)
           })}

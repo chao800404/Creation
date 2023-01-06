@@ -11,7 +11,6 @@ import useWindowPointerToggle from '../../utils/useWindowPointerToggle'
 import { useMenuPopupStore } from '../../store/useMenuPopupStore'
 import WrapperRename from '../wrapper/wrapperRename'
 import { addLabel } from '../../store/useLabelStore'
-import shallow from 'zustand/shallow'
 
 const WorkspaceItem: React.FC<
   ResDataType & {
@@ -47,13 +46,10 @@ const WorkspaceItem: React.FC<
     }
   }
 
-  const { toggle, handleToggleSet } = useWindowPointerToggle(
-    'tree-node',
-    (target) => {
-      const show = useMenuPopupStore.getState().show
-      if (!target || (target.id !== node.id && show)) updateText()
-    }
-  )
+  const { ref, toggle, handleToggleSet } = useWindowPointerToggle((target) => {
+    const show = useMenuPopupStore.getState().show
+    if (!target || (target.id !== node.id && show)) updateText()
+  })
 
   return (
     <WorkspaceItemWrapper
@@ -67,6 +63,7 @@ const WorkspaceItem: React.FC<
           showMenuPopup({ x, y, dataType, buttonsMap, width: 7.5 })
         }
       }}
+      ref={ref}
       data-type={dataType}
     >
       <Link href={`dashboard/${props.id}`}>

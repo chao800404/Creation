@@ -4,26 +4,22 @@ import { BsFillPlusCircleFill } from 'react-icons/bs'
 import { motion, AnimatePresence } from 'framer-motion'
 import ChangePopup from '../popup/changePopup'
 import SelectBlockContainer from '../container/selectBlockContainer'
-import useOnClickOutside from '../../utils/useOnClickOutside'
-import { useBlocksStore } from '../../store/useBlocksStore'
-import shallow from 'zustand/shallow'
-import { BLOCK_SELECTOR } from '../../utils/config'
-import { useRouter } from 'next/router'
-import { usePageSWR } from '../../hook/usePageSWR'
-import { BlockInputType } from '../../hook/type'
+import useWindowPointerToggle from '../../utils/useWindowPointerToggle'
+import { BlockInputType, BlockSelectorType } from '../../hook/type'
+import useCalcWindowHeight from '../../utils/useCalcWindowHeight'
 
 type BlockInputWrapperType = {
-  isEmpty: boolean
   children: React.ReactNode
   popupShow: boolean
-  isFocus: boolean
-  blockIndex: number
+  index: number
+  tabs: string[]
+  tabIndex: number
+  searchFields: string
   blockData: Omit<BlockInputType['blockData'], 'pageId'>
-  blockDataSet: (
-    blockContent: Omit<BlockInputType['blockData'], 'pageId'>
-  ) => void
-  popupShowSet: (show: boolean) => void
-  focusSet: (focus: boolean) => void
+  hiddenPopUp: () => void
+  inputButtonHanlder: () => void
+  blockContentSet: (index: number) => void
+  blocksSelectMap: BlockSelectorType[]
 }
 
 const animate = (scale: number) => ({
@@ -33,46 +29,21 @@ const animate = (scale: number) => ({
 })
 
 const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
-  isEmpty,
   children,
   popupShow,
-  popupShowSet,
-  focusSet,
-  isFocus,
-  blockIndex,
+  inputButtonHanlder,
   blockData,
-  blockDataSet,
+  blocksSelectMap,
+  blockContentSet,
+  index,
+  tabs,
+  tabIndex,
+  hiddenPopUp,
+  searchFields,
 }) => {
-  const [focusIndex, setFocusIndex] = useState(0)
   const [overThenWindowMiddleH, setOverThenWindowMiddleH] = useState(false)
-  const { blocksMapSet } = useBlocksStore(
-    (state) => ({
-      blocksMapSet: state.blocksMapSet,
-    }),
-    shallow
-  )
-  const { page } = useRouter().query
-
-  const {
-    mutateFunction: { addBlock },
-  } = usePageSWR((page && page[0]) || '')
-
+  const [showBtn, setShowBtn] = useState(false)
   const elemRef = useRef<HTMLDivElement | null>(null)
-  // const focusBlockIdSet = usePageStore(
-  //   (state) => state.focusBlockIdSet,
-  //   shallow
-  // )
-
-  const { isLeave } = useOnClickOutside((e) => {
-    const target = (e.target as HTMLElement).closest(
-      '[data-type = "block-add-popup"]'
-    )
-    !target && popupShow && popupShowSet(false)
-  })
-
-  useEffect(() => {
-    blocksMapSet(BLOCK_SELECTOR)
-  }, [blocksMapSet])
 
   useEffect(() => {
     const rect = elemRef.current?.getBoundingClientRect()
@@ -82,44 +53,40 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
     }
   }, [popupShow])
 
-  const memoFocusIndexSet = useCallback(
-    (index: React.SetStateAction<number>) => setFocusIndex(index),
-    []
-  )
+  const { ref } = useWindowPointerToggle(() => hiddenPopUp())
+
+  const elemPosition = useCalcWindowHeight({
+    elem: ref.current,
+    depend: popupShow,
+  })
 
   return (
     <BlockInputBaseWrapper
       id={blockData.id}
       onFocusCapture={(e) => {
         e.stopPropagation()
-        // focusBlockIdSet(blockData.id)
-        focusSet(true)
+        setShowBtn(true)
       }}
-      onBlur={(e) => {
-        if (e.target.id !== 'code-language') {
-          !isLeave && focusSet(false)
-        }
-      }}
+      onBlur={() => setShowBtn(false)}
       tabIndex={0}
-      // animate={{ backgroundColor: isFocus ? '#f8f8f8' : '#ffffff' }}
-      className={`p_m round_sm  ${popupShow ? 'popup-open' : ''}`}
+      className="p_m round_sm"
       data-type="block-content"
-      ref={elemRef}
+      // ref={elemRef}
+      ref={ref}
     >
       <motion.div
-        animate={{ opacity: isFocus && !popupShow ? 1 : 0 }}
         className="add_block-icon"
-        onClick={() => {
-          !isEmpty ? addBlock(blockIndex) : popupShowSet(true)
-        }}
+        onClick={() => inputButtonHanlder()}
         data-type="block-add-popup"
+        animate={{ opacity: showBtn ? 1 : 0 }}
+        style={{ visibility: showBtn ? 'visible' : 'hidden' }}
       >
         <BsFillPlusCircleFill className="add_block-icon-content" />
       </motion.div>
 
       {children}
       <AnimatePresence>
-        {popupShow && isFocus && isEmpty && (
+        {popupShow && (
           <motion.div
             transition={{ type: 'spring', damping: 10, stiffness: 350 }}
             initial={animate(1)}
@@ -127,19 +94,16 @@ const BlockInputWrapper: React.FC<BlockInputWrapperType> = ({
             exit={animate(0.95)}
             className="add_block-popup"
             data-type="block-add-popup"
-            style={{ bottom: overThenWindowMiddleH ? '4.5rem' : ' -20.5rem' }}
+            style={{ bottom: elemPosition === 'TOP' ? '4.5rem' : ' -20.5rem' }}
           >
-            <ChangePopup
-              tabs={['All', 'Basic', 'Table']}
-              scrollTop={40 * focusIndex}
-            >
+            <ChangePopup tabs={tabs} move={index * 40} newIndex={tabIndex}>
               <SelectBlockContainer
-                focusIndex={focusIndex}
-                focusIndexSet={memoFocusIndexSet}
-                id={blockData.id}
-                blockData={blockData}
-                blockDataSet={blockDataSet}
+                blocksSelectMap={blocksSelectMap}
+                blockContentSet={blockContentSet}
+                searchFields={searchFields}
               />
+              <div>hekkio</div>
+              <div>aaa</div>
             </ChangePopup>
           </motion.div>
         )}

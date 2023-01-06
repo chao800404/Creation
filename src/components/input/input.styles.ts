@@ -26,21 +26,16 @@ export const BlockInputBaseWrapper = styled(motion.div)`
   width: 100%;
   position: relative;
 
-  .add_block-input {
-    width: 100%;
-    font-size: 1.25rem;
-    font-weight: normal;
-  }
-
   .add_block-icon {
     position: absolute;
-    left: -2.2rem;
+    left: -1.5rem;
     z-index: 10;
     top: 50%;
     transform: translateY(-50%);
+    cursor: pointer;
 
     &-content {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       color: ${({ theme }) => theme.colors.primary};
     }
   }
@@ -57,22 +52,28 @@ type AddBlocknputWrapperTyep = {
   isFocus: boolean
 }
 
-export const AddBlocknputWrapper = styled('div').attrs<AddBlocknputWrapperTyep>(
-  ({ isFocus }) => ({ isFocus })
-)<AddBlocknputWrapperTyep>`
+export const AddBlocknputWrapper = styled('div')`
   position: relative;
   min-height: 28px;
-  height: auto;
+  display: flex;
+  align-items: center;
 
   .add_block-input {
     font-size: 1.1rem;
     align-self: center;
-    grid-columns: 1 / -1;
+    grid-column: 1 / -1;
     grid-row: 1 / -1;
     background-color: transparent;
+    width: 100%;
 
     &::placeholder {
-      color: ${({ isFocus, theme }) => (isFocus ? '#E3E3E3' : '#efefef')};
+      font-weight: 500;
+      font-size: 1rem;
+      color: ${({ theme }) => theme.colors.secondary_light};
+    }
+
+    &:focus::placeholder {
+      color: ${({ theme }) => theme.colors.primary_high};
     }
   }
 `

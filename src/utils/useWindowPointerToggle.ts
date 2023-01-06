@@ -1,21 +1,19 @@
-import React, { useState } from 'react'
+import { useState, useRef } from 'react'
 import useOnClickOutside from './useOnClickOutside'
 
 const useWindowPointerToggle = (
-  dataType: string,
-  handleClickOutSide: (target: Element | null) => void
+  handleClickOutSide: (target?: Element) => void
 ) => {
   const [toggle, setToggle] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
 
   const handleToggleSet = (toggle: boolean) => setToggle(toggle)
 
   const handleOnPointerDown = (e: MouseEvent) => {
-    const target = (e.target as HTMLElement).closest(
-      `[data-type="${dataType}"]`
-    )
-    if (!target) {
-      handleToggleSet(false)
+    const target = e.target as Element
+    if (ref.current && !ref.current.contains(target)) {
       handleClickOutSide(target)
+      setToggle(false)
     }
   }
 
@@ -24,6 +22,7 @@ const useWindowPointerToggle = (
   return {
     handleToggleSet,
     toggle,
+    ref,
   }
 }
 

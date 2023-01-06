@@ -83,9 +83,9 @@ export const HeaderEditorSWrapper = styled('div').attrs<HeaderEditorType>(
   .headerEditor_content {
     width: 100%;
     grid-column: 2 / -1;
-    font-size: 2rem;
     align-self: center;
-    font-size: 2.3rem;
+    font-size: 2.5rem;
+    font-family: 'Inter Tight', sans-serif;
   }
 
   .header_editor-gap-line {

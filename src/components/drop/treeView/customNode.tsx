@@ -34,15 +34,11 @@ export const CustomNode: React.FC<CustomNodeType> = (props) => {
   const indent = depth * 22
   const text = node.text && node.text.length > 0 ? node.text : 'Untitled'
   const [nextText, setNextText] = useState(text)
-  const elemRef = useRef<HTMLDivElement | null>(null)
 
-  const { toggle, handleToggleSet } = useWindowPointerToggle(
-    'tree-node',
-    (target) => {
-      const show = useMenuPopupStore.getState().show
-      if (!target || (target.id !== node.id && show)) updateText()
-    }
-  )
+  const { ref, toggle, handleToggleSet } = useWindowPointerToggle((target) => {
+    const show = useMenuPopupStore.getState().show
+    if (!target || (target.id !== node.id && show)) updateText()
+  })
 
   const updateText = () => {
     if (nextText.length > 0 && text !== nextText) {
@@ -79,7 +75,7 @@ export const CustomNode: React.FC<CustomNodeType> = (props) => {
   }
 
   useEffect(() => {
-    const elem = elemRef.current
+    const elem = ref.current
     const parentElem = elem?.parentElement?.parentElement
 
     if (elem && parentElem) {
@@ -104,7 +100,7 @@ export const CustomNode: React.FC<CustomNodeType> = (props) => {
         showInput={toggle}
         data-testid={`${testIdPrefix}custom-node-${node.id}`}
         isParent={node.parent === 0}
-        ref={elemRef}
+        ref={ref}
         onPointerDown={(e) => showMenu && showMenu(targetProps(e))}
         onPointerUp={(e) => e.buttons === 0 && addLabel(node)}
         onMouseEnter={() => router.prefetch(`dashboard/${node.id}`)}
@@ -129,6 +125,7 @@ export const CustomNode: React.FC<CustomNodeType> = (props) => {
                 onChange={(e) => setNextText(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && updateText()}
                 showInput={toggle}
+                fontWeight={node.parent === 0 ? 800 : 0}
               />
             </div>
             {!toggle && (

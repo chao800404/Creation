@@ -10,16 +10,16 @@ import { BaseBlockType } from './type'
 // export { default as CodeBlock } from './codeBlockContent'
 // export { default as TableBlock } from './tableBlock'
 
-const BlockContent = ({ blockData, ...otherProps }: BaseBlockType) => {
-  switch (blockData.name) {
+const BlockContent = (props: BaseBlockType) => {
+  switch (props.blockData.name) {
     case BLOCK_SELECTOR[8].name:
-      return <CodeBlockContent blockData={blockData} {...otherProps} />
+      return <CodeBlockContent {...props} />
     case BLOCK_SELECTOR[4].name:
-      return <TableBlock blockData={blockData} {...otherProps} />
-    // case BLOCK_SELECTOR[9].name:
-    //   return <ButtonBlock blockData={blockData} {...otherProps} />
+      return <TableBlock {...props} />
+    case BLOCK_SELECTOR[9].name:
+      return <ButtonBlock {...props} />
     default:
-      return <BaseBlock blockData={blockData} {...otherProps} />
+      return <BaseBlock {...props} />
   }
 }
 

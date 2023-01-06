@@ -29,7 +29,7 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import { lowlight } from 'lowlight'
 import { BLOCK_SELECTOR } from '../utils/config'
-import { Editor, ReactNodeViewRenderer } from '@tiptap/react'
+import { Editor } from '@tiptap/react'
 import { ImBold, ImStrikethrough, ImUnderline } from 'react-icons/im'
 import { GoItalic } from 'react-icons/go'
 import { HiOutlineCode } from 'react-icons/hi'
@@ -49,9 +49,8 @@ import {
   AiOutlineMergeCells,
   AiOutlineTable,
 } from 'react-icons/ai'
-import NextLink from 'next/link'
 
-const basicBlockFeature = [
+export const basicBlockFeature = [
   Document,
   Blockquote,
   Strike,
@@ -89,7 +88,7 @@ export const headingBlockFeature = (name: string, id: string) => [
   ...basicBlockFeature,
   Paragraph,
   Placeholder.configure({
-    placeholder: `${name}`,
+    placeholder: `${name.replace('_', ' ')}`,
   }),
   Heading.configure({
     levels: [1, 2, 3],

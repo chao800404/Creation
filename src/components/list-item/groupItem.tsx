@@ -58,8 +58,8 @@ const GroupItem = (
                 key={index}
                 desc={button.desc.replaceAll('_', ' ')}
                 icon={button.icon}
-                onClick={() => {
-                  // if (button.onClick) button.onClick()
+                onClick={(e) => {
+                  if (button.onClick) button.onClick(e)
                   hiddenMenuPopup()
                 }}
                 dataType={dataType}

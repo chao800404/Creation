@@ -44,7 +44,7 @@ type UsePageSWRResult = {
     ) => void
     updateOrder: (reorder: string[]) => void
     addBlock: (index: number, name?: string, type?: BlocksNameType) => void
-    deleteBlock: (page_id: string, id: string, index: number) => void
+    deleteBlock: (page_id: string, id: string) => void
   }
 }
 
@@ -185,7 +185,7 @@ export const usePageSWR: UsePageSWRType = (pageId) => {
       )
     },
 
-    deleteBlock: (page_id, id, index) => {
+    deleteBlock: (page_id, id) => {
       if (!data) return
       const cloneBlockToOrder = [...(data?.data.blockToOrder as string[])]
       const newBlockToOder = cloneBlockToOrder.filter(

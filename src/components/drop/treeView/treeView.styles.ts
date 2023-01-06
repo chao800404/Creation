@@ -73,11 +73,10 @@ export const CustomNodeWrapper = styled.div.attrs<CustomNodeType>(
   })
 )<CustomNodeType>`
   input {
-    font-family: 'Exo', sans-serif;
     background-color: transparent;
     border: none;
-    font-size: 0.8rem;
     outline: none;
+    font-size: 0.8rem;
     font-weight: 700;
     caret-color: ${({ isSelected, theme }) =>
       isSelected ? theme.colors.white : theme.colors.primary};
@@ -181,7 +180,6 @@ export const CustomNodeWrapper = styled.div.attrs<CustomNodeType>(
       padding-inline-start: 0.2rem;
       color: inherit;
       font-size: 0.8rem;
-      font-family: 'Exo', sans-serif;
       margin-top: 0.1rem;
       width: inherit;
 

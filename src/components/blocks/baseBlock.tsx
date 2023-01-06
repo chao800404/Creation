@@ -1,17 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { EditorContent, useEditor, BubbleMenu, Extensions } from '@tiptap/react'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import BlockPopup from '../popup/blockPopup'
+import React, { useEffect } from 'react'
 import { TextPopupBtns } from '../../lib/tiptap'
 import * as blockFeatures from '../../lib/tiptap'
 import { BlockInputType } from '../../hook/type'
-import { HexAlphaColorPicker } from 'react-colorful'
 import BubblePopup from '../popup/bubblePopup'
 
 type BaseBlockType = {
   blockData: BlockInputType['blockData']
   className: string
-  isFocus: boolean
   blockContentSet: (
     blockContent: Omit<BlockInputType['blockData'], 'pageId'>
   ) => void
@@ -21,7 +18,6 @@ const BaseBlock: React.FC<BaseBlockType> = ({
   blockData,
   className,
   blockContentSet,
-  isFocus,
 }) => {
   const { feature } = blockFeatures.blockTypeSelector(
     blockData.name,
@@ -31,9 +27,7 @@ const BaseBlock: React.FC<BaseBlockType> = ({
   const editor = useEditor({
     extensions: [...feature] as Extensions,
     // autofocus: true,
-    onCreate: ({ editor }) => {
-      editor.commands.focus('end')
-    },
+    onCreate: ({ editor }) => editor.commands.focus('end'),
     content: blockData.content,
   })
 
@@ -77,6 +71,7 @@ const BaseBlock: React.FC<BaseBlockType> = ({
         editor={editor}
         data-name={blockData.name}
         id={blockData?.id}
+        style={{ width: '100%' }}
       />
       {/* <SecondBubble {...secondBubble} /> */}
     </div>

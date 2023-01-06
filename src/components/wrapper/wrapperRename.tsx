@@ -7,12 +7,14 @@ const WrapperRename = ({
   width,
   onChange,
   onKeyDown,
+  fontWeight,
 }: {
   text: string
   showInput: boolean
   width?: string
   onChange: React.ChangeEventHandler<HTMLInputElement>
   onKeyDown: React.KeyboardEventHandler<HTMLInputElement>
+  fontWeight?: number
 }) => {
   return showInput ? (
     <input
@@ -23,7 +25,9 @@ const WrapperRename = ({
       onKeyDown={onKeyDown}
     />
   ) : (
-    <p style={{ width: width ? width : 'calc(100% - 4rem)' }}>{text}</p>
+    <p style={{ width: width ? width : 'calc(100% - 4rem)', fontWeight }}>
+      {text}
+    </p>
   )
 }
 

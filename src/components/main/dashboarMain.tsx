@@ -5,10 +5,12 @@ import HeaderEditorS from '../edit/headerEditorS'
 import Spinner from '../spinner/spinner'
 import { DashboardMainWrapper } from './main.styles'
 import BlockInputContent from '../input/blockInputContent'
-import { ButtonBlock } from '../blocks'
+import { ButtonBlock } from '../blocks/'
 import dynamic from 'next/dynamic'
 import React, { Suspense, useEffect, useRef, useState } from 'react'
-import { sortPageBlock } from '../../utils/sortPageBlock'
+import { useBlocksStore } from '../../store'
+import BLOCKS_SELECTOR from '../../config/BLOCKS_SELECTOR.json'
+import { BlockSelectorType } from '../../hook/type'
 
 const DynamicDashboardBanner = dynamic(
   () => import('../banner/dashboardBanner'),
@@ -30,7 +32,6 @@ const DashboardMain = () => {
     isLoading,
   } = usePageSWR(id)
 
-  const blocksContent = sortPageBlock({ blocks, blockToOrder })
   const elemRef = useRef<HTMLDivElement | null>(null)
 
   // const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -92,6 +93,11 @@ const DashboardMain = () => {
 
   // if (changeRouter) return null
 
+  useEffect(() => {
+    const { blocksMapSet } = useBlocksStore.getState()
+    blocksMapSet(BLOCKS_SELECTOR as BlockSelectorType[])
+  }, [])
+
   return (
     <DashboardMainWrapper
       tabIndex={0}
@@ -117,21 +123,20 @@ const DashboardMain = () => {
 
             ref={elemRef}
           >
-            {blocksContent &&
-              blocksContent.map(
-                (block, index) =>
-                  block && (
-                    <BlockInputContent
-                      blockData={block}
-                      key={block?.id}
-                      pageId={id}
-                      blockIndex={index}
-                      bigThenOne={blocksContent.length > 1}
-                    />
-                  )
-              )}
+            {blocks?.map(
+              (block, index) =>
+                block && (
+                  <BlockInputContent
+                    blockData={block}
+                    key={block?.id}
+                    pageId={id}
+                    bigThenOne={blocks.length > 1}
+                    blockIndex={index}
+                  />
+                )
+            )}
           </div>
-          <ButtonBlock />
+          {/* <ButtonBlock /> */}
           <div style={{ height: '50vh', background: '#ffffff' }}></div>
         </div>
 

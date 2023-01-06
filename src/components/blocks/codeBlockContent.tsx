@@ -3,7 +3,6 @@ import { BlockInputType } from '../../hook/type'
 import { CodeBlockWrapper } from './block.styles'
 import { replaceClassName } from '../../utils/filterFile'
 import {
-  Editor,
   EditorContent,
   Extensions,
   ReactNodeViewRenderer,
@@ -118,6 +117,7 @@ const CodeBlockContent: React.FC<BaseBlockType> = ({
       editor={editor}
       data-name={blockData.name}
       id={blockData?.id}
+      style={{ width: '100%' }}
     />
   )
 }

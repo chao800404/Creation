@@ -7,16 +7,10 @@ import { useListSWR } from '../../src/hook/useListSWR'
 import { useRouter } from 'next/router'
 import Spinner from '../../src/components/spinner/spinner'
 import { fetcher } from '../../src/utils/fetch'
-import { useCoverStore } from '../../src/store'
-import shallow from 'zustand/shallow'
 import { MenuPopup } from '../../src/components/popup/menuPopup'
-import { useStatusStore } from '../../src/store/useStatusStore'
+import { useBlocksStore, useCoverStore } from '../../src/store'
 
 const Dashboard = () => {
-  const coverImageMapSet = useCoverStore(
-    (state) => state.coverImageMapSet,
-    shallow
-  )
   const router = useRouter()
   const {
     query: { page },
@@ -29,6 +23,7 @@ const Dashboard = () => {
   } = useListSWR(page && (page[0] as string))
 
   useEffect(() => {
+    const { coverImageMapSet } = useCoverStore.getState()
     fetcher('/api/getImageCover').then((coverImagePath) =>
       coverImageMapSet(coverImagePath?.path)
     )

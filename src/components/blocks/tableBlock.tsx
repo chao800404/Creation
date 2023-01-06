@@ -12,7 +12,6 @@ import BubblePopup from '../popup/bubblePopup'
 type BaseBlockType = {
   blockData: BlockInputType['blockData']
   className: string
-  isFocus: boolean
   blockContentSet: (
     blockContent: Omit<BlockInputType['blockData'], 'pageId'>
   ) => void
@@ -22,7 +21,6 @@ const TableBlock: React.FC<BaseBlockType> = ({
   blockData,
   className,
   blockContentSet,
-  isFocus,
 }) => {
   const elemRef = useRef<null | HTMLDivElement>(null)
 

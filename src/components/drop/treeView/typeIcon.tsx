@@ -9,7 +9,7 @@ import Image from 'next/image'
 type TypeIcon<T> = {
   isOpen: boolean
   hasChild: boolean
-  node: TreeDataType<T>
+  node?: TreeDataType<T>
   iconSize?: string
 }
 
@@ -19,6 +19,10 @@ export const TypeIcon = ({
   node,
   iconSize,
 }: TypeIcon<ListData>) => {
+  if (!node) {
+    return null
+  }
+
   const emoji = node.data?.emoji
   const iconSizes = iconSize ? iconSize : '1rem'
 

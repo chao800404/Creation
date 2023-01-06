@@ -4,7 +4,7 @@ import WrapperScrollbar from '../scroll/wrapperScrollbar'
 import { useRouter } from 'next/router'
 import { usePageSWR } from '../../hook/usePageSWR'
 import BlockReviewBtn from '../button/blockReviewBtn'
-import { sortPageBlock } from '../../utils/sortPageBlock'
+
 // import { usePageStore } from '../../store'
 import shallow from 'zustand/shallow'
 import { BlockInputType } from '../../hook/type'
@@ -22,10 +22,10 @@ const BlockReviewContainer = () => {
 
   const [items, setItems] = useState<null | BlockInputType['blockData'][]>(null)
 
-  useEffect(() => {
-    const blocksContent = sortPageBlock({ blocks, blockToOrder })
-    setItems(blocksContent)
-  }, [blocks, blockToOrder])
+  // useEffect(() => {
+  //   const blocksContent = sortPageBlock({ blocks, blockToOrder })
+  //   setItems(blocksContent)
+  // }, [blocks, blockToOrder])
 
   useEffect(() => {
     if (!reordered) return

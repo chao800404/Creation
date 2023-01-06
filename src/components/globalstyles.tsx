@@ -7,8 +7,8 @@ export const GlobalStyle = createGlobalStyle`
       box-sizing:inherit;
   }
  
-  html,input , button { 
-    font-family: 'Exo', sans-serif;
+  html,input , button  { 
+    font-family: 'Inter Tight', sans-serif;
   } 
 
   
@@ -27,9 +27,8 @@ export const GlobalStyle = createGlobalStyle`
     border: none;
     outline: none;
     resize: none;
-    font-weight: 700;
-    font-family: Roboto;
     font-size:1rem;
+    font-weight: 800;
 
     
     &::placeholder {
@@ -83,11 +82,11 @@ export const GlobalStyle = createGlobalStyle`
 
   h1 {
     font-weight: bold;
-    font-size:2.5rem;
+    font-size:2.25rem;
     pointer-events: none;
   }
   h2 {
-    font-size: 2rem;
+    font-size: 1.875rem;
   }
 
   h3 {
@@ -136,19 +135,16 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: 700;
   }
 
-
-  .add_block-input{
-    li {
-      font-size: 1rem;
-      margin-left: 1rem;
-      font-weight: 400;
-    }
+  .heightligh {
+    color:red;
   }
+
 
 
   div[data-name="Bullested_list"] {
       li {
         list-style: square;
+        margin-left:1.2rem;
       }
     }
 
@@ -161,25 +157,26 @@ export const GlobalStyle = createGlobalStyle`
   ul[data-type="taskList"] {
     list-style: none;
     padding: 0;
- 
+    
     p {
-      margin-left: .1rem;
+      margin-left: -0.1rem;
     }
   
     li {
       display: flex;
-      align-items: center;
       margin-left:0;
   
       > label {
         flex: 0 0 auto;
         margin-right: 0.5rem;
         user-select: none;
+        margin-top: 0.4rem;
+
 
         > input {
           display:block;
           accent-color:#1c1c1c;
-
+        
         }
       }
   
@@ -240,7 +237,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     h1.is-empty:first-child::before {
-      font-size:1.5rem;
+      font-size:inherit;
     }
 
     p.is-empty:first-child::before{

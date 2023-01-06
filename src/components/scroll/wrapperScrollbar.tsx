@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { motion } from 'framer-motion'
 import { usePageControllerStore } from '../../store'
@@ -26,13 +26,22 @@ const opacityMotion = {
 
 type WrapperScrollbarType = {
   children: ReactNode
-  scrollTop?: number
+  move?: number
 }
 
-const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({ children }) => {
+const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
+  children,
+  move,
+}) => {
   const dragStart = usePageControllerStore((state) => state.dragStart, shallow)
   const [isCeiling, setCeiling] = useState(true)
   const scrollElem = useRef<null | Scrollbars>(null)
+
+  useEffect(() => {
+    if (move !== undefined) {
+      scrollElem.current?.scrollTop(move)
+    }
+  }, [move])
 
   return (
     <SrollWrappr whileHover="hover" initial="rest">
