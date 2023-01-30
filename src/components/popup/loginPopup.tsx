@@ -7,7 +7,7 @@ import { usePopupStore, useUserStore } from '../../store'
 import BasicInput from '../input/input'
 import { HiOutlineMail } from 'react-icons/hi'
 import { FaRegUser } from 'react-icons/fa'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { LoginPopupWrapper } from './popup.styles'
 
 const LoginPopup = () => {

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Head from 'next/head'
 import { DashboardLayout, DashboardMain } from '../../src/components/index'
 import { SWRConfig, unstable_serialize, useSWRConfig } from 'swr'
@@ -8,21 +8,30 @@ import { useRouter } from 'next/router'
 import Spinner from '../../src/components/spinner/spinner'
 import { fetcher } from '../../src/utils/fetch'
 import { MenuPopup } from '../../src/components/popup/menuPopup'
-import { useBlocksStore, useCoverStore } from '../../src/store'
+import { useCoverStore } from '../../src/store'
+import dynamic from 'next/dynamic'
+
+const DynamicLayout = dynamic(
+  import('../../src/components/layout/dashboardLayout'),
+  { ssr: false }
+)
 
 const Dashboard = () => {
   const router = useRouter()
+  const dataFetchedRef = useRef(false)
   const {
     query: { page },
   } = router
 
-  const { cache } = useSWRConfig()
   const {
-    data: { emoji, title },
+    data: { emoji, title, list },
     isLoading,
   } = useListSWR(page && (page[0] as string))
 
   useEffect(() => {
+    if (dataFetchedRef.current) return
+
+    dataFetchedRef.current = true
     const { coverImageMapSet } = useCoverStore.getState()
     fetcher('/api/getImageCover').then((coverImagePath) =>
       coverImageMapSet(coverImagePath?.path)
@@ -43,9 +52,9 @@ const Dashboard = () => {
       </Head>
 
       <MenuPopup />
-      <DashboardLayout>
+      <DynamicLayout>
         <DashboardMain />
-      </DashboardLayout>
+      </DynamicLayout>
     </SWRConfig>
   )
 }

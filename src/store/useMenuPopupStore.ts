@@ -1,5 +1,5 @@
 import { IconType } from 'react-icons'
-import create from 'zustand'
+import { create } from 'zustand'
 
 export type ButtonMapType = {
   icon?: IconType

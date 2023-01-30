@@ -12,7 +12,7 @@ import useWindowPointerToggle from '../../../utils/useWindowPointerToggle'
 
 import Link from 'next/link'
 import { useLabelStore, addLabel } from '../../../store/useLabelStore'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { useRouter } from 'next/router'
 
 export const CustomNode: React.FC<CustomNodeType> = (props) => {

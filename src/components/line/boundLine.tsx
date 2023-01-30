@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { usePageControllerStore } from '../../store'
 import { BoundLineWrapper, LineProps } from './line.styles'
 
@@ -53,7 +53,7 @@ const BoundLine: React.FC<BoundLineType> = ({
     ]
 
     events.forEach((event) =>
-      window.addEventListener<typeof event[0]>(event[0], event[1])
+      window.addEventListener<(typeof event)[0]>(event[0], event[1])
     )
 
     return () => {

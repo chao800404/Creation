@@ -63,6 +63,7 @@ export const LabelItemWrapper: FC<LabelType<ResDataType>['item']> = ({
   })
 
   drag(drop(ref))
+
   return (
     <div ref={ref} data-handler-id={handlerId}>
       <LabelItem

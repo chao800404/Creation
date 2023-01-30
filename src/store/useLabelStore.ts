@@ -1,6 +1,6 @@
 import { ListData, ResDataType } from './../hook/useListSWR'
 import produce, { setAutoFreeze } from 'immer'
-import create from 'zustand'
+import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { findIndex } from '../utils/findIndex'
 import { add } from 'lodash'

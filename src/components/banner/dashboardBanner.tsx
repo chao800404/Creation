@@ -9,7 +9,7 @@ import React, {
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCoverStore } from '../../store'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { DashboardBannerWrapper } from './banner.styles'
 import SelectImageContainer from '../container/selectImageContainer'
 import UploadImagContainer from '../container/uploadImageContainer'

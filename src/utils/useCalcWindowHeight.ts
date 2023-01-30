@@ -1,4 +1,4 @@
-import Reac, { RefObject, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type ResResult = 'TOP' | 'BOTTOM' | null
 type UseCalcWindowHeight = <J>({

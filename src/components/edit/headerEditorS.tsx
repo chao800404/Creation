@@ -7,7 +7,7 @@ import EditorOptionButton from '../button/editorOptionButton'
 import { useCoverStore } from '../../store'
 import { useRouter } from 'next/router'
 import { randomPath } from '../../utils/randomPath'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { usePageSWR } from '../../hook/usePageSWR'
 import { BsFillEmojiSunglassesFill } from 'react-icons/bs'
 import { FaImage } from 'react-icons/fa'
@@ -185,7 +185,7 @@ const HeaderEditorS = () => {
       )}
 
       <ReactTextareaAutosize
-        placeholder="Enter something.."
+        placeholder="Title"
         className="headerEditor_content"
         onFocus={() => {
           setShouldShow(true)

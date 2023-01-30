@@ -6,7 +6,7 @@ import { usePageSWR } from '../../hook/usePageSWR'
 import BlockReviewBtn from '../button/blockReviewBtn'
 
 // import { usePageStore } from '../../store'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { BlockInputType } from '../../hook/type'
 
 const BlockReviewContainer = () => {

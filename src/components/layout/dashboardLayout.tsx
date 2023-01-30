@@ -22,17 +22,6 @@ import { TreeView, FavoriteTag } from '../drop'
 import { MenuType } from './dashboard'
 import { MainDropWrapper } from '../drop'
 
-// const DynamicSideWrapper = dynamic(() => import('../side/sideWrapper'), {
-//   ssr: false,
-// })
-
-// const DynamicDashBoardContainer = dynamic(
-//   () => import('../container/dashBoardContainer'),
-//   {
-//     ssr: false,
-//   }
-// )
-
 type DashboardLayoutType = {
   children: JSX.Element | JSX.Element[]
 }
@@ -86,10 +75,6 @@ const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
     [mutateFunction]
   )
 
-  // const handleDrop = (item) => {
-
-  // }
-
   if (!list) return null
 
   return (
@@ -134,7 +119,6 @@ const DashboardLayout: React.FC<DashboardLayoutType> = ({ children }) => {
 
         <DashBoardContainer id={id} list={list}>
           <MainDropWrapper>{children}</MainDropWrapper>
-          {/* {children} */}
         </DashBoardContainer>
       </DashboardLayoutWrapper>
     </DndProvider>

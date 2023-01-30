@@ -1,7 +1,7 @@
 import React from 'react'
 import { WorkspaceItemPopupWrapper } from './popup.styles'
 import { useMenuPopupStore } from '../../store/useMenuPopupStore'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { InitialMenuPopup } from '../../store/useMenuPopupStore'
 import PopupItem from '../list-item/popup-item'
 import useOnClickOutside from '../../utils/useOnClickOutside'

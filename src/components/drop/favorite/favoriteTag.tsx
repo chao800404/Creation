@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
-import shallow from 'zustand/shallow'
-import { useDrop } from 'react-dnd'
-import { SIDE_OPTION } from '../../../utils/config'
+import { shallow } from 'zustand/shallow'
 import { ResDataType, useListSWR } from '../../../hook/useListSWR'
 import { BsFillBookmarkStarFill } from 'react-icons/bs'
 import FeaturesBtn from '../../button/featuresBtn'
@@ -10,8 +8,9 @@ import WrapperScrollbar from '../../scroll/wrapperScrollbar'
 import WorkspaceItem from '../../list-item/workspaceItem'
 import { FeatureTagWrapper } from './favorite.styles'
 import { TreeViewType } from '../treeView/type'
-import { showMenuPopup } from '../../popup/menuPopup'
 import { usePageControllerStore } from '../../../store/usePageControllerStore'
+import dynamic from 'next/dynamic'
+import { pageMap } from '../../../lib/yjs'
 
 const variants = (height: number) => ({
   hide: {
@@ -53,10 +52,13 @@ const FavoriteTag: React.FC<TreeViewType> = ({ list, id, menuMap }) => {
         document.body.style.cursor = 'ns-resize'
         const { top } = elem.getBoundingClientRect()
         const height = e.pageY - top
-        height > 150 && height < 350 && favoriteTagHeightSet(height)
+        if (height > 150 && height < 350) {
+          pageMap.set('pageMap', { favHeight: height })
+        }
       }
     },
-    [favoriteTagHeightSet, pointerDown]
+
+    [pointerDown]
   )
 
   useEffect(() => {
@@ -71,6 +73,30 @@ const FavoriteTag: React.FC<TreeViewType> = ({ list, id, menuMap }) => {
     }
   }, [handlePointer])
 
+  useEffect(() => {
+    const handleChange = () => {
+      const favTag = pageMap.get('pageMap')
+
+      if (favTag !== undefined) {
+        const [key] = Object.keys(favTag)
+
+        switch (key) {
+          case 'open':
+            typeof favTag.open === 'boolean' && favoriteTagToggle(favTag.open)
+            break
+          case 'favHeight':
+            typeof favTag.favHeight === 'number' &&
+              favoriteTagHeightSet(favTag.favHeight)
+            break
+        }
+        // favoriteTagToggle(favTag.open)
+      }
+    }
+    pageMap.observe(handleChange)
+    return () => pageMap.unobserve(handleChange)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <FeatureTagWrapper
       isDrag={pointerDown}
@@ -82,7 +108,7 @@ const FavoriteTag: React.FC<TreeViewType> = ({ list, id, menuMap }) => {
           icon={BsFillBookmarkStarFill}
           text={'Favorite'}
           style={{ padding: '2px .5rem', borderBottom: '1px solid #e3e3e3' }}
-          onClick={() => favoriteTagToggle(!favoriteTagOpen)}
+          onClick={() => pageMap.set('pageMap', { open: !favoriteTagOpen })}
         />
       </div>
       <AnimatePresence>
@@ -131,4 +157,4 @@ const FavoriteTag: React.FC<TreeViewType> = ({ list, id, menuMap }) => {
   )
 }
 
-export default FavoriteTag
+export default dynamic(() => Promise.resolve(FavoriteTag), { ssr: false })

@@ -17,6 +17,7 @@ export const HeaderEditorSWrapper = styled('div').attrs<HeaderEditorType>(
   height: fit-content;
   position: relative;
   padding: 0.5rem 0 0 0;
+  margin-top: 5rem;
 
   &:hover {
     .headierEditor_popup {

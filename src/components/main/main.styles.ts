@@ -8,19 +8,16 @@ type DashboardMain = {
 export const DashboardMainWrapper = styled('div')<DashboardMain>`
   width: 100%;
   height: 100%;
-  position: relative;
 
   .DashboardMain_container {
     background: white;
     height: 100%;
-    /* padding: 1rem; */
     width: 100%;
+    position: relative;
 
     &-banner {
       width: inherit;
-
       height: ${({ show }) => (show ? '18rem' : '0')};
-      position: relative;
       border-bottom: ${({ show }) => (show ? '1px solid' : '0')};
     }
 
@@ -31,25 +28,8 @@ export const DashboardMainWrapper = styled('div')<DashboardMain>`
       padding: 0 3rem;
       gap: 0.5rem;
       background-color: ${({ theme }) => theme.colors.white};
-
-      &-gap {
-        height: ${({ hasCover }) => (hasCover ? '1.5rem' : '2.5rem')};
-      }
-
-      &-header {
-        display: flex;
-        align-items: center;
-        width: 100%;
-      }
-
-      &-add {
-        width: 100%;
-        margin-top: 1rem;
-        position: relative;
-        display: inherit;
-        flex-direction: column;
-        gap: 0.2rem;
-      }
+      height: 100%;
+      position: relative;
     }
   }
 `

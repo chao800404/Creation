@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import produce from 'immer'
 
 export type InitialKeydownState = {
@@ -20,6 +20,8 @@ type handleOnKeydownProps = {
 
 type Action = {
   handleOnKeydown: (props: handleOnKeydownProps) => void
+  handleArrowUp: () => void
+  handleArrowDown: (length: number) => void
   reset: () => void
 }
 
@@ -92,6 +94,24 @@ export const useKeydownStore = create<InitialKeydownState & Action>(
         })
       )
     },
+    handleArrowUp: () =>
+      set(
+        produce<InitialKeydownState>((state) => {
+          const { index } = state
+          if (index > 0) {
+            state.index -= 1
+          }
+        })
+      ),
+    handleArrowDown: (length) =>
+      set(
+        produce<InitialKeydownState>((state) => {
+          const { index } = state
+          if (index < length - 1) {
+            state.index += 1
+          }
+        })
+      ),
     reset: () =>
       set(
         produce<InitialKeydownState>((state) => {

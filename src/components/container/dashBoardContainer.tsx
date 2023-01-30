@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import DashBoardNav from '../navbar/dashBoardNav'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { usePageControllerStore } from '../../store'
 import { DashboardContainerWrapper } from './container.styles'
 import BoundLine from '../line/boundLine'

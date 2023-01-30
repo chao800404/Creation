@@ -12,38 +12,38 @@ type SearchBarBtnProps = {
 const SearchBarBtn: React.FC<SearchBarBtnProps> = ({ desc }) => {
   const [toggleOpen, setToggleOpen] = useState(false)
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const { ctrlKey, key } = e
-      if (ctrlKey && key.toUpperCase() === 'K') {
-        e.preventDefault()
-        console.log(true)
-        !toggleOpen && setToggleOpen(true)
-      }
-    }
+  // useEffect(() => {
+  //   const handleKeyDown = (e: KeyboardEvent) => {
+  //     const { ctrlKey, key } = e
+  //     if (ctrlKey && key.toUpperCase() === 'K') {
+  //       e.preventDefault()
+  //       console.log(true)
+  //       !toggleOpen && setToggleOpen(true)
+  //     }
+  //   }
 
-    const handleOnClick = (e: MouseEvent) => {
-      const btn = (e.target as HTMLElement).closest(
-        '[data-type="serch-button"]'
-      )
-      const serchBox = (e.target as HTMLElement).closest(
-        '[data-type="search-popup"]'
-      )
+  //   const handleOnClick = (e: MouseEvent) => {
+  //     const btn = (e.target as HTMLElement).closest(
+  //       '[data-type="serch-button"]'
+  //     )
+  //     const serchBox = (e.target as HTMLElement).closest(
+  //       '[data-type="search-popup"]'
+  //     )
 
-      if (btn || serchBox) {
-        return setToggleOpen(true)
-      }
+  //     if (btn || serchBox) {
+  //       return setToggleOpen(true)
+  //     }
 
-      setToggleOpen(false)
-    }
+  //     setToggleOpen(false)
+  //   }
 
-    document.addEventListener('click', handleOnClick, false)
-    document.addEventListener('keydown', handleKeyDown, false)
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown, false)
-      document.removeEventListener('click', handleOnClick, false)
-    }
-  }, [toggleOpen])
+  //   document.addEventListener('click', handleOnClick, false)
+  //   document.addEventListener('keydown', handleKeyDown, false)
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyDown, false)
+  //     document.removeEventListener('click', handleOnClick, false)
+  //   }
+  // }, [toggleOpen])
 
   return (
     <>

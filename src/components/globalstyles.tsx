@@ -39,7 +39,10 @@ export const GlobalStyle = createGlobalStyle`
   li {
     list-style: none;
     font-size: .5rem;
-    font-weight: 700;
+    
+    p {
+      padding-left: 0.3rem;
+    }
   }
 
   a,a:active,a:focus {
@@ -59,24 +62,10 @@ export const GlobalStyle = createGlobalStyle`
   img,h1,h2,h3,h4,h5,h6,p,button {
     user-select: none;
   }
+  
 
   svg {
-    display: block;
-    
-  }
-
-  select {
-    background: #1c1c1c;
-    border: none;
-    color:white;
-    display: flex;
-    justify-content:center;
-    
-
-    option {
-      color:inherit;
-      display: block;
-    }
+    display: block; 
   }
 
 
@@ -96,12 +85,14 @@ export const GlobalStyle = createGlobalStyle`
   blockquote {
     padding-left: 1rem;
     border-left: 2px solid #c3c3c3;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
   }
 
 
   code {
     background-color: #c3c3c3;
-    color: #616161;
+    color: white;
   }
 
   .pl_m {
@@ -140,50 +131,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 
-
-  div[data-name="Bullested_list"] {
-      li {
-        list-style: square;
-        margin-left:1.2rem;
-      }
-    }
-
-  div[data-name="Numbered_list"] {
-      li {
-        list-style: number;
-      }
-  }
-
-  ul[data-type="taskList"] {
-    list-style: none;
-    padding: 0;
-    
-    p {
-      margin-left: -0.1rem;
-    }
-  
-    li {
-      display: flex;
-      margin-left:0;
-  
-      > label {
-        flex: 0 0 auto;
-        margin-right: 0.5rem;
-        user-select: none;
-        margin-top: 0.4rem;
-
-
-        > input {
-          display:block;
-          accent-color:#1c1c1c;
-        
-        }
-      }
-  
-      > div {
-        flex: 1 1 auto;
-      }
-    }
+  .has-focus {
+    background-color: red;
   }
 
 
@@ -209,22 +158,318 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  .resize-cursor {
-    cursor: ew-resize;
-    cursor: col-resize;
+  .slate-p {
+    line-height: 1;
+  }
+
+  hr.slate-HrElement-hr {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  hr.bGpDwk {
+    background-color: #747474;
+  }
+
+  pre.slate-code_block {
+    background-color:#1c1c1c;
+    margin-top:0.5rem;
+    margin-bottom:0.5rem;
+
+    & > select {
+      background-color: #1c1c1c;
+      color: white;
+
+      &::-webkit-scrollbar {
+        width: 100%;
+        height:.5rem;
+      }
+
+
+      &::-webkit-scrollbar-thumb {
+        background: #555;
+        &:hover {
+          background: #1c1c1c;
+        }
+      }
+    }
+
+    span {
+
+      & >.keyword {
+        color: #C792EA;
+      }
+
+      & >.operator 
+      >.url {
+        color:#9a6e3a;
+      }
+
+      & >.comment {
+        color: slategray;
+      }
+      
+      & >.variable, 
+      >.regex {
+        color: #e90;
+      }
+
+      & >.boolean, 
+      >.number, 
+      >.constant, 
+      >.symbol,
+      >.selector {
+        color: #FBBC88;
+      }
+
+      
+
+      & >.punctuation{
+        color: #89DDFF;
+      }
+
+      & >.string,
+      >.char,
+      >.tag {
+        color: #C3E88D;
+      }
+
+      & >.function {
+        color: #dd4a68;
+      }
+
+      & >.literal-property{
+        color: #F07178
+      }
+    }
   }
 
 
-  .ProseMirror {
-    p,h1,h2,h3,h4,h5,h6,div{
-      outline: none;
+
+  [data-testid="Toolbar"]{
+    position: fixed;
+    bottom: 3rem;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+
+  
+  }
+
+
+  .slate-mark_selector-1-active,
+  .slate-mark_selector-2-active,
+  .slate-ToolbarButton-active{
+    color:black !important;    
+  }
+
+  .mark_selector{
+    display: flex;
+    position: relative;
+    margin-right: 8px;
+    /* transform: translateY(1px); */
+
+    &-drop {
+      position: relative;
+      width: 4px;
+      right: 7px;
+      top: 5px;
+
+      svg {
+        cursor: pointer;
+      }
+    }
+
+    &-popup {
+      position: absolute;
+      top: -4.5rem;
+      left:-2.5rem;
+      background-color: #1c1c1c;
+      border-radius: 5px;
+      width: auto;
+      box-shadow: 0 0 .2rem rgba(0,0,0,0.5);
+      border: 1px solid #555;
+      padding: 0.2rem 0;
+
+      &-item {
+        display: flex;
+        align-items: center;
+        color: white;
+        padding: 0.2rem 0.8rem;
+        cursor: pointer;
+
+        &:hover {
+          background-color:#555;
+        }
+
+        & > span:nth-child(1){
+          width: 0.6rem;
+          font-size: 0.7rem;
+          color: green;
+          display: flex;
+        }
+
+        & > span:nth-child(2){
+          height: 1.3rem;
+          padding:0 0.5rem;
+          display: flex;
+          align-items: center;
+
+          svg {
+            width: 1.2rem;
+            height: 1.2rem;
+          }
+        }
+
+        & > span:nth-child(3){
+          font-size: 0.6rem;
+        }
+      }
+    }
+  }
+
+  [data-testid="ColorPicker"]{
+    border: 2px solid #555;
+    border-radius: 5px;
+    box-shadow: 0 0 0.1rem rgba(0,0,0,0.1);
+
+    & > div > div {
+      button {
+        width: 95%;
+        font-weight: 900;
+
+        &:hover {
+          background-color:#1c1c1c;
+          color: white;
+        }
+      }
+    }
+  
+
+    & > button[data-testid="ColorPickerClear"]{
+      width: 95%;
+      font-weight: 900;
+
+      &:hover {
+        background-color:#1c1c1c;
+        color: white;
+      }
     }
 
 
-    h1.is-empty:first-child::before,
-    h2.is-empty:first-child::before,
-    h3.is-empty:first-child::before,
-    p.is-empty:first-child::before
+    button[data-testid="ColorButton"]{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        box-shadow: unset;
+        border: 2px solid #1c1c1c;
+        box-sizing: content-box;
+      }
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  
+  .tippy-box[data-theme~='dark'] {
+    background-color: #1c1c1c;
+    color: #c0c0c0;
+    font-size: 0.5rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: 700;
+  }
+
+  .TtHLj {
+    border-radius: 5px;
+    .iflLRb{
+      box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+      border: 2px solid #1c1c1c;
+
+      & > nav#emoji-nav {
+        & > div > div {
+          background-color: #1c1c1c;
+        }
+      }
+
+      input[type="text"]{
+        &::placeholder{
+        
+        }
+      }
+
+      svg {
+        fill: #1c1c1c;
+      }
+
+      [data-id="scroll"]{
+        &::-webkit-scrollbar{
+          width: 5px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background-color: #1c1c1c;
+          border: unset;
+        }
+      }
+    }
+  }
+
+  .diuqSz {
+    box-shadow: 0 0 0.2rem rgba(0,0,0,0.3) !important;
+    background: #1c1c1c !important;;
+   
+    & > div.cKeavz {
+      input {
+        color: white !important;;
+
+        &::placeholder {
+          color: #ccc !important;;
+        }
+      }
+    }
+  }
+  .hbmPqc {
+    background: #1c1c1c;
+    color: white;
+    border-radius: 5px;
+
+    .jYjDDa {
+      background-color: #555;
+    }
+    button , a {
+      background: inherit;
+      color: inherit;
+
+      &:hover {
+        background: inherit;
+        color:#cccccc;
+      }
+    }
+  }
+
+
+
+  /* .ProseMirror {
+    p,h1,h2,h3,h4,h5,h6,div{
+      outline: none;
+      position: relative;
+    }
+
+    p,h1,h2,h3,h4,h5,h6 {
+      color: #373737;
+    }
+
+    h1.is-empty::before,
+    h2.is-empty::before,
+    h3.is-empty::before,
+    p.is-empty::before
     {
       content: attr(data-placeholder);
       position: absolute;
@@ -247,7 +492,7 @@ export const GlobalStyle = createGlobalStyle`
     p {
       font-size: 1rem;
       height: fit-content;
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
 
@@ -318,6 +563,8 @@ export const GlobalStyle = createGlobalStyle`
       }
 
     }
+    
+ 
 
 
     table {
@@ -386,16 +633,12 @@ export const GlobalStyle = createGlobalStyle`
     }
 
   
-    hr {
-      border: none;
-      border-top: 2px solid rgba(#0D0D0D, 0.1);
-      margin: 2rem 0;
-    }
+
   
     
   }
 
-
+ */
 
 `
 
@@ -403,6 +646,7 @@ type themeKey =
   | 'primary'
   | 'primary_high'
   | 'primary_2'
+  | 'primary_3'
   | 'primary_dark'
   | 'primary_high_2'
   | 'secondary'
@@ -423,6 +667,7 @@ export const theme: DefaultTheme = {
   colors: {
     primary: '#1c1c1c',
     primary_2: '#747474',
+    primary_3: '#555',
     primary_high: '#cccccc',
     primary_high_2: '#393939',
     primary_dark: '#000000',

@@ -9,7 +9,7 @@ import { useInView } from 'react-intersection-observer'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { EmojiBaseMap } from '@prisma/client'
 import { useEmojiStore } from '../../store/index'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { fetcher } from '../../utils/fetch'
 
 const EmojiComponent = ({ emojis }: { emojis: EmojiBaseMap[] }) => (

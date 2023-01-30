@@ -3,7 +3,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Navbar, LoginPopup } from '../src/components/index'
 import { usePopupStore } from '../src/store'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { IndexLayout } from '../src/components/layout'
 
 export const Home: NextPage = () => {

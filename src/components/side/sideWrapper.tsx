@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { SIDE_MAX_WIDTH, SIDE_MIN_WIDTH } from '../../utils/config'
 import BoundLine from '../line/boundLine'
 import { usePageControllerStore } from '../../store'

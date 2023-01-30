@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import { validateEamil, validateUserName } from '../lib/validator'
 import produce from 'immer'
 

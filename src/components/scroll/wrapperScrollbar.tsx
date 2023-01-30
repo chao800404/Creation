@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { motion } from 'framer-motion'
 import { usePageControllerStore } from '../../store'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { SrollWrappr } from './scroll.styles'
 
 const opacityMotion = {

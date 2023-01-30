@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { usePopupStore } from '../../store'
 import { NavbarWrapper } from './navbar.styles'
 

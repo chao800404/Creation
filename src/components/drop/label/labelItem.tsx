@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { AiOutlineCloseSquare } from 'react-icons/ai'
 import { ResDataType } from '../../../hook/useListSWR'
 import { TypeIcon } from '../treeView/typeIcon'
