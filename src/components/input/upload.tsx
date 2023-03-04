@@ -98,6 +98,7 @@ const UploadFile = (props: UploadProps) => {
     <input
       style={style}
       type="file"
+      autoFocus={true}
       accept="image/*"
       onChange={handleUpload}
       onDragEnter={handleDragEnter}

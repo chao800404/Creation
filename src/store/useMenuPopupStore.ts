@@ -47,5 +47,5 @@ export const useMenuPopupStore = create<InitialMenuPopup & Action>(
   })
 )
 
-process.env.NODE_ENV !== 'production' &&
-  useMenuPopupStore.subscribe(console.log)
+// process.env.NODE_ENV !== 'production' &&
+//   useMenuPopupStore.subscribe(console.log)

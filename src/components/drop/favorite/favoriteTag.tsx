@@ -43,7 +43,7 @@ const FavoriteTag: React.FC<TreeViewType> = ({ list, id, menuMap }) => {
     mutateFunction: { addNewPage, updatePageConfig },
   } = useListSWR()
 
-  const favoriteList = list.filter((item) => item.data?.favorite)
+  const favoriteList = list?.filter((item) => item?.data?.favorite)
 
   const handlePointer = useCallback(
     (e: PointerEvent) => {
@@ -126,30 +126,28 @@ const FavoriteTag: React.FC<TreeViewType> = ({ list, id, menuMap }) => {
             }}
             onContextMenu={(e) => e.preventDefault()}
           >
-            <>
-              <WrapperScrollbar>
-                {favoriteList.map((item) => (
-                  <WorkspaceItem
-                    key={item.id}
-                    {...item}
-                    isSelected={item.id === id}
-                    hasChild={list.some((its) => its.parent === item.id)}
-                    addNewPage={addNewPage}
-                    dataType="workspace-item"
-                    menuMap={menuMap}
-                    updatePageConfig={updatePageConfig}
-                  />
-                ))}
-              </WrapperScrollbar>
-              <div
-                data-type="feature-drag"
-                className="feature_drag_bound"
-                onPointerDown={(e) => {
-                  e.preventDefault()
-                  setPointerDown(true)
-                }}
-              />
-            </>
+            <WrapperScrollbar>
+              {favoriteList.map((item) => (
+                <WorkspaceItem
+                  key={item.id}
+                  {...item}
+                  isSelected={item.id === id}
+                  hasChild={list.some((its) => its.parent === item.id)}
+                  addNewPage={addNewPage}
+                  dataType="workspace-item"
+                  menuMap={menuMap}
+                  updatePageConfig={updatePageConfig}
+                />
+              ))}
+            </WrapperScrollbar>
+            <div
+              data-type="feature-drag"
+              className="feature_drag_bound"
+              onPointerDown={(e) => {
+                e.preventDefault()
+                setPointerDown(true)
+              }}
+            />
           </motion.div>
         )}
       </AnimatePresence>

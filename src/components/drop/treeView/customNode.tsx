@@ -35,10 +35,11 @@ export const CustomNode: React.FC<CustomNodeType> = (props) => {
   const text = node.text && node.text.length > 0 ? node.text : 'Untitled'
   const [nextText, setNextText] = useState(text)
 
-  const { ref, toggle, handleToggleSet } = useWindowPointerToggle((target) => {
-    const show = useMenuPopupStore.getState().show
-    if (!target || (target.id !== node.id && show)) updateText()
-  })
+  const { ref, toggle, handleToggleSet } =
+    useWindowPointerToggle<HTMLDivElement>((target) => {
+      const show = useMenuPopupStore.getState().show
+      if (!target || (target.id !== node.id && show)) updateText()
+    })
 
   const updateText = () => {
     if (nextText.length > 0 && text !== nextText) {

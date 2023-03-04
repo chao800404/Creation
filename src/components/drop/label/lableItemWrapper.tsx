@@ -54,9 +54,7 @@ export const LabelItemWrapper: FC<LabelType<ResDataType>['item']> = ({
 
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.Label,
-    item: () => {
-      return { id: label.id, index }
-    },
+    item: () => ({ id: label.id, index }),
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),

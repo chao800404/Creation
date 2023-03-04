@@ -27,11 +27,13 @@ const opacityMotion = {
 type WrapperScrollbarType = {
   children: ReactNode
   move?: number
+  style?: React.CSSProperties
 }
 
 const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
   children,
   move,
+  style,
 }) => {
   const dragStart = usePageControllerStore((state) => state.dragStart, shallow)
   const [isCeiling, setCeiling] = useState(true)
@@ -44,7 +46,7 @@ const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
   }, [move])
 
   return (
-    <SrollWrappr whileHover="hover" initial="rest">
+    <SrollWrappr whileHover="hover" initial="rest" style={style}>
       <Scrollbars
         height="100%"
         width="100%"
@@ -61,12 +63,14 @@ const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
                 height: '100%',
                 zIndex: '500',
               }}
+              contentEditable={false}
             />
           )
         }}
         renderThumbVertical={({ style, ...props }) => {
           return (
             <motion.div
+              contentEditable={false}
               style={{
                 ...style,
                 backgroundColor: '#1A202C',
@@ -84,6 +88,8 @@ const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
             <motion.div
               {...props}
               className="view"
+              // style={{ overflowY: 'hidden' }}
+
               // animate={
               //   isCeiling
               //     ? { backgroundColor: 'rgba(0,0,0,0)' }

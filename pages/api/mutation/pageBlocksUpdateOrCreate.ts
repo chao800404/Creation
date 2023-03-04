@@ -2,7 +2,6 @@ import { NextApiResponse, NextApiRequest } from 'next'
 import { z, ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
-import { BlockHTML } from '@prisma/client'
 
 // type MySchema = z.infer<typeof MySchema>
 const keyEnum = ['text', 'list', 'code', 'table', 'button'] as const
@@ -41,74 +40,74 @@ export default async function handler(
       if (!resData) throw new Error("You can't be updating this file")
 
       if (req.method === 'POST' || req.method === 'PATCH') {
-        const block = await prisma.page.update({
-          where: {
-            id: page_id,
-          },
-          data: {
-            pageConfig: {
-              update: {
-                blockToOrder,
-              },
-            },
-            blockHTML: {
-              upsert: {
-                where: {
-                  id,
-                },
-                create: {
-                  name,
-                  content,
-                  id,
-                },
-                update: {
-                  content: content,
-                  name,
-                  type,
-                },
-              },
-            },
-          },
-          select: {
-            blockHTML: {
-              where: {
-                id,
-              },
-              select: {
-                id: true,
-                name: true,
-                content: true,
-                type: true,
-              },
-            },
-          },
-        })
+        // const block = await prisma.page.update({
+        //   where: {
+        //     id: page_id,
+        //   },
+        //   data: {
+        //     pageConfig: {
+        //       update: {
+        //         blockToOrder,
+        //       },
+        //     },
+        //     blockHTML: {
+        //       upsert: {
+        //         where: {
+        //           id,
+        //         },
+        //         create: {
+        //           name,
+        //           content,
+        //           id,
+        //         },
+        //         update: {
+        //           content: content,
+        //           name,
+        //           type,
+        //         },
+        //       },
+        //     },
+        //   },
+        //   select: {
+        //     blockHTML: {
+        //       where: {
+        //         id,
+        //       },
+        //       select: {
+        //         id: true,
+        //         name: true,
+        //         content: true,
+        //         type: true,
+        //       },
+        //     },
+        //   },
+        // })
 
-        return res.status(200).json({
-          status: block ? 'success' : 'fail',
-          data: block.blockHTML[0],
-        })
-      } else if (req.method === 'DELETE') {
-        await prisma.page.update({
-          where: {
-            id: page_id,
-          },
-          data: {
-            pageConfig: {
-              update: {
-                blockToOrder,
-              },
-            },
-            blockHTML: {
-              delete: {
-                pageId_id: {
-                  pageId: page_id,
-                  id: id as string,
-                },
-              },
-            },
-          },
-        })
+        //   return res.status(200).json({
+        //     status: block ? 'success' : 'fail',
+        //     data: block.blockHTML[0],
+        //   })
+        // } else if (req.method === 'DELETE') {
+        //   await prisma.page.update({
+        //     where: {
+        //       id: page_id,
+        //     },
+        //     data: {
+        //       pageConfig: {
+        //         update: {
+        //           blockToOrder,
+        //         },
+        //       },
+        //       blockHTML: {
+        //         delete: {
+        //           pageId_id: {
+        //             pageId: page_id,
+        //             id: id as string,
+        //           },
+        //         },
+        //       },
+        //     },
+        //   })
 
         return res.status(200).json({
           status: 'success',

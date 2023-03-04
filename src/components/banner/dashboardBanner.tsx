@@ -136,7 +136,7 @@ const DashboardBanner = ({ coverImage }: { coverImage: string }) => {
                         />
                       ))}
                   </div>
-                  <UploadImagContainer setToggleShow={togglePopupMemorize} />
+                  {/* <UploadImagContainer setToggleShow={togglePopupMemorize} /> */}
                 </DynamicChangePopup>
               </Suspense>
             </motion.div>

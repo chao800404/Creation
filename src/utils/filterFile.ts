@@ -33,3 +33,6 @@ export const httpParser = (url: string) => {
 
   return httpRegex.test(url)
 }
+
+export const replaceText = (string: string) =>
+  string.toLocaleLowerCase().replace('_', ' ').replace('-', ' ')

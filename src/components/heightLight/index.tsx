@@ -9,7 +9,7 @@ export const Heightlight = ({
 }) => {
   const coloringWord = searchFields
     ? text?.replace(
-        searchFields?.toLocaleLowerCase(),
+        searchFields?.toLocaleLowerCase().replace('_', ' '),
         `<span class=${className}>${searchFields?.toLocaleLowerCase()}</span>`
       )
     : text

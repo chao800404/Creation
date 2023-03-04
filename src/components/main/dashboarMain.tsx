@@ -5,6 +5,7 @@ import HeaderEditorS from '../edit/headerEditorS'
 import { DashboardMainWrapper } from './main.styles'
 import dynamic from 'next/dynamic'
 import React, { Suspense, useEffect, useRef } from 'react'
+import { useListSWR } from '@/hook/useListSWR'
 const DynamicDashboardBanner = dynamic(
   () => import('../banner/dashboardBanner'),
   {
@@ -12,7 +13,7 @@ const DynamicDashboardBanner = dynamic(
   }
 )
 
-const Editor = dynamic(() => import('../edtiors'), { ssr: false })
+const Editor = dynamic(() => import('../edtior/editor'), { ssr: false })
 
 const DashboardMain = () => {
   const router = useRouter()
@@ -21,11 +22,15 @@ const DashboardMain = () => {
   } = router
 
   const id = (page && (page[0] as string)) || ''
-  // const [changeRouter, setChangeRouter] = useState(false)
   const {
-    data: { cover, blocks, blockToOrder },
+    data: { cover, content },
     isLoading,
   } = usePageSWR(id)
+  const {
+    data: { editable },
+  } = useListSWR(id)
+
+  console.log(content)
 
   return (
     <DashboardMainWrapper
@@ -44,7 +49,7 @@ const DashboardMain = () => {
 
         <div className="DashboardMain_container-content">
           <HeaderEditorS />
-          <Editor />
+          <Editor editable={editable || false} />
         </div>
       </div>
     </DashboardMainWrapper>

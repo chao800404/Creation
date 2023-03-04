@@ -1,14 +1,16 @@
 import { Prisma } from '@prisma/client'
 import { JSONParser } from 'formidable/parsers'
 import { NextApiResponse, NextApiRequest } from 'next'
-import { ZodError } from 'zod'
+import { object, ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
 
 type BlockType = 'id' | 'content' | 'name' | 'type'
 type SortBlocksType = Record<string, Record<BlockType, string>>
 
-export default async function getUserData(
+type Node<T> = Record<string, T>
+
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -24,20 +26,15 @@ export default async function getUserData(
             },
           },
           select: {
-            userId: true,
-            cover: true,
-            blockHTML: {
+            cover: {
               select: {
-                content: true,
                 id: true,
-                name: true,
-                type: true,
+                image: true,
               },
-              orderBy: {},
             },
-            pageConfig: {
+            content: {
               select: {
-                blockToOrder: true,
+                id: true,
               },
             },
           },
@@ -45,23 +42,29 @@ export default async function getUserData(
 
         if (!resData) throw new Error('You are not allowed to query these data')
 
-        const { cover, pageConfig, blockHTML } = resData
+        let nodes: Node<unknown>[] = await prisma.node.findMany({
+          where: {
+            contentId: resData?.content?.id,
+          },
+        })
 
-        const blockHtmlMap = blockHTML.reduce((acc, next) => {
-          acc[next.id] = next
-          return acc
-        }, {} as SortBlocksType)
+        nodes = nodes.map((item) => {
+          const object: Node<unknown> = {}
+          for (const [key, value] of Object.entries(item)) {
+            if (key === 'parentId' || !!value) {
+              object[key] = value
+            }
+          }
+          return object
+        })
 
-        const sortBlocks = (pageConfig?.blockToOrder as [])?.map(
-          (id) => blockHtmlMap[id]
-        )
+        // console.log(nodes)
 
         res.status(200).json({
           status: 'success',
           data: {
-            cover,
-            blocks: sortBlocks,
-            blockToOrder: pageConfig?.blockToOrder,
+            cover: resData.cover,
+            nodes: nodes,
           },
         })
       } catch (error) {

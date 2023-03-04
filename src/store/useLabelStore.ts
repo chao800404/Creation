@@ -100,4 +100,6 @@ export const addLabel = (item: ResDataType) => {
   addLabel(item)
 }
 
+process.env.NODE_ENV !== 'production' && useLabelStore.subscribe(console.log)
+
 setAutoFreeze(false)

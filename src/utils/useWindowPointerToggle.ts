@@ -1,19 +1,23 @@
 import { useState, useRef } from 'react'
 import useOnClickOutside from './useOnClickOutside'
 
-const useWindowPointerToggle = (
-  handleClickOutSide?: (target?: Element) => void
+const useWindowPointerToggle = <T extends Node>(
+  handleClickOutSide?: (target?: T) => void
 ) => {
   const [toggle, setToggle] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<T>(null)
 
   const handleToggleSet = (toggle: boolean) => setToggle(toggle)
 
   const handleOnPointerDown = (e: MouseEvent) => {
-    const target = e.target as Element
+    const target = e.target
 
-    if (ref.current && !ref.current.contains(target)) {
-      !!handleClickOutSide && handleClickOutSide(target)
+    if (
+      target &&
+      ref.current &&
+      !(ref.current as unknown as HTMLElement).contains(target as Node)
+    ) {
+      !!handleClickOutSide && handleClickOutSide(target as T)
       setToggle(false)
     }
   }

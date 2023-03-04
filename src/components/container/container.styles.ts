@@ -96,14 +96,12 @@ export const DashboardContainerWrapper = styled('main')`
 export const UploadImageContainerWrapper = styled('div')`
   height: 100%;
   color: #8c8c8c;
+  width: 100%;
+  gap: 0.2rem;
+  flex-direction: column;
+  display: flex;
 
   .uploadImage-content {
-    flex-direction: column;
-    display: flex;
-    height: inherit;
-    gap: 0.2rem;
-    width: 100%;
-
     &-box {
       display: block;
       width: inherit;

@@ -235,7 +235,7 @@ export const useListSWR: UseListType = (pageId) => {
     },
   }
 
-  const listItem = data?.data?.find((item) => item.id === pageId)
+  const listItem = data?.data?.find((item) => item?.id === pageId)
 
   return {
     data: {

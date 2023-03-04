@@ -6,7 +6,7 @@ import { DragItem } from '../label/type'
 import { MainDropWrapperType } from './type'
 import { useRouter } from 'next/router'
 import { MainWrapper } from './main.styles'
-import { useLabelStore, addLabel } from '../../../store/useLabelStore'
+import { addLabel } from '../../../store/useLabelStore'
 import { ResDataType } from '../../../hook/useListSWR'
 
 const MainDropWrapper: React.FC<MainDropWrapperType> = ({ children }) => {

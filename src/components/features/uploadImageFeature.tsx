@@ -5,7 +5,15 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ImageType } from '../input/upload'
 
-const UploadImageFeature = ({ file }: { file: ImageType }) => {
+const UploadImageFeature = ({
+  file,
+  typesetting,
+}: {
+  file: ImageType
+  typesetting: 'column' | 'row'
+}) => {
+  const type = typesetting === 'column'
+
   return (
     <UploadImageFeatureWrapper>
       {file?.file ? (
@@ -18,7 +26,13 @@ const UploadImageFeature = ({ file }: { file: ImageType }) => {
           />
         </div>
       ) : (
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: type ? 'column' : 'row',
+            gap: type ? 'unset' : '1.5rem',
+          }}
+        >
           <motion.div
             animate={{
               opacity: [1, 0.5, 1],

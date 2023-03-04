@@ -75,7 +75,9 @@ const DashBoardContainr = ({
             </div>
           )}
 
-          <WrapperScrollbar>{children}</WrapperScrollbar>
+          <WrapperScrollbar style={{ width: '100%', height: '100%' }}>
+            {children}
+          </WrapperScrollbar>
           <BoundLine
             widthSet={dashboardMainWidthSet}
             left="-2px"

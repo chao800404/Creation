@@ -18,7 +18,11 @@
     "noImplicitThis": true,
     "sourceMap": true,
     "types": ["node"],
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

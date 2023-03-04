@@ -66,4 +66,4 @@ export const useUserStore = create<InitialUser & Action>((set, get) => ({
     ),
 }))
 
-process.env.NODE_ENV !== 'production' && useUserStore.subscribe(console.log)
+// process.env.NODE_ENV !== 'production' && useUserStore.subscribe(console.log)

@@ -34,4 +34,4 @@ export const useStatusStore = create<InitialStatusStore & Action>(
   })
 )
 
-process.env.NODE_ENV !== 'production' && useStatusStore.subscribe(console.log)
+// process.env.NODE_ENV !== 'production' && useStatusStore.subscribe(console.log)

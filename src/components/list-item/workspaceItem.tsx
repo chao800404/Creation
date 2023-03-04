@@ -46,10 +46,11 @@ const WorkspaceItem: React.FC<
     }
   }
 
-  const { ref, toggle, handleToggleSet } = useWindowPointerToggle((target) => {
-    const show = useMenuPopupStore.getState().show
-    if (!target || (target.id !== node.id && show)) updateText()
-  })
+  const { ref, toggle, handleToggleSet } =
+    useWindowPointerToggle<HTMLDivElement>((target) => {
+      const show = useMenuPopupStore.getState().show
+      if (!target || (target.id !== node.id && show)) updateText()
+    })
 
   return (
     <WorkspaceItemWrapper

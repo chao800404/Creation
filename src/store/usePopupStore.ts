@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-type InitialUser = {
+type InitPopupStore = {
   indexSignInDisplay: boolean
 }
 
@@ -8,16 +8,16 @@ type Action = {
   displayToggle: () => void
 }
 
-const initialPopup = {
+const initialPopupStore = {
   indexSignInDisplay: false,
 }
 
-export const usePopupStore = create<InitialUser & Action>((set, get) => ({
-  ...initialPopup,
+export const usePopupStore = create<InitPopupStore & Action>((set, get) => ({
+  ...initialPopupStore,
   displayToggle: () =>
     set(() => ({
       indexSignInDisplay: !get().indexSignInDisplay,
     })),
 }))
 
-process.env.NODE_ENV !== 'production' && usePopupStore.subscribe(console.log)
+// process.env.NODE_ENV !== 'production' && usePopupStore.subscribe(console.log)

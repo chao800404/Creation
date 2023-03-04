@@ -1,4 +1,5 @@
 import { createGlobalStyle, DefaultTheme } from 'styled-components'
+import 'tippy.js/dist/tippy.css'
 
 export const GlobalStyle = createGlobalStyle`
   *,*::before,*::after {
@@ -29,7 +30,7 @@ export const GlobalStyle = createGlobalStyle`
     resize: none;
     font-size:1rem;
     font-weight: 800;
-
+    font-family: 'Inter Tight', sans-serif;
     
     &::placeholder {
       color: #EFEFEF;
@@ -59,10 +60,7 @@ export const GlobalStyle = createGlobalStyle`
     cursor:pointer;
   }
 
-  img,h1,h2,h3,h4,h5,h6,p,button {
-    user-select: none;
-  }
-  
+
 
   svg {
     display: block; 
@@ -162,6 +160,24 @@ export const GlobalStyle = createGlobalStyle`
     line-height: 1;
   }
 
+  .slate-align-center{
+    text-align: center;
+    position: relative;
+    &::before{
+      left:50%;
+      transform: translateX(-50%);
+      width:10rem;
+    }
+  }
+
+  .slate-align-right {
+    text-align: right;
+    position: relative;
+    &::before{
+      right:0;
+    }
+  }
+
   hr.slate-HrElement-hr {
     padding-top: 0;
     padding-bottom: 0;
@@ -247,15 +263,17 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 
+  .tippy_style {
+    background-color:#1c1c1c;
+    padding:0.3rem 0.5rem;
+    color: #F0F0F0;
+    border-radius: 5px;
+    font-size: 0.8rem;
+  }
 
-  [data-testid="Toolbar"]{
-    position: fixed;
-    bottom: 3rem;
-    z-index: 10;
-    display: flex;
-    justify-content: center;
 
-  
+  button[data-testid="ToolbarButton"]{
+    color:#C0C0C0;
   }
 
 
@@ -274,8 +292,8 @@ export const GlobalStyle = createGlobalStyle`
     &-drop {
       position: relative;
       width: 4px;
-      right: 7px;
-      top: 5px;
+      right: 8px;
+      top: 8px;
 
       svg {
         cursor: pointer;
@@ -283,15 +301,17 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     &-popup {
-      position: absolute;
-      top: -4.5rem;
-      left:-2.5rem;
       background-color: #1c1c1c;
       border-radius: 5px;
       width: auto;
       box-shadow: 0 0 .2rem rgba(0,0,0,0.5);
       border: 1px solid #555;
-      padding: 0.2rem 0;
+      padding:0;
+      display: flex;
+      flex-direction: column;
+      padding:0.3rem 0;
+    
+
 
       &-item {
         display: flex;
@@ -382,7 +402,6 @@ export const GlobalStyle = createGlobalStyle`
     background-color: #1c1c1c;
     color: #c0c0c0;
     font-size: 0.5rem;
-    padding: 5px 10px;
     border-radius: 5px;
     font-weight: 700;
   }
@@ -424,7 +443,7 @@ export const GlobalStyle = createGlobalStyle`
   .diuqSz {
     box-shadow: 0 0 0.2rem rgba(0,0,0,0.3) !important;
     background: #1c1c1c !important;;
-   
+    
     & > div.cKeavz {
       input {
         color: white !important;;
@@ -454,192 +473,7 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-
-
-  /* .ProseMirror {
-    p,h1,h2,h3,h4,h5,h6,div{
-      outline: none;
-      position: relative;
-    }
-
-    p,h1,h2,h3,h4,h5,h6 {
-      color: #373737;
-    }
-
-    h1.is-empty::before,
-    h2.is-empty::before,
-    h3.is-empty::before,
-    p.is-empty::before
-    {
-      content: attr(data-placeholder);
-      position: absolute;
-      top:50%;
-      transform: translateY(-50%);
-      color: #efefef;
-      width: 100%;
-      pointer-events: none;
-    
-    }
-
-    h1.is-empty:first-child::before {
-      font-size:inherit;
-    }
-
-    p.is-empty:first-child::before{
-      font-size:1rem;
-    }
-
-    p {
-      font-size: 1rem;
-      height: fit-content;
-      line-height: 1.5;
-    }
-
-
-    pre {
-      background: rgb(25, 25, 25);
-      color: #FFF;
-      font-family: 'JetBrainsMono', monospace;
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      code {
-        background: none;
-        color: inherit;
-        font-size: .9rem;
-        padding: 0;
-        line-height: 1.5;
-      }
-  
-      .hljs-comment,
-      .hljs-quote {
-        color: #616161;
-      }
-  
-      .hljs-variable,
-      .hljs-template-variable,
-      .hljs-attribute,
-      .hljs-tag,
-      .hljs-name,
-      .hljs-regexp,
-      .hljs-link,
-      .hljs-name,
-      .hljs-selector-id,
-      .hljs-selector-class {
-        color: #f98181;
-      }
-  
-      .hljs-number,
-      .hljs-meta,
-      .hljs-built_in,
-      .hljs-builtin-name,
-      .hljs-literal,
-      .hljs-type,
-      .hljs-params {
-        color: #fbbc88;
-      }
-  
-      .hljs-string,
-      .hljs-symbol,
-      .hljs-bullet {
-        color: #b9f18d;
-      }
-  
-      .hljs-title,
-      .hljs-section {
-        color: #ff4a32;
-      }
-  
-      .hljs-keyword,
-      .hljs-selector-tag {
-        color: #dd93ff;
-      }
-  
-      .hljs-emphasis {
-        font-style: italic;
-      }
-  
-      .hljs-strong {
-        font-weight: 700;
-      }
-
-    }
-    
  
-
-
-    table {
-    border-collapse: collapse;
-    margin: 0;
-    overflow: hidden;
-    table-layout: fixed;
-    width: 100%;
-      tr {
-        min-height: 2rem;
-      }    
-    
-  
-      td,
-      th {
-        border: 2px solid #ced4da;
-        box-sizing: border-box;
-        width: 10rem;
-        padding: 3px 5px;
-        position: relative;
-        vertical-align: top;
-        cursor:text;
-        
-
-        > * {
-          margin-bottom: 0;
-        }
-
-        &:focus {
-          background: red;
-        }
-      }
-  
-      th {
-        background-color: #f1f3f5;
-        font-weight: bold;
-        text-align: left;
-      }
-  
-      .selectedCell:after {
-        background: rgba(87, 104, 93, 0.4);
-        content: "";
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        pointer-events: none;
-        position: absolute;
-        z-index: 2;
-      }
-
-      
-  
-      .column-resize-handle {
-        background-color: rgba(0,0,0,.5);
-        bottom: -2px;
-        position: absolute;
-        right: -2px;
-        pointer-events: none;
-        top: 0;
-        width: 4px;
-        cursor: ew-resize;
-        cursor: col-resize;
-      }
-
-    }
-
-  
-
-  
-    
-  }
-
- */
-
 `
 
 type themeKey =
@@ -651,6 +485,7 @@ type themeKey =
   | 'primary_high_2'
   | 'secondary'
   | 'secondary_light'
+  | 'secondary_light_2'
   | 'secondary_dark'
   | 'tertiary'
   | 'white'
@@ -673,6 +508,7 @@ export const theme: DefaultTheme = {
     primary_dark: '#000000',
     secondary: '#f4f4f4',
     secondary_light: '#efefef',
+    secondary_light_2: '#F1F1F1',
     secondary_dark: '',
     tertiary: '#e8f0fe', // #e8f0fe
     white: '#ffffff',

@@ -40,9 +40,16 @@ export default async function handler(
             cover: {
               create: {},
             },
-            blockHTML: {
+            content: {
               create: {
-                id: blockId,
+                node: {
+                  createMany: {
+                    data: [
+                      { type: 'p', parentId: null, id: blockId },
+                      { type: 'text', parentId: blockId, text: '' },
+                    ],
+                  },
+                },
               },
             },
             parentId: parentId || null,
@@ -71,24 +78,29 @@ export default async function handler(
                 droppable: true,
               },
             },
+
             parentId: true,
             children: true,
           },
         })
 
+        console.log()
+
         res.status(200).json({
           status: 'success',
           data: {
             id: resData.id,
-            parent: resData.parentId || 0,
+            parent: resData.parentId === null ? 0 : resData.parentId,
             text: resData.pageConfig?.title,
             droppable: resData.pageConfig?.droppable,
             data: {
-              favorite: resData.pageConfig?.favorite,
               editable: resData.pageConfig?.editable,
-              hasChild: resData.children.length > 0,
+              favorite: resData.pageConfig?.favorite,
               shouldShow: resData.pageConfig?.shouldShow,
-              emoji: resData.emoji,
+              emoji: {
+                id: resData.emoji?.id,
+                image: resData.emoji?.image,
+              },
             },
           },
         })

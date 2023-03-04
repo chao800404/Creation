@@ -55,23 +55,6 @@ export default async function handler(
           },
         })
 
-        console.log(resData)
-
-        // const resData = await prisma.page.findUnique({
-        //   where: {
-        //     id,
-        //   },
-        // })
-
-        // if (!resData || resData.userId !== user.id)
-        //   throw new Error("You can't delete this file")
-
-        // const { userId, ...otherData } = await prisma.page.delete({
-        //   where: {
-        //     id,
-        //   },
-        // })
-
         res.status(200).json({
           status: 'success',
           data: resData.map((item) => ({

@@ -15,10 +15,10 @@ const BlockReviewContainer = () => {
   // const focusBlockId = usePageStore((state) => state.focusBlockId, shallow)
   const { page } = router.query
   const id = (page && (page[0] as string)) || ''
-  const {
-    data: { blocks, blockToOrder },
-    mutateFunction: { updateOrder },
-  } = usePageSWR(id)
+  // const {
+  //   data: { blocks, blockToOrder },
+  //   mutateFunction: { updateOrder },
+  // } = usePageSWR(id)
 
   const [items, setItems] = useState<null | BlockInputType['blockData'][]>(null)
 
@@ -27,13 +27,13 @@ const BlockReviewContainer = () => {
   //   setItems(blocksContent)
   // }, [blocks, blockToOrder])
 
-  useEffect(() => {
-    if (!reordered) return
-    const reorderIdMaps = items?.map((item) => item.id)
-    !!reorderIdMaps && updateOrder(reorderIdMaps)
+  // useEffect(() => {
+  //   if (!reordered) return
+  //   const reorderIdMaps = items?.map((item) => item.id)
+  //   !!reorderIdMaps && updateOrder(reorderIdMaps)
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reordered])
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [reordered])
 
   return (
     <BlockReviewWrapper>
