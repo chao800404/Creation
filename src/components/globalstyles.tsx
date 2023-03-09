@@ -23,6 +23,20 @@ export const GlobalStyle = createGlobalStyle`
       } */
   }
 
+  :root {
+    --primary:#1c1c1c;
+    --primary_2: #747474;
+    --primary_3: #555;
+    --primary_high: #cccccc;
+    --primary_high_2:#393939;
+    --primary_dark: #000000;
+    --secondary: #f4f4f4;
+    --secondary_light: #efefef;
+    --secondary_light_2: #F1F1F1;
+    --secondary_dark: ;
+    --tertiary: #e8f0fe;
+    --white: #ffffff;
+  }
   
   textarea {
     border: none;
@@ -502,17 +516,17 @@ declare module 'styled-components' {
 
 export const theme: DefaultTheme = {
   colors: {
-    primary: '#1c1c1c',
-    primary_2: '#747474',
-    primary_3: '#555',
-    primary_high: '#cccccc',
-    primary_high_2: '#393939',
-    primary_dark: '#000000',
-    secondary: '#f4f4f4',
-    secondary_light: '#efefef',
-    secondary_light_2: '#F1F1F1',
+    primary: 'var(--primary)',
+    primary_2: 'var(--primary_2)',
+    primary_3: 'var(--primary_3)',
+    primary_high: 'var(--primary_high)',
+    primary_high_2: 'var(--primary_high_2)',
+    primary_dark: 'var(--primary_dark)',
+    secondary: 'var(--secondary)',
+    secondary_light: 'var(--secondary_light)',
+    secondary_light_2: 'var(--secondary_light_2)',
     secondary_dark: '',
-    tertiary: '#e8f0fe', // #e8f0fe
-    white: '#ffffff',
+    tertiary: 'var(--tertiary)',
+    white: 'var(--white)',
   },
 }

@@ -8,7 +8,7 @@ import { LinkButtonPopupProps, LinkItem } from './type'
 
 const labels = [{ name: 'INTERNAL LINK' }, { name: 'EXTERNAL LINK' }]
 
-export const LinkButtonPopup = ({
+const LinkButtonPopup = ({
   toggle,
   items,
   handleSetSrc,
@@ -35,3 +35,7 @@ export const LinkButtonPopup = ({
     </AnimatePresence>
   )
 }
+
+React.memo(LinkButtonPopup).displayName = 'LinkButtonPopup'
+
+export { LinkButtonPopup }

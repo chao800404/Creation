@@ -63,7 +63,7 @@ import { createExpandableHeadingPlugin } from '../expandableHeading'
 
 const components = withStyledDraggables(withStyledPlaceHolders(plateUI))
 
-export const Plugins = ({ inputCreationId }: { inputCreationId: string }) =>
+export const Plugins = () =>
   createPlugins<MyValue>(
     [
       ...basicNodesPlugins,
@@ -83,7 +83,7 @@ export const Plugins = ({ inputCreationId }: { inputCreationId: string }) =>
       createComboboxPlugin(),
       createReactPlugin(),
       // createBlockSelectionPlugin(),
-      createMentionPlugin(mentionPlugin({ inputCreationId })),
+      createMentionPlugin(mentionPlugin),
       // createMentionPlugin(),
       createExitBreakPlugin(exitBreakPlugin),
       createSoftBreakPlugin(softBreakPlugin),

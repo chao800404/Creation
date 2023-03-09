@@ -34,11 +34,18 @@ export const ExpandableHeadingWrapper = styled('div').attrs<ExpandableHeading>(
     grid-column: 1 / 2;
     grid-row: 2 / -1;
     justify-self: start;
-    background-color: ${({ theme, focus }) =>
-      focus ? theme.colors.primary_high : theme.colors.secondary_light};
-    height: 100%;
-    width: 2px;
-    margin-left: 3px;
+    cursor: default;
+    width: 100%;
+
+    & > span {
+      background-color: ${({ theme, focus }) =>
+        focus ? theme.colors.primary_high : theme.colors.secondary_light};
+      height: 100%;
+      width: 2px;
+      margin-left: 3px;
+
+      display: block;
+    }
   }
 
   .title {

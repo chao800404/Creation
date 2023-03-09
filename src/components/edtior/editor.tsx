@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { editableProps } from './common/editableProps'
 import { Plate, Toolbar } from '@udecode/plate'
 import { MyValue } from './plateTypes'
@@ -41,6 +41,8 @@ const Editor = ({
   const status = useStatusStore((state) => state.status, shallow)
   const items = useMemo(() => getSuggestionItems, [])
 
+  const renderElement = useMemo(() => Plugins(), [])
+
   const debounced = useDebouncedCallback((value) => {
     if (value !== node && (status === 'success' || status === 'normal')) {
       updateNode({ pageId, value })
@@ -54,8 +56,6 @@ const Editor = ({
   //   }
   // }, [debugValue, onChange, node])
 
-  // console.log(debugValue)
-
   return (
     <EditorWrapper>
       <PlateProvider<MyValue>
@@ -64,8 +64,7 @@ const Editor = ({
           debounced(value)
         }}
         initialValue={node}
-        normalizeInitialValue={false}
-        plugins={Plugins({ inputCreationId: pageId })}
+        plugins={renderElement}
         id={pageId}
       >
         <Plate

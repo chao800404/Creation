@@ -11,15 +11,10 @@ import {
 } from '@udecode/plate'
 import { MyPlatePlugin } from '../plateTypes'
 
-export const mentionPlugin = ({
-  inputCreationId,
-}: {
-  inputCreationId: string
-}): Partial<MyPlatePlugin<MentionPlugin>> => ({
+export const mentionPlugin: Partial<MyPlatePlugin<MentionPlugin>> = {
   key: '/',
   options: {
     trigger: '/',
-    inputCreation: { key: inputCreationId, value: inputCreationId },
     query: (editor) => {
       // const blockPath = getBlockAbove(editor)?.[1]
       // const type = getBlockAbove(editor)?.[0]?.type
@@ -44,4 +39,4 @@ export const mentionPlugin = ({
     },
   },
   isElement: false,
-})
+}

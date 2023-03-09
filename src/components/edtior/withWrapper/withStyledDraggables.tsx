@@ -33,7 +33,7 @@ import {
   ELEMENT_EXPANDABLE_HEADING_3,
 } from '../expandableHeading'
 
-const GrabberTooltipContent = () => {
+const GrabberTooltipContent = React.memo(() => {
   return (
     <ToolContainerWrapper>
       <span>
@@ -41,7 +41,9 @@ const GrabberTooltipContent = () => {
       </span>
     </ToolContainerWrapper>
   )
-}
+})
+
+GrabberTooltipContent.displayName = 'GrabberTooltipContent'
 
 export const grabberTooltipProps: TippyProps = {
   content: <GrabberTooltipContent />,
@@ -50,6 +52,14 @@ export const grabberTooltipProps: TippyProps = {
   placement: 'top',
   delay: [1000, 0],
 }
+
+const TippyDrag = () => (
+  <Tippy {...grabberTooltipProps}>
+    <DragButtonWrapper contentEditable={false} type="button">
+      <KeyboardArrowRight height="1rem" />
+    </DragButtonWrapper>
+  </Tippy>
+)
 
 export const withStyledDraggables = (components: unknown) => {
   return withDraggables(components, [
@@ -82,13 +92,7 @@ export const withStyledDraggables = (components: unknown) => {
         ELEMENT_EXPANDABLE_HEADING_3,
       ],
       onRenderDragHandle: () => {
-        return (
-          <Tippy {...grabberTooltipProps}>
-            <DragButtonWrapper contentEditable={false} type="button">
-              <KeyboardArrowRight height="1rem" />
-            </DragButtonWrapper>
-          </Tippy>
-        )
+        return <TippyDrag />
       },
     },
     {
