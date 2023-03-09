@@ -13,3 +13,23 @@ export type BlockInputType = {
     focus?: boolean
   }
 }
+
+export declare type UpdateNode<T> = ({
+  pageId,
+  value,
+}: {
+  pageId: string
+  value: V
+}) => void
+
+type PageSWRResult<V> = {
+  data: V
+  isLoading: boolean
+  mutateFunction: {
+    uploadCoverImage: (src: string) => void
+    uploadCoverImageFile: (file: File) => void
+    updateNodes: UpdateNode<V>
+    updateOrder: (reorder: string[]) => void
+    deleteBlock: (page_id: string, id: string) => void
+  }
+}

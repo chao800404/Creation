@@ -41,7 +41,7 @@ export const BUTTON_ITEMS: ImageItemBtnProps[] = [
   },
   {
     icon: CloudDownload,
-    desc: 'Download Image',
+    desc: 'Download',
     className: 'download',
   },
 ]

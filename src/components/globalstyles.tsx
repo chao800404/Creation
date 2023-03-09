@@ -93,6 +93,8 @@ export const GlobalStyle = createGlobalStyle`
     color: white;
   }
 
+
+
   .pl_m {
     padding-left: .5rem;
   }

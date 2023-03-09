@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import { ImageItemWrapper } from './imageBlock.styles'
 import { BUTTON_ITEMS, ImageItemBtnProps } from './buttonItems'
 import { useReadOnly } from 'slate-react'
-import { findNodePath, setNodes } from '@udecode/plate'
+import { findNodePath, getAboveNode, setNodes } from '@udecode/plate'
 import { DragIndicator } from '@styled-icons/material/DragIndicator'
 import { useDragNode, useDropNode } from '../dnd'
 import { updateNodePostion } from '../transform/updateNodePostion'
@@ -14,11 +14,17 @@ import InternalLink from '../blockPopup/internalLink'
 import { UploadImageElement } from '../image/uploadImageElement'
 import ExternalLink from '../blockPopup/externalLink'
 import { ImagePopupItemProps } from '../image/type'
-import { ImageItemButton, ImageItemPopupBtn } from './imageItemButton'
+import {
+  ImageItemButton,
+  ImageItemOptionButton,
+  ImageItemPopupBtn,
+} from './imageItemButton'
 import { saveAs } from 'file-saver'
-import useWindowPointerToggle from '@/utils/useWindowPointerToggle'
-
+import { motion } from 'framer-motion'
 import { ImageItemElement } from './type'
+import { ELEMENT_IMAGE_ITEM_BLOCK } from './imageListBlockPlugin'
+import { variants } from './utils/animate'
+import { OptionTool } from '@/components/optionTool/optionTool'
 
 const labels = [
   { name: 'INTERNAL LINK' },
@@ -33,11 +39,13 @@ export const ImageItemBlockElement = (
   const elemRef = React.useRef(null)
   const dragWrapperRef = React.useRef(null)
   const { children, editor, element, list } = props
-
   const [visible, setVisible] = React.useState(false)
-  const { ref, toggle, handleToggleSet } =
-    useWindowPointerToggle<HTMLDivElement>()
+
   const path = findNodePath(editor, element)
+
+  const focus = getAboveNode(editor, {
+    match: { type: ELEMENT_IMAGE_ITEM_BLOCK, id: element.id },
+  })
 
   const show = () => setVisible(true)
   const hide = () => setVisible(false)
@@ -95,7 +103,7 @@ export const ImageItemBlockElement = (
               visible={visible}
               hide={hide}
               show={show}
-              desc={!!element.url ? '' : item.desc}
+              desc={item.desc}
             />
           )
         case 'download':
@@ -125,35 +133,82 @@ export const ImageItemBlockElement = (
     [editor, element, renderPopup, visible]
   )
 
+  const renderOption = useCallback(
+    (item: ImageItemBtnProps, i: number) => {
+      switch (item.className) {
+        case 'download':
+          return (
+            !!element.url && (
+              <ImageItemOptionButton
+                key={`${item.desc}_${i}`}
+                element={element}
+                editor={editor}
+                desc={item.desc}
+                format={() => saveAs(element.url as string, 'image.jpg')}
+                {...item}
+              />
+            )
+          )
+        default:
+          return (
+            <ImageItemOptionButton
+              key={`${item.desc}_${i}`}
+              {...item}
+              element={element}
+              editor={editor}
+              content={renderPopup}
+              visible={visible}
+              hide={hide}
+              show={show}
+              desc={item.desc}
+            />
+          )
+      }
+    },
+    [editor, element, renderPopup, visible]
+  )
+
   drop(preview(elemRef))
 
   return (
-    <ImageItemWrapper
-      isActive={toggle}
-      hasImage={!!element.url}
-      ref={ref}
-      onClick={() => handleToggleSet(true)}
-    >
-      <div className="img_item-content" ref={elemRef}>
+    <ImageItemWrapper isActive={!!focus} hasImage={!!element.url}>
+      <motion.div
+        className="img_item-content"
+        ref={elemRef}
+        transition={{ ease: [0.17, 0.67, 0.83, 0.67] }}
+        variants={variants}
+        animate={focus && !readOnly ? 'active' : 'init'}
+        style={{ zIndex: `${visible ? '1' : '0'}` }}
+      >
         <div className="img_item-img" contentEditable={false}>
-          {!readOnly && (
-            <>
+          <>
+            {!readOnly && (
               <div className="drag" ref={multiDragRef}>
                 <span>
                   <DragIndicator />
                 </span>
               </div>
-              {element.url && (
-                <div className="img_item-img-x">
-                  <img src={element.url as string} alt={'img'} />
-                </div>
-              )}
-              {BUTTON_ITEMS.map((item, i) => renderButton(item, i))}
-            </>
-          )}
+            )}
+            {element.url && (
+              <div
+                className="img_item-img-x"
+                style={{
+                  backgroundImage: `url(${element.url})`,
+                }}
+              />
+            )}
+            {!readOnly &&
+              (element.url ? (
+                <OptionTool className="option">
+                  <>{BUTTON_ITEMS.map((item, i) => renderOption(item, i))}</>
+                </OptionTool>
+              ) : (
+                BUTTON_ITEMS.map((item, i) => renderButton(item, i))
+              ))}
+          </>
         </div>
         <div className="img_item-desc">{children}</div>
-      </div>
+      </motion.div>
     </ImageItemWrapper>
   )
 }

@@ -9,6 +9,15 @@ import ToolbarButtons from './ToolbarButtons'
 import cuid from 'cuid'
 import dynamic from 'next/dynamic'
 import { EditorWrapper } from './styles'
+import { updateData } from '@/utils/fetch'
+import { useDebounce, useDebouncedCallback } from 'use-debounce'
+import { differenceBy } from 'lodash'
+import { useRouter } from 'next/router'
+import { UpdateNode } from '@/hook/type'
+import { useStatusStore } from '@/store/useStatusStore'
+import { shallow } from 'zustand/shallow'
+import { useReadOnly } from 'slate-react'
+import { MENTIONABLES } from '@/data/mentionData'
 
 const MentionCombobox = dynamic(() => import('./mention/mentionCombobox'))
 
@@ -16,36 +25,67 @@ const initialValue: MyValue = [
   { type: ELEMENT_PARAGRAPH, children: [{ text: '' }], id: cuid() },
 ]
 
-const Editor = ({ editable }: { editable: boolean }) => {
+const Editor = ({
+  editable,
+  pageId,
+  node,
+  updateNode,
+}: {
+  editable: boolean
+  pageId: string
+  node: MyValue
+  updateNode: UpdateNode<MyValue>
+}) => {
   const [debugValue, setDebugValue] = useState<MyValue | null>(null)
   const [onChange, setOnChange] = useState(false)
-
+  const status = useStatusStore((state) => state.status, shallow)
   const items = useMemo(() => getSuggestionItems, [])
 
+  const debounced = useDebouncedCallback((value) => {
+    if (value !== node && (status === 'success' || status === 'normal')) {
+      updateNode({ pageId, value })
+      console.log(value === node, 'render')
+    }
+  }, 1000)
+
   useEffect(() => {
-    if (debugValue && !onChange) {
+    if (debugValue && !onChange && node) {
       const { type } = debugValue[0]
       setOnChange(!(type === ELEMENT_PARAGRAPH))
     }
-  }, [debugValue, onChange])
+  }, [debugValue, onChange, node])
 
-  console.log(debugValue)
+  // console.log(debugValue)
 
   return (
     <EditorWrapper>
       <PlateProvider<MyValue>
-        onChange={(value) => setDebugValue(value)}
-        initialValue={initialValue}
-        normalizeInitialValue={true}
-        plugins={Plugins}
+        onChange={(value) => {
+          setDebugValue(value)
+          debounced(value)
+        }}
+        initialValue={node}
+        normalizeInitialValue={false}
+        plugins={Plugins({ inputCreationId: pageId })}
+        id={pageId}
       >
-        <Plate editableProps={editableProps({ onChange, readOnly: false })}>
+        <Plate
+          id={pageId}
+          editableProps={editableProps({
+            onChange,
+            readOnly: !editable,
+          })}
+        >
           <MentionCombobox items={items} pluginKey="/" />
           {/* <CursorOverlayContainer containerRef={containerRef} /> */}
+          {/* <MentionCombobox items={MENTIONABLES} /> */}
+          <div style={{ height: '50vh' }} />
         </Plate>
-        <Toolbar>
-          <ToolbarButtons />
-        </Toolbar>
+        {editable && (
+          <Toolbar>
+            <ToolbarButtons />
+          </Toolbar>
+        )}
       </PlateProvider>
     </EditorWrapper>
   )

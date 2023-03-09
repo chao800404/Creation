@@ -1,5 +1,5 @@
 import React from 'react'
-import { RxDragHandleDots2 } from 'react-icons/rx'
+import { ArrowRight } from '@styled-icons/evaicons-solid/ArrowRight'
 import Tippy, { TippyProps } from '@tippyjs/react'
 import { ToolContainerWrapper, DragButtonWrapper } from '../styles'
 import {
@@ -21,6 +21,7 @@ import {
 } from '@udecode/plate'
 import { withDraggables } from '@udecode/plate-ui-dnd'
 import { ELEMENT_LINK_BUTTON } from '../linkButton'
+import { KeyboardArrowRight } from '@styled-icons/material-rounded/KeyboardArrowRight'
 import {
   ELEMENT_IMAGE_ITEM_BLOCK,
   ELEMENT_IMAGE_LIST_BLOCK,
@@ -45,6 +46,9 @@ const GrabberTooltipContent = () => {
 export const grabberTooltipProps: TippyProps = {
   content: <GrabberTooltipContent />,
   theme: 'dark',
+  arrow: false,
+  placement: 'top',
+  delay: [1000, 0],
 }
 
 export const withStyledDraggables = (components: unknown) => {
@@ -81,7 +85,7 @@ export const withStyledDraggables = (components: unknown) => {
         return (
           <Tippy {...grabberTooltipProps}>
             <DragButtonWrapper contentEditable={false} type="button">
-              <RxDragHandleDots2 />
+              <KeyboardArrowRight height="1rem" />
             </DragButtonWrapper>
           </Tippy>
         )
@@ -139,7 +143,6 @@ export const withStyledDraggables = (components: unknown) => {
       keys: [ELEMENT_PARAGRAPH, ELEMENT_UL, ELEMENT_OL],
       styles: {
         gutterLeft: {
-          padding: '4px 0 0',
           alignItems: 'center',
         },
       },

@@ -1,7 +1,8 @@
+import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
 export const ImageListWrapper = styled('div')`
-  padding: 1rem 0 1rem 0;
+  padding: 0.8rem 0 0.8rem 0;
 
   .image_list {
     width: fit-content;
@@ -26,7 +27,8 @@ export const ImageItemWrapper = styled('div').attrs<ImageItemProps>(
   position: relative;
 
   &:hover {
-    & .img_item-img > .drag > span {
+    & .img_item-img > .drag > span,
+    .option {
       opacity: 1;
       visibility: visible;
     }
@@ -38,6 +40,16 @@ export const ImageItemWrapper = styled('div').attrs<ImageItemProps>(
     border-radius: 5px;
     box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.3);
     border: 1px solid ${({ theme }) => theme.colors.primary};
+    will-change: scale;
+    position: relative;
+    font-size: ${({ hasImage }) => (hasImage ? '0.9rem' : '')};
+
+    &-icon {
+      svg {
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+    }
   }
 
   .img_item-img {
@@ -46,17 +58,29 @@ export const ImageItemWrapper = styled('div').attrs<ImageItemProps>(
     grid-template-columns: 1fr repeat(2, 3fr) 1fr;
     grid-template-rows: repeat(5, 1fr);
     background-color: ${({ theme }) => theme.colors.primary};
-    gap: ${({ hasImage }) => (hasImage ? 0 : '0.5rem')};
+    gap: 0.5rem;
+    position: relative;
 
     &-x {
       grid-column: 1/ -1;
       grid-row: 1/-1;
+      background-position: center;
+      background-size: 100%;
 
       & > img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
+    }
+
+    .option {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 30;
+      opacity: ${({ isActive }) => (isActive ? 1 : 0)};
+      visibility: ${({ isActive }) => (isActive ? 'visible' : 'hidden')};
     }
 
     & > .drag {
@@ -99,64 +123,40 @@ export const ImageItemWrapper = styled('div').attrs<ImageItemProps>(
     }
 
     & > .add {
-      grid-column: ${({ hasImage }) => (hasImage ? '1/2' : '2 / 4')};
-      grid-row: ${({ hasImage }) => (hasImage ? '1/2' : '2 / 4')};
+      grid-column: 2 / 4;
+      grid-row: 2 / 4;
     }
 
     & > .delete {
-      grid-column: ${({ hasImage }) => (hasImage ? '1/2' : '2 / 3')};
-      grid-row: ${({ hasImage }) => (hasImage ? '2/3' : '4 / 5')};
+      grid-column: 2 / 3;
+      grid-row: 4 /5;
     }
 
     & > .insert {
-      grid-column: ${({ hasImage }) => (hasImage ? '1/2' : '3 / 4')};
-      grid-row: ${({ hasImage }) => (hasImage ? '3/4' : '4 / 5')};
+      grid-column: 3 / 4;
+      grid-row: 4 / 5;
     }
 
     & > .download {
-      grid-column: ${({ hasImage }) => (hasImage ? '1/2' : '3 / 4')};
-      grid-row: ${({ hasImage }) => (hasImage ? '4/5' : '5 / 6')};
-    }
-
-    svg {
-      display: block;
-      margin: auto;
-      width: 1.2rem;
+      grid-column: 3 / 4;
+      grid-row: 5 / 6;
     }
 
     &-btn {
-      border-radius: ${({ hasImage, theme }) => (hasImage ? 'unset' : '3px')};
-      background-color: ${({ hasImage, theme }) =>
-        !!hasImage ? theme.colors.primary : 'rgba(255, 255, 255, 0.4)'};
+      border-radius: 3px;
+      background-color: rgba(255, 255, 255, 0.4);
       color: ${({ theme }) => theme.colors.white};
       gap: 0.5rem;
       height: 100%;
-      box-shadow: ${({ hasImage }) =>
-        !!hasImage ? 'unset' : '0.3rem 0.3rem 0.5rem rgba(0, 0, 0, 0.9)'};
+      box-shadow: 0.3rem 0.3rem 0.5rem rgba(0, 0, 0, 0.9);
       user-select: none;
-      border: ${({ hasImage }) =>
-        !!hasImage ? 'unset' : '1px solid rgba(255, 255, 255, 0.4)'};
+      border: 1px solid rgba(255, 255, 255, 0.4);
       cursor: pointer;
-      padding: ${({ hasImage }) => (hasImage ? '0.4rem' : 'unset')};
       position: relative;
-      opacity: ${({ hasImage, isActive }) => (hasImage && !isActive ? 0 : 1)};
-      visibility: ${({ hasImage, isActive }) =>
-        hasImage && !isActive ? 'hidden' : 'visible'};
-
       will-change: transform;
-
-      &:not(:last-child) {
-        &::after {
-          content: '';
-          width: 60%;
-          height: 1px;
-          position: absolute;
-          bottom: 0;
-          z-index: 2;
-          background-color: rgba(255, 255, 255, 0.3);
-          display: ${({ hasImage }) => (hasImage ? 'default' : 'none')};
-        }
-      }
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       &:first-child {
         border-top-left-radius: 3px;
@@ -170,6 +170,10 @@ export const ImageItemWrapper = styled('div').attrs<ImageItemProps>(
 
       span {
         font-size: 0.9rem;
+      }
+
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.primary_high};
       }
     }
 
@@ -223,5 +227,23 @@ export const ImageItemRowWrapper = styled('div').attrs<ImageItemRowProps>(
         visibility: visible;
       }
     }
+  }
+`
+export const ImageItemOptionButtonWrapper = styled(motion.span)`
+  display: flex;
+  padding: 0.3rem 0.5rem;
+  position: relative;
+  gap: 0.8rem;
+  zoom: 0.9;
+  border-bottom: 1px solid transparent;
+  border-radius: 3px;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.primary_3};
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary_3};
+    border-bottom: 1px solid transparent;
   }
 `

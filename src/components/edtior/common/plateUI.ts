@@ -16,6 +16,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TD,
+  ELEMENT_TODO_LI,
   ELEMENT_TR,
   ELEMENT_UL,
   EmojiCombobox,
@@ -43,6 +44,7 @@ import {
   ExpandableHeadingElement,
 } from '../expandableHeading'
 import { ELEMENT_EH1, ELEMENT_EH2, ELEMENT_EH3 } from '../eHeading-element'
+import { TodoListElement } from '../todoList/todoListElement'
 
 export const plateUI = createPlateUI({
   [ELEMENT_CODE_BLOCK]: withProps(CodeBlockElement, {
@@ -171,19 +173,11 @@ export const plateUI = createPlateUI({
       root: {
         background: '#efefef',
         color: '#393939',
-        padding: '2px 5px',
+        padding: '0 5px',
         fontSize: '1rem',
         borderRadius: '2px',
         border: '1px solid rgba(0,0,0,0.3)',
-        marginRight: '5px',
-      },
-    },
-  }),
-
-  [EMOJI_MAX_SEARCH_RESULT]: withProps(StyledElement, {
-    styles: {
-      root: {
-        backgroundColor: 'red',
+        margin: '0 5px',
       },
     },
   }),
@@ -197,4 +191,5 @@ export const plateUI = createPlateUI({
   [ELEMENT_EXPANDABLE_HEADING_1]: ExpandableHeadingElement,
   [ELEMENT_EXPANDABLE_HEADING_2]: ExpandableHeadingElement,
   [ELEMENT_EXPANDABLE_HEADING_3]: ExpandableHeadingElement,
+  [ELEMENT_TODO_LI]: TodoListElement,
 })

@@ -28,4 +28,5 @@ export const indentListPlugin: Partial<MyPlatePlugin<IndentListPlugin>> = {
       ],
     },
   },
+  options: {},
 }

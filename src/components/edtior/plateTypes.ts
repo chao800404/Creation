@@ -23,6 +23,9 @@ import {
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_H4,
+  ELEMENT_H5,
+  ELEMENT_H6,
   ELEMENT_HR,
   ELEMENT_IMAGE,
   ELEMENT_LI,
@@ -91,6 +94,7 @@ import {
   ELEMENT_IMAGE_ITEM_BLOCK,
   ELEMENT_IMAGE_LIST_BLOCK,
 } from './imageListBlock'
+import { ELEMENT_LINK_BUTTON } from './linkButton'
 
 /**
  * Text
@@ -115,8 +119,8 @@ export interface RichText extends TText, TCommentText {
   backgroundColor?: CSSProperties['backgroundColor']
   fontFamily?: CSSProperties['fontFamily']
   color?: CSSProperties['color']
-  fontSize?: CSSProperties['fontSize']
-  fontWeight?: CSSProperties['fontWeight']
+  fontSize?: CSSProperties['fontSize'] | null
+  fontWeight?: CSSProperties['fontWeight'] | null
 }
 
 /**
@@ -207,6 +211,21 @@ export interface MyH3Element extends MyBlockElement {
   children: MyInlineChildren
 }
 
+export interface MyH4Element extends MyBlockElement {
+  type: typeof ELEMENT_H4
+  children: MyInlineChildren
+}
+
+export interface MyH5Element extends MyBlockElement {
+  type: typeof ELEMENT_H5
+  children: MyInlineChildren
+}
+
+export interface MyH6Element extends MyBlockElement {
+  type: typeof ELEMENT_H6
+  children: MyInlineChildren
+}
+
 export interface MyEH1Element extends MyBlockElement {
   type: typeof ELEMENT_EH1
   children: MyInlineChildren
@@ -288,6 +307,8 @@ export interface MyTodoListElement
 export interface MyImageElement extends TImageElement, MyBlockElement {
   type: typeof ELEMENT_IMAGE
   children: [EmptyText]
+  vertical?: string
+  align?: string
 }
 
 export interface MyMediaEmbedElement
@@ -313,6 +334,13 @@ export interface MyImageListElement extends TElement, MyBlockElement {
   id: PlateId
 }
 
+export interface MyLinkButton extends TElement, MyBlockElement {
+  type: typeof ELEMENT_LINK_BUTTON
+  children: [EmptyText]
+  url: string
+  emoji?: null | string
+}
+
 export type MyNestableBlock = MyParagraphElement
 
 export type MyBlock = Exclude<MyElement, MyInlineElement>
@@ -323,6 +351,9 @@ export type MyRootBlock =
   | MyH1Element
   | MyH2Element
   | MyH3Element
+  | MyH4Element
+  | MyH5Element
+  | MyH6Element
   | MyBlockquoteElement
   | MyCodeBlockElement
   | MyTableElement
@@ -336,6 +367,7 @@ export type MyRootBlock =
   | MyTableCellElement
   | MyTableRowElement
   | MyTableThElement
+  | MyLinkButton
 // | MyNameElement
 // | MyDescElement
 // | MyExcalidrawElement;

@@ -6,6 +6,7 @@ import { DashboardMainWrapper } from './main.styles'
 import dynamic from 'next/dynamic'
 import React, { Suspense, useEffect, useRef } from 'react'
 import { useListSWR } from '@/hook/useListSWR'
+import { MyValue } from '../edtior/plateTypes'
 const DynamicDashboardBanner = dynamic(
   () => import('../banner/dashboardBanner'),
   {
@@ -25,12 +26,11 @@ const DashboardMain = () => {
   const {
     data: { cover, content },
     isLoading,
+    mutateFunction: { updateNodes },
   } = usePageSWR(id)
   const {
     data: { editable },
   } = useListSWR(id)
-
-  console.log(content)
 
   return (
     <DashboardMainWrapper
@@ -49,7 +49,14 @@ const DashboardMain = () => {
 
         <div className="DashboardMain_container-content">
           <HeaderEditorS />
-          <Editor editable={editable || false} />
+          {content && (
+            <Editor
+              editable={editable || false}
+              pageId={id}
+              node={content}
+              updateNode={updateNodes}
+            />
+          )}
         </div>
       </div>
     </DashboardMainWrapper>

@@ -29,6 +29,8 @@ import {
   TTableElement,
   removeNodes,
   getAboveNode,
+  insertEmptyElement,
+  insertElements,
 } from '@udecode/plate'
 import { ELEMENT_LINK_BUTTON } from '../linkButton'
 import { ELEMENT_IMAGE_LIST_BLOCK } from '../imageListBlock'
@@ -40,7 +42,17 @@ import {
 } from '../expandableHeading'
 import { setExpandableHeading } from '../expandableHeading/transforms'
 
-const getSuggestionItems = [
+export type SuggestionItem = {
+  text: string
+  key: string
+  data: {
+    desc: string
+    image: string
+  }
+  command: <V extends Value>(editor: PlateEditor<V>) => void
+}
+
+const getSuggestionItems: SuggestionItem[] = [
   {
     text: 'Heading_1',
     key: ELEMENT_H1,
@@ -48,8 +60,7 @@ const getSuggestionItems = [
       desc: 'Big section heading.',
       image: '/static/blocks/header.png',
     },
-    command: (editor: PlateEditor<Value>) =>
-      setElements(editor, { type: ELEMENT_H1 }),
+    command: (editor) => setElements(editor, { type: ELEMENT_H1 }),
   },
   {
     text: 'Expandable_header',
@@ -58,7 +69,7 @@ const getSuggestionItems = [
       desc: 'Shortcut type(button).',
       image: '/static/blocks/toggle_heading_1.png',
     },
-    command: (editor: PlateEditor<Value>) => {
+    command: (editor) => {
       setExpandableHeading(editor, { levels: 1 })
     },
   },
@@ -69,8 +80,7 @@ const getSuggestionItems = [
       desc: 'Medium section heading.',
       image: '/static/blocks/subheader.png',
     },
-    command: (editor: PlateEditor<Value>) =>
-      setElements(editor, { type: ELEMENT_H2 }),
+    command: (editor) => setElements(editor, { type: ELEMENT_H2 }),
   },
   {
     text: 'Expandable_header',
@@ -79,7 +89,7 @@ const getSuggestionItems = [
       desc: 'Shortcut type(button).',
       image: '/static/blocks/toggle_heading_2.png',
     },
-    command: (editor: PlateEditor<Value>) => {
+    command: (editor) => {
       setExpandableHeading(editor, { levels: 2 })
     },
   },
@@ -90,8 +100,7 @@ const getSuggestionItems = [
       desc: 'Small section heading.',
       image: '/static/blocks/subsubheader.png',
     },
-    command: (editor: PlateEditor<Value>) =>
-      setElements(editor, { type: ELEMENT_H3 }),
+    command: (editor) => setElements(editor, { type: ELEMENT_H3 }),
   },
   {
     text: 'Expandable_header',
@@ -100,7 +109,7 @@ const getSuggestionItems = [
       desc: 'Shortcut type(button).',
       image: '/static/blocks/toggle_heading_3.png',
     },
-    command: (editor: PlateEditor<Value>) => {
+    command: (editor) => {
       setExpandableHeading(editor, { levels: 3 })
     },
   },
@@ -111,8 +120,7 @@ const getSuggestionItems = [
       desc: 'Just start writing with plain text.',
       image: '/static/blocks/en-US.png',
     },
-    command: (editor: PlateEditor<Value>) =>
-      setElements(editor, { type: ELEMENT_PARAGRAPH }),
+    command: (editor) => setElements(editor, { type: ELEMENT_PARAGRAPH }),
   },
   {
     text: 'Table',
@@ -121,7 +129,7 @@ const getSuggestionItems = [
       desc: 'Add simple a tabular content.',
       image: '/static/blocks/simple-table.png',
     },
-    command: (editor: PlateEditor<Value>) => {
+    command: (editor) => {
       // editor.insertTable(3, 3, { columnWidth: 200, maxWidth: 500 })
       insertTable(editor, { colCount: 3, rowCount: 3 })
     },
@@ -133,8 +141,7 @@ const getSuggestionItems = [
       desc: 'Embed a sub-page inside the page.',
       image: '/static/blocks/to-do-list.png',
     },
-    command: (editor: PlateEditor<Value>) =>
-      setElements(editor, { type: ELEMENT_TODO_LI }),
+    command: (editor) => setElements(editor, { type: ELEMENT_TODO_LI }),
   },
   {
     text: 'Bullested_list',
@@ -143,8 +150,7 @@ const getSuggestionItems = [
       desc: 'Create a simple bulleted list.',
       image: '/static/blocks/bulleted-list.png',
     },
-    command: (editor: PlateEditor<Value>) =>
-      setElements(editor, { type: ELEMENT_UL }),
+    command: (editor) => setElements(editor, { type: ELEMENT_UL }),
   },
   {
     text: 'Numbered_list',
@@ -153,8 +159,7 @@ const getSuggestionItems = [
       desc: 'Create a list with numbering.',
       image: '/static/blocks/numbered-list.png',
     },
-    command: (editor: PlateEditor<Value>) =>
-      setElements(editor, { type: ELEMENT_OL }),
+    command: (editor) => setElements(editor, { type: ELEMENT_OL }),
   },
   {
     text: 'Code_Block',
@@ -163,7 +168,7 @@ const getSuggestionItems = [
       desc: 'Capture a code snippet.',
       image: '/static/blocks/code.png',
     },
-    command: (editor: PlateEditor<Value>) => {
+    command: (editor) => {
       insertEmptyCodeBlock(editor, {
         defaultType: getPluginType(editor, ELEMENT_DEFAULT),
         insertNodesOptions: { select: true },
@@ -178,27 +183,6 @@ const getSuggestionItems = [
   //     image: '/static/blocks/block-quote.png',
   //   },
 
-  //   // command: ({ editor, range }: CommandType) => {
-  //   //   editor.chain().focus().deleteRange(range).toggleBlockquote().run()
-  //   // },
-  // },
-  // {
-  //   text: 'Link_button',
-  //   key: '',
-  //   data: {
-  //     desc: 'Shortcut type(button).',
-  //     image: '/static/blocks/link-button.png',
-  //   },
-
-  //   // command: ({ editor, range }: CommandType) => {
-  //   //   editor
-  //   //     .chain()
-  //   //     .focus()
-  //   //     .deleteRange(range)
-  //   //     .setNode('linkButtonNode')
-  //   //     .run()
-  //   // },
-  // },
   {
     text: 'Horizontal_divider',
     key: ELEMENT_HR,
@@ -206,12 +190,14 @@ const getSuggestionItems = [
       desc: 'Shortcut:type enter(---)',
       image: '/static/blocks/horizontal-divider.png',
     },
-    command: (editor: PlateEditor<Value>) => {
-      setElements(editor, { type: ELEMENT_HR })
-      insertNodes(editor, {
-        type: ELEMENT_PARAGRAPH,
-        children: [{ text: '' }],
-      })
+    command: (editor) => {
+      insertElements(editor, [
+        {
+          type: ELEMENT_HR,
+          children: [{ text: '' }],
+        },
+        { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
+      ])
     },
   },
   {
@@ -221,7 +207,7 @@ const getSuggestionItems = [
       desc: 'Shortcut:type (image)',
       image: '/static/blocks/image.png',
     },
-    command: (editor: PlateEditor<Value>) => {
+    command: (editor) => {
       setElements(editor, { type: ELEMENT_IMAGE })
     },
   },
@@ -232,7 +218,7 @@ const getSuggestionItems = [
       desc: 'Shortcut type(button).',
       image: '/static/blocks/link-button.png',
     },
-    command: (editor: PlateEditor<Value>) => {
+    command: (editor) => {
       setElements(editor, { type: ELEMENT_LINK_BUTTON })
     },
   },
@@ -243,7 +229,7 @@ const getSuggestionItems = [
       desc: 'Shortcut type(button).',
       image: '/static/blocks/image-list-block.png',
     },
-    command: (editor: PlateEditor<Value>) => {
+    command: (editor) => {
       insertImageListBlock(editor, { quant: 4 })
     },
   },

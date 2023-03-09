@@ -56,8 +56,6 @@ export default async function handler(
           })
         }
 
-        console.log(updateData)
-
         if (!updateData) throw new Error('Please provide correct key')
 
         res.status(200).json({

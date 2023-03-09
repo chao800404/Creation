@@ -2,6 +2,7 @@ import { NextApiResponse, NextApiRequest } from 'next'
 import { z, ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
+import { selectPage } from '@/lib/feilds'
 
 type MySchema = z.infer<typeof MySchema>
 
@@ -18,9 +19,6 @@ export default async function handler(
       if (req.method === 'DELETE') {
         const data = JSON.parse(req.body)
         const { id } = MySchema.parse(data)
-
-        console.log(id)
-
         await prisma.page.delete({
           where: {
             id_userId: {
@@ -35,23 +33,7 @@ export default async function handler(
             userId: user.id,
           },
           select: {
-            id: true,
-            pageConfig: {
-              select: {
-                favorite: true,
-                editable: true,
-                shouldShow: true,
-                title: true,
-                droppable: true,
-              },
-            },
-            parentId: true,
-            emoji: {
-              select: {
-                id: true,
-                image: true,
-              },
-            },
+            ...selectPage,
           },
         })
 

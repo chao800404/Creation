@@ -93,7 +93,7 @@ export const useListSWR: UseListType = (pageId) => {
 
       mutate(
         `/api/query/queryList`,
-        createData(`addNewPage`, { id: newPage.id as string, parentId }),
+        createData(`create-new-page`, { id: newPage.id as string, parentId }),
         {
           populateCache: (resPage, list: ListResDataType) => {
             return produce(list, (draft) => {
@@ -155,7 +155,7 @@ export const useListSWR: UseListType = (pageId) => {
 
       mutate(
         `/api/query/queryList`,
-        deleteData<{ id: string }>('deletePage', { id }),
+        deleteData<{ id: string }>('delete-page', { id }),
         {
           populateCache: (resPage, list: ListResDataType) => {
             return produce(list, (draft) => {

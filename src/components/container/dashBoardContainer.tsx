@@ -48,6 +48,8 @@ const DashBoardContainr = ({
     }
   }, [dragStart])
 
+  const hasLabels = labels && labels.length > 0
+
   return (
     <DashboardContainerWrapper style={{ width: `calc(100% - ${sideWidth}px)` }}>
       <div className="dashboard_nav">
@@ -62,7 +64,7 @@ const DashBoardContainr = ({
           style={{ width: `${dashboardMainWidth}px` }}
           ref={dashboardMainElem}
         >
-          {labels && labels.length > 0 && (
+          {hasLabels && (
             <div className="dashboardContainer_label">
               <LabelContainer
                 id={id}
@@ -75,7 +77,12 @@ const DashBoardContainr = ({
             </div>
           )}
 
-          <WrapperScrollbar style={{ width: '100%', height: '100%' }}>
+          <WrapperScrollbar
+            style={{
+              width: '100%',
+              height: hasLabels ? 'calc(100% - 2rem)' : '100%',
+            }}
+          >
             {children}
           </WrapperScrollbar>
           <BoundLine

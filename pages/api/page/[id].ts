@@ -1,14 +1,17 @@
-import { Prisma } from '@prisma/client'
 import { JSONParser } from 'formidable/parsers'
 import { NextApiResponse, NextApiRequest } from 'next'
 import { object, ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
+import { MyValue } from '@/components/edtior/plateTypes'
+import sortArray from 'sort-array'
 
 type BlockType = 'id' | 'content' | 'name' | 'type'
-type SortBlocksType = Record<string, Record<BlockType, string>>
-
-type Node<T> = Record<string, T>
+type Data = {
+  nodes: {
+    data: []
+  }
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,37 +37,20 @@ export default async function handler(
             },
             content: {
               select: {
-                id: true,
+                nodes: true,
               },
             },
           },
         })
 
         if (!resData) throw new Error('You are not allowed to query these data')
-
-        let nodes: Node<unknown>[] = await prisma.node.findMany({
-          where: {
-            contentId: resData?.content?.id,
-          },
-        })
-
-        nodes = nodes.map((item) => {
-          const object: Node<unknown> = {}
-          for (const [key, value] of Object.entries(item)) {
-            if (key === 'parentId' || !!value) {
-              object[key] = value
-            }
-          }
-          return object
-        })
-
-        // console.log(nodes)
+        const { cover, content } = resData
 
         res.status(200).json({
           status: 'success',
           data: {
-            cover: resData.cover,
-            nodes: nodes,
+            cover,
+            nodes: content?.nodes || [],
           },
         })
       } catch (error) {

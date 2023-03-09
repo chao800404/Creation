@@ -2,6 +2,7 @@ import { ImageItemButtonProps, ImageItemPopupBtnProps } from './type'
 import React from 'react'
 import { motion } from 'framer-motion'
 import Tippy from '@tippyjs/react'
+import { ImageItemOptionButtonWrapper } from './imageBlock.styles'
 
 const variants = {
   onTap: {
@@ -41,7 +42,7 @@ export const ImageItemPopupBtn = React.memo(
           <span className="img_item-content-icon">
             <Icon />
           </span>
-          {!!desc && <span>{desc}</span>}
+          {!!desc && <span className="img_item-content-desc">{desc}</span>}
         </motion.span>
       </Tippy>
     )
@@ -63,7 +64,7 @@ export const ImageItemButton = React.memo(
       <Tippy content={desc} delay={500} appendTo="parent">
         <motion.span
           whileTap="onTap"
-          className={`img_item-img-btn center ${className}`}
+          className={`img_item-img-btn ${className}`}
           variants={variants}
           onMouseDown={() => format({ editor, element })}
         >
@@ -77,3 +78,27 @@ export const ImageItemButton = React.memo(
 )
 
 ImageItemButton.displayName = 'ImageItemButton'
+
+export const ImageItemOptionButton = React.memo(
+  ({
+    icon: Icon,
+    desc,
+    className,
+    format,
+    editor,
+    element,
+  }: ImageItemButtonProps) => {
+    return (
+      <ImageItemOptionButtonWrapper
+        onMouseDown={() => format({ editor, element })}
+      >
+        <span className="img_item-content-icon">
+          <Icon />
+        </span>
+        <span>{desc}</span>
+      </ImageItemOptionButtonWrapper>
+    )
+  }
+)
+
+ImageItemOptionButton.displayName = 'ImageItemOptionButton'

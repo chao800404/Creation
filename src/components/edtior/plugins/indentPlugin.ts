@@ -8,6 +8,7 @@ import {
   ELEMENT_H5,
   ELEMENT_H6,
   ELEMENT_PARAGRAPH,
+  ELEMENT_TODO_LI,
   IndentPlugin,
   setIndent,
 } from '@udecode/plate'
@@ -57,6 +58,7 @@ export const indentPlugin: Partial<MyPlatePlugin<IndentPlugin>> = {
         ELEMENT_BLOCKQUOTE,
         ELEMENT_CODE_BLOCK,
         ELEMENT_DESC,
+        ELEMENT_TODO_LI,
       ],
     },
   },

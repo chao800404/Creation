@@ -34,6 +34,9 @@ export const updateNodePostion = <V extends Value>(
   if (dragNode && hoverNode && !Path.equals(dragNode[1], hoverNode[1])) {
     const parentNode = getNodeParent(editor, dragNode[1])
     const parentPath = findNodePath(editor, parentNode)
+
+    console.log(dragNode[0], hoverNode[0])
+
     if (parentNode) {
       const children = parentNode.children.map((item) => {
         if (item.id === dragNode[0].id) {

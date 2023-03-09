@@ -115,19 +115,19 @@ model Page {
 }
 
 model PageConfig {
-  id           String   @id @default(cuid())        
-  favorite     Boolean  @default(false)
-  editable     Boolean  @default(true)
-  blockToOrder Json?
-  title        String?       
-  shouldShow   Boolean  @default(false)
-  droppable    Boolean  @default(true)
-  pageToOrder  Json?
-  pageId       String   @unique @map("page_id")
-  page         Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  id                 String        @id @default(cuid())        
+  favorite           Boolean       @default(false)
+  editable           Boolean       @default(true)
+  blockToOrder       Json?     
+  title              String?            
+  shouldShow         Boolean       @default(false)
+  droppable          Boolean       @default(true)
+  pageToOrder        Json?     
+  pageId             String        @unique @map("page_id")
+  page               Page          @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @default(now())
 
   @@unique([id, pageId])
   @@map("page_config")
@@ -137,183 +137,17 @@ model PageConfig {
 
 
 model Content {
-  id          String        @id @default(cuid())
-  pageId      String        @map("page_id") @unique
-  page        Page          @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  node        Node[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id                String                @id @default(cuid())
+  pageId            String                @map("page_id") @unique
+  page              Page                  @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  nodes             Json?
+  
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @default(now())
 
 
   @@unique([pageId, id])
   @@index([id , pageId])
   @@map("content")
 }
-
-
-model Node {
-  id                String        @id @default(cuid())
-  type              String        @default("text")
-  backgroundColor   String?       
-  bold              Boolean?      
-  code              Boolean?       
-  color             String?       
-  italic            Boolean?       
-  strikethrough     Boolean?      
-  superscript       Boolean?      
-  text              String?        
-  underline         Boolean?      
-  subscript         Boolean?       
-  target            String?       
-  url               String?       
-  checked           Boolean?
-  contentId         String        @map("content_id")
-  content           Content       @relation(fields: [contentId], references: [id] , onDelete: Cascade)
-  parentId          String?       @map("parent_id") @default("0")
-  parent            Node?         @relation("ParentChildren", fields: [parentId], references: [id], onDelete: Cascade)
-  children          Node[]        @relation("ParentChildren")
-
-  @@unique([contentId, id])
-  @@index([id , type])
-  @@map("node")
-}
-
-
-// model Paragraph {
-//   id                String        @id @default(cuid())
-//   contentId         String        @map("content_id")
-//   content           Content       @relation(fields: [contentId], references: [id] , onDelete: Cascade)
-//   type              String        @default("p")
-//   parentId          String?       @map("parent_id") @default("0") 
-//   children          NormalType[]
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @default(now())
-
-//   @@unique([contentId, id])
-//   @@index([id , contentId])
-//   @@map("paragraph")
-// }
-
-
-// model Blockquote {
-//   id                String        @id @default(cuid())
-//   children          NormalType[]
-//   contentId         String        @map("content_id")
-//   content           Content       @relation(fields: [contentId], references: [id] , onDelete: Cascade)
-//   type              String        @default("blockquote")
-//   parentId          String?       @map("parent_id") @default("0") 
-
-
-//   @@unique([contentId, id])
-//   @@index([id , type])
-//   @@map("blockquote")
-// }
-
-
-// model Heading {
-//   id                String        @id @default(cuid())
-//   children          NormalType[]
-//   contentId         String        @map("content_id")
-//   content           Content       @relation(fields: [contentId], references: [id] , onDelete: Cascade)
-//   type              String        @default("h1")
-//   parentId          String?       @map("parent_id") @default("0") 
-
-
-//   @@unique([contentId, id])
-//   @@index([id , type])
-//   @@map("heading")
-// }
-
-
-// model ActionItem {
-//   id                String        @id @default(cuid())
-//   children          NormalType[]
-//   contentId         String        @map("content_id")
-//   content           Content       @relation(fields: [contentId], references: [id] , onDelete: Cascade)
-//   type              String        @default("action_item")
-//   parentId          String?       @map("parent_id") @default("0")
-//   checked           Boolean       @default(false)
-
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @default(now())
-
-//   @@unique([contentId, id])
-//   @@index([id , type])
-//   @@map("action_item")
-// }
-
-
-// model NormalType {
-//   id                String        @id @default(cuid())
-//   text              Text[]
-//   link              Link[]        
-//   paragraphId       String?       @map("paragraph_id")
-//   paragraph         Paragraph?    @relation(fields: [paragraphId], references: [id] , onDelete: Cascade)
-//   blockquoteId      String?       @map("blockquote_id")
-//   blockquote        Blockquote?   @relation(fields: [blockquoteId], references: [id] , onDelete: Cascade)
-//   headingId         String?       @map("heading_id")
-//   heading           Heading?      @relation(fields: [headingId], references: [id] , onDelete: Cascade)
-//   actionItemId      String?       @map("actionItem_id")
-//   acitonItem        ActionItem?   @relation(fields: [actionItemId], references: [id] , onDelete: Cascade)
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @default(now())
-
-//   @@unique([paragraphId, id , blockquoteId , headingId])
-//   @@index([id])
-//   @@map("normal_type")
-// }
-
-
-
-// model Link {
-//   id                String        @id @default(cuid())
-//   children          Text[]    
-//   normalTypeId      String?       @map("normalType_id")
-//   normalType        NormalType?   @relation(fields: [normalTypeId], references: [id] , onDelete: Cascade)
-//   type              String        @default("a")
-//   parentId          String?       @map("parent_id") @default("0")
-//   target            String        @default("_self")
-//   url               String        @default("")
-
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @default(now())
-
-//   @@unique([normalTypeId, id])
-//   @@index([id , type])
-//   @@map("link")
-// }
-
-
-
-// model Text {
-//   id                String        @id @default(cuid())
-//   type              String        @default("text")
-//   backgroundColor   String?       
-//   bold              Boolean?      
-//   code              Boolean?       
-//   color             String?       
-//   italic            Boolean?       
-//   strikethrough     Boolean?      
-//   superscript       Boolean?      
-//   text              String?        
-//   underline         Boolean?      
-//   subscript         Boolean?       
-//   normalTypeId      String        @map("normalType_id")
-//   normalType        NormalType?   @relation(fields: [normalTypeId], references: [id] , onDelete: Cascade)
-//   linkId            String?       @map("link_id") 
-//   link              Link?         @relation(fields: [linkId ], references: [id], onDelete: Cascade)
-  
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @default(now())
-
-//   @@unique([id])
-//   @@index([id , type])
-//   @@map("text")
-// }
 

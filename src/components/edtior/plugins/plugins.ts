@@ -63,62 +63,63 @@ import { createExpandableHeadingPlugin } from '../expandableHeading'
 
 const components = withStyledDraggables(withStyledPlaceHolders(plateUI))
 
-export const Plugins = createPlugins<MyValue>(
-  [
-    ...basicNodesPlugins,
-    createDescBlock(),
-    createEHeadingPlugin(),
-    createImageListBlockPlugin({
-      then: () => ({
-        plugins: [
-          {
-            props: { list: PopupItems },
-            key: ELEMENT_IMAGE_ITEM_BLOCK,
-          },
-        ],
+export const Plugins = ({ inputCreationId }: { inputCreationId: string }) =>
+  createPlugins<MyValue>(
+    [
+      ...basicNodesPlugins,
+      createDescBlock(),
+      createEHeadingPlugin(),
+      createImageListBlockPlugin({
+        then: () => ({
+          plugins: [
+            {
+              props: { list: PopupItems },
+              key: ELEMENT_IMAGE_ITEM_BLOCK,
+            },
+          ],
+        }),
       }),
-    }),
-    createLinkButton(),
-    createComboboxPlugin(),
-    createReactPlugin(),
-    // createBlockSelectionPlugin(),
-    createMentionPlugin(mentionPlugin),
-    createExitBreakPlugin(exitBreakPlugin),
-    createSoftBreakPlugin(softBreakPlugin),
-    createResetNodePlugin(resetBlockTypePlugin),
-    createIndentPlugin(indentPlugin),
-    createIndentListPlugin(indentListPlugin),
-    createNodeIdPlugin({ options: { idCreator: () => cuid() } }),
-    createDndPlugin({ options: { enableScroller: true } }),
-    createFontFamilyPlugin(),
-    createFontColorPlugin(),
-    // createImagePlugin({
-    //   then: () => ({
-    //     props: {
-    //       list: PopupItems,
-    //     },
-    //   }),
-    // }),
-
-    createFontBackgroundColorPlugin(),
-    createLineHeightPlugin(lineHeightPlugin),
-    createAlignPlugin(alignPlugin),
-    createExpandableHeadingPlugin(),
-    createSelectOnBackspacePlugin({
-      options: { query: { allow: [ELEMENT_HR] } },
-    }),
-    createTrailingBlockPlugin(trailingBlockPlugin),
-    createAutoformatPlugin<AutoformatPlugin<MyValue, MyEditor>, MyValue>(
-      autoformatPlugin
-    ),
-    createEmojiPlugin({
-      renderAfterEditable: EmojiCombobox as RenderAfterEditable<MyValue>,
-    }),
-    createLinkPlugin({
-      renderAfterEditable: PlateFloatingLink as RenderAfterEditable<MyValue>,
-    }),
-  ],
-  {
-    components,
-  }
-)
+      createLinkButton(),
+      createComboboxPlugin(),
+      createReactPlugin(),
+      // createBlockSelectionPlugin(),
+      createMentionPlugin(mentionPlugin({ inputCreationId })),
+      // createMentionPlugin(),
+      createExitBreakPlugin(exitBreakPlugin),
+      createSoftBreakPlugin(softBreakPlugin),
+      createResetNodePlugin(resetBlockTypePlugin),
+      createIndentPlugin(indentPlugin),
+      createIndentListPlugin(indentListPlugin),
+      createNodeIdPlugin({ options: { idCreator: () => cuid() } }),
+      createDndPlugin({ options: { enableScroller: true } }),
+      createFontFamilyPlugin(),
+      createFontColorPlugin(),
+      createImagePlugin({
+        then: () => ({
+          props: {
+            list: PopupItems,
+          },
+        }),
+      }),
+      createFontBackgroundColorPlugin(),
+      createLineHeightPlugin(lineHeightPlugin),
+      createAlignPlugin(alignPlugin),
+      createExpandableHeadingPlugin(),
+      createSelectOnBackspacePlugin({
+        options: { query: { allow: [ELEMENT_HR] } },
+      }),
+      createTrailingBlockPlugin(trailingBlockPlugin),
+      createAutoformatPlugin<AutoformatPlugin<MyValue, MyEditor>, MyValue>(
+        autoformatPlugin
+      ),
+      createEmojiPlugin({
+        renderAfterEditable: EmojiCombobox as RenderAfterEditable<MyValue>,
+      }),
+      createLinkPlugin({
+        renderAfterEditable: PlateFloatingLink as RenderAfterEditable<MyValue>,
+      }),
+    ],
+    {
+      components,
+    }
+  )

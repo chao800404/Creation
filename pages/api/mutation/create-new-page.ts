@@ -4,6 +4,7 @@ import { z, ZodError } from 'zod'
 import prisma from '../../../src/lib/prisma'
 import validateUser from '../../../src/utils/validate'
 import cuid from 'cuid'
+import { selectPage, createPage } from '@/lib/feilds'
 
 const MySchema = z.object({
   id: z.string().cuid({ message: 'Please provide correct ID' }),
@@ -12,6 +13,8 @@ const MySchema = z.object({
     z.string().cuid({ message: 'Please provide correct' }),
   ]),
 })
+
+const data = [{ type: 'p', id: cuid(), children: [{ text: '' }] }]
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,24 +37,6 @@ export default async function handler(
           data: {
             id: id,
             userId: user.id,
-            emoji: {
-              create: {},
-            },
-            cover: {
-              create: {},
-            },
-            content: {
-              create: {
-                node: {
-                  createMany: {
-                    data: [
-                      { type: 'p', parentId: null, id: blockId },
-                      { type: 'text', parentId: blockId, text: '' },
-                    ],
-                  },
-                },
-              },
-            },
             parentId: parentId || null,
             pageConfig: {
               create: {
@@ -59,32 +44,17 @@ export default async function handler(
                 blockToOrder: [blockId] as Prisma.JsonArray,
               },
             },
-            children: {},
+            content: {
+              create: {
+                nodes: data,
+              },
+            },
           },
           select: {
-            id: true,
-            emoji: {
-              select: {
-                id: true,
-                image: true,
-              },
-            },
-            pageConfig: {
-              select: {
-                title: true,
-                favorite: true,
-                editable: true,
-                shouldShow: true,
-                droppable: true,
-              },
-            },
-
-            parentId: true,
+            ...selectPage,
             children: true,
           },
         })
-
-        console.log()
 
         res.status(200).json({
           status: 'success',

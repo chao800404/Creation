@@ -88,7 +88,7 @@ const WrapperScrollbar: React.FC<WrapperScrollbarType> = ({
             <motion.div
               {...props}
               className="view"
-              // style={{ overflowY: 'hidden' }}
+              // style={{ overflowX: 'hidden', height: '100%' }}
 
               // animate={
               //   isCeiling

@@ -10,15 +10,27 @@ export const ToolContainerWrapper = styled.div`
   }
 `
 export const DragButtonWrapper = styled.button`
-  width: 1.5rem;
-  height: 100%;
+  width: 1rem;
+  height: 1rem;
   margin-right: 0.1rem;
   background: transparent;
   cursor: grab;
   display: flex;
   align-items: center;
+  position: relative;
+  color: ${({ theme }) => theme.colors.primary_dark};
+  margin-right: 0.2rem;
 
-  font-size: 1.1rem;
+  &::before {
+    content: '';
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid ${({ theme }) => theme.colors.primary};
+    border-radius: 50%;
+    opacity: 0.5;
+    position: absolute;
+  }
 `
 
 export const PlateEditorWrapper = styled.section`
@@ -91,7 +103,7 @@ export const ToolbarButtonsWrapper = styled('div')`
 export const EditorWrapper = styled('div')`
   width: 100%;
   display: grid;
-  grid-template-rows: 1fr 2rem;
+  grid-template-rows: 1fr 3rem;
   grid-template-columns: 100%;
   height: 100%;
 
@@ -100,5 +112,6 @@ export const EditorWrapper = styled('div')`
     justify-self: center;
     position: fixed;
     bottom: 3rem;
+    z-index: 100;
   }
 `

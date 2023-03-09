@@ -1,3 +1,4 @@
+import { MyValue } from '@/components/edtior/plateTypes'
 import useSWR, { useSWRConfig } from 'swr'
 import { useMemo } from 'react'
 import {
@@ -7,13 +8,18 @@ import {
   createBlock,
   deleteData,
 } from '../utils/fetch'
-import { Content, Cover, Node } from '@prisma/client'
+import { Content, Cover } from '@prisma/client'
 import produce from 'immer'
 import { findIndex } from '../utils/findIndex'
 import { insertIndex } from '../utils/inserIndex'
 import cuid from 'cuid'
 
-import { BlockInputType, BlocksNameType, ignoreType } from './type'
+import {
+  BlockInputType,
+  BlocksNameType,
+  ignoreType,
+  PageSWRResult,
+} from './type'
 
 type CoverType = Omit<Cover, ignoreType>
 
@@ -23,27 +29,9 @@ type PageResDataType = {
       id: string
       image: string
     }
-    content: Node[]
+    nodes: MyValue
   }
   status: 'success' | 'fail'
-}
-
-type UsePageSWRResult = {
-  data: PageResDataType['data']
-  isLoading: boolean
-  mutateFunction: {
-    uploadCoverImage: (src: string) => void
-    uploadCoverImageFile: (file: File) => void
-    updateBlock: (
-      blockId: string,
-      blockContent: BlockInputType['blockData'],
-      signal?: AbortSignal | null | undefined,
-      revalidate?: boolean
-    ) => void
-    updateOrder: (reorder: string[]) => void
-    addBlock: (index: number, name?: string, type?: BlocksNameType) => void
-    deleteBlock: (page_id: string, id: string) => void
-  }
 }
 
 // type UsePageSWRType = (pageId: string) => UsePageSWRResult
@@ -55,7 +43,7 @@ export const usePageSWR = (pageId: string) => {
     fetcher
   )
 
-  const mutateFunction: UsePageSWRResult['mutateFunction'] = {
+  const mutateFunction: PageSWRResult<MyValue>['mutateFunction'] = {
     uploadCoverImage: (src) => {
       mutate<PageResDataType>(
         `/api/page/${pageId}`,
@@ -87,73 +75,25 @@ export const usePageSWR = (pageId: string) => {
       )
     },
 
-    addBlock: (index, name = 'Paragraph', type = 'text') => {
-      // if (!data) return
-      // const cloneBlockToOrder = [...(data?.data.blockToOrder as string[])]
-      // const newBlock = {
-      //   name,
-      //   id: cuid(),
-      //   content: '',
-      //   type,
-      // }
-      // insertIndex(cloneBlockToOrder, index + 1, newBlock.id)
-      // const newBlockCreate = produce<PageResDataType>(data, (draft) => {
-      //   draft.data.blockToOrder = cloneBlockToOrder
-      //   insertIndex(draft.data.blocks, index + 1, {
-      //     ...newBlock,
-      //     newBlock: true,
-      //   })
-      // })
-      // mutate<PageResDataType>(
-      //   `/api/page/${pageId}`,
-      //   async (data) => {
-      //     await createBlock('pageBlocksUpdateOrCreate', {
-      //       page_id: pageId,
-      //       blockToOrder: cloneBlockToOrder,
-      //       ...newBlock,
-      //     })
-      //     return newBlockCreate
-      //   },
-      //   {
-      //     revalidate: false,
-      //     rollbackOnError: true,
-      //     optimisticData: newBlockCreate,
-      //   }
-      // )
-    },
+    updateNodes: ({ pageId, value }) => {
+      if (data) {
+        const update = produce<PageResDataType>(data, (draft) => {
+          draft.data.nodes = value
+        })
 
-    updateBlock: (blockId, blockContent, signal, revalidate = false) => {
-      // if (!data) return
-      // const cloneBlockToOrder = [...(data?.data.blockToOrder as string[])]
-      // const updateBlock = produce<PageResDataType>(data, (draft) => {
-      //   draft.data.blockToOrder = cloneBlockToOrder
-      //   findIndex(data.data.blocks, blockId, (index) => {
-      //     draft.data.blocks[index] = {
-      //       ...blockContent,
-      //       newBlock: false,
-      //     }
-      //   })
-      // })
-      // mutate<PageResDataType>(
-      //   `/api/page/${pageId}`,
-      //   async (data) => {
-      //     await updateData(
-      //       'pageBlocksUpdateOrCreate',
-      //       {
-      //         page_id: pageId,
-      //         blockToOrder: cloneBlockToOrder,
-      //         ...blockContent,
-      //       },
-      //       signal
-      //     )
-      //     return updateBlock
-      //   },
-      //   {
-      //     revalidate: false,
-      //     rollbackOnError: true,
-      //     optimisticData: updateBlock,
-      //   }
-      // )
+        mutate<PageResDataType>(
+          `/api/page/${pageId}`,
+          (data) => {
+            updateData('syncContent', { data: value, id: pageId }, null)
+            return update
+          },
+          {
+            revalidate: false,
+            rollbackOnError: true,
+            optimisticData: update,
+          }
+        )
+      }
     },
 
     updateOrder: (reorder) => {
@@ -219,7 +159,7 @@ export const usePageSWR = (pageId: string) => {
   return {
     data: {
       cover: data?.data?.cover?.image || '',
-      content: data?.data?.content,
+      content: data?.data?.nodes,
     },
     isLoading: !error && !data,
     mutateFunction,
