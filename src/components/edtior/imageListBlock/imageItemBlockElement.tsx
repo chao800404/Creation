@@ -1,7 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useCallback } from 'react'
 import { ImageItemWrapper } from './imageBlock.styles'
-import { BUTTON_ITEMS, ImageItemBtnProps } from './buttonItems'
+import {
+  BUTTON_ITEMS,
+  ImageItemBtnProps,
+  BUTTON_HASURL_ITEMS,
+} from './buttonItems'
 import { useReadOnly } from 'slate-react'
 import { findNodePath, getAboveNode, setNodes } from '@udecode/plate'
 import { DragIndicator } from '@styled-icons/material/DragIndicator'
@@ -200,7 +204,11 @@ export const ImageItemBlockElement = (
             {!readOnly &&
               (element.url ? (
                 <OptionTool className="option">
-                  <>{BUTTON_ITEMS.map((item, i) => renderOption(item, i))}</>
+                  <>
+                    {BUTTON_HASURL_ITEMS.map((item, i) =>
+                      renderOption(item, i)
+                    )}
+                  </>
                 </OptionTool>
               ) : (
                 BUTTON_ITEMS.map((item, i) => renderButton(item, i))

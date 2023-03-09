@@ -24,7 +24,6 @@ type OptionToolProps = {
 }
 
 const OptionTool: React.FC<OptionToolProps> = ({ className, children }) => {
-  // const [isOpen, setIsOpen] = useState(false)
   const {
     ref,
     handleToggleSet,
@@ -46,7 +45,7 @@ const OptionTool: React.FC<OptionToolProps> = ({ className, children }) => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0, transition: { duration: 1.5 } }}
               exit={{ opacity: 0, transition: { duration: 0.5 } }}
               className="option-content"

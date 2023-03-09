@@ -16,8 +16,10 @@ export const OptionToolWrapper = styled('div')`
     cursor: pointer;
     opacity: 0.8;
     transition: all 0.3s ease-in-out;
-    will-change: auto;
+    will-change: scale;
     overflow: hidden;
+    width: 30px;
+    height: 20px;
 
     & > svg {
       width: 100%;

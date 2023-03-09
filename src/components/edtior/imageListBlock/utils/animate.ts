@@ -1,6 +1,6 @@
 export const variants = {
   active: {
-    scale: 1.04,
+    scale: 1.02,
   },
   init: {
     scale: 1,

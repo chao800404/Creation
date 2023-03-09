@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 type ExpandableHeading = {
   open: boolean
+  focus: boolean
 }
 
 export const ExpandableHeadingWrapper = styled('div').attrs<ExpandableHeading>(
@@ -14,32 +15,35 @@ export const ExpandableHeadingWrapper = styled('div').attrs<ExpandableHeading>(
   grid-template-rows: auto 1fr;
   margin: 0.5rem 0;
 
-  .arrow {
+  .open_icon {
     grid-column: 1 / 2;
     cursor: pointer;
-    width: 100%;
     align-self: center;
+    justify-self: start;
 
-    & > span {
-      will-change: rotate;
+    &-content {
+      width: 0.5rem;
+      height: 0.5rem;
+      background-color: ${({ theme }) => theme.colors.primary};
+      border-radius: 50%;
       display: block;
-      transform-origin: center;
-      width: 0.8rem;
-      height: 0.8rem;
-      transition: all 0.3s ease;
-      transform: ${({ open }) => `rotate(${open ? '90deg' : '0deg'})`};
-
-      svg {
-        transform: rotate(180deg);
-        margin-bottom: auto;
-        margin-top: auto;
-        display: block;
-      }
     }
+  }
+
+  .border {
+    grid-column: 1 / 2;
+    grid-row: 2 / -1;
+    justify-self: start;
+    background-color: ${({ theme, focus }) =>
+      focus ? theme.colors.primary_high : theme.colors.secondary_light};
+    height: 100%;
+    width: 2px;
+    margin-left: 3px;
   }
 
   .title {
     grid-column: 2 / 3;
+    grid-row: 1 / 2;
     align-self: center;
     h1,
     h2,

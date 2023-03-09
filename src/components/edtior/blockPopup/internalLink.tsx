@@ -107,4 +107,4 @@ const InternalLink = forwardRef<HTMLInputElement, InternalLinkAttrs>(
   }
 )
 
-export default InternalLink
+export default React.memo(InternalLink)

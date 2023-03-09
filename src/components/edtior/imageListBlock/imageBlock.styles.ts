@@ -42,7 +42,6 @@ export const ImageItemWrapper = styled('div').attrs<ImageItemProps>(
     border: 1px solid ${({ theme }) => theme.colors.primary};
     will-change: scale;
     position: relative;
-    font-size: ${({ hasImage }) => (hasImage ? '0.9rem' : '')};
 
     &-icon {
       svg {
@@ -85,7 +84,7 @@ export const ImageItemWrapper = styled('div').attrs<ImageItemProps>(
 
     & > .drag {
       grid-column: 2 / 4;
-      grid-row: 1 / 3;
+      grid-row: 1 / -1;
       color: white;
       color: ${({ theme }) => theme.colors.white};
 
@@ -234,16 +233,11 @@ export const ImageItemOptionButtonWrapper = styled(motion.span)`
   padding: 0.3rem 0.5rem;
   position: relative;
   gap: 0.8rem;
-  zoom: 0.9;
-  border-bottom: 1px solid transparent;
   border-radius: 3px;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.primary_3};
-  }
+  will-change: scale;
+  zoom: 0.9;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.primary_3};
-    border-bottom: 1px solid transparent;
   }
 `

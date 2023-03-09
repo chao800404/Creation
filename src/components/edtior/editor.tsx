@@ -44,16 +44,15 @@ const Editor = ({
   const debounced = useDebouncedCallback((value) => {
     if (value !== node && (status === 'success' || status === 'normal')) {
       updateNode({ pageId, value })
-      console.log(value === node, 'render')
     }
   }, 1000)
 
-  useEffect(() => {
-    if (debugValue && !onChange && node) {
-      const { type } = debugValue[0]
-      setOnChange(!(type === ELEMENT_PARAGRAPH))
-    }
-  }, [debugValue, onChange, node])
+  // useEffect(() => {
+  //   if (debugValue && !onChange && node) {
+  //     const { type } = debugValue[0]
+  //     setOnChange(!(type === ELEMENT_PARAGRAPH))
+  //   }
+  // }, [debugValue, onChange, node])
 
   // console.log(debugValue)
 

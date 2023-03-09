@@ -19,7 +19,7 @@ export const DragButtonWrapper = styled.button`
   align-items: center;
   position: relative;
   color: ${({ theme }) => theme.colors.primary_dark};
-  margin-right: 0.2rem;
+  margin-right: 0.7rem;
 
   &::before {
     content: '';
