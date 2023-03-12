@@ -5,17 +5,22 @@ import {
   StyledElementProps,
 } from '@udecode/plate-styled-components'
 import { getCodeLineElementStyles } from '@udecode/plate'
-import { CodeLine } from './codeBlock.styles'
 
 export const CodeLineElement = <V extends Value>(
   props: StyledElementProps<V>
 ) => {
   const { attributes, children, nodeProps } = props
+  const [onLoad, setOnLoad] = React.useState(false)
 
   const rootProps = getRootProps(props)
   const { root } = getCodeLineElementStyles(props)
 
-  return (
+  React.useEffect(() => {
+    const timeout = setTimeout(() => setOnLoad(true))
+    return () => clearTimeout(timeout)
+  }, [])
+
+  return onLoad ? (
     <div
       id={'code_line'}
       {...attributes}
@@ -25,5 +30,7 @@ export const CodeLineElement = <V extends Value>(
     >
       {children}
     </div>
+  ) : (
+    <></>
   )
 }

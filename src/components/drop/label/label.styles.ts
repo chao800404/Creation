@@ -26,7 +26,7 @@ export const LabelItemWrapper = styled.div.attrs<LabelItemType>(
   position: relative;
 
   border: ${({ isSelected, theme }) =>
-    isSelected ? '' : `1px silid ${theme.colors.secondary_dark}`};
+    isSelected ? '' : `1px silid ${theme.colors.primary}`};
   border-right: 1px solid;
   position: relative;
 

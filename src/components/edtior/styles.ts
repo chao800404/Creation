@@ -105,7 +105,7 @@ export const EditorWrapper = styled('div')`
   display: grid;
   grid-template-rows: 1fr 3rem;
   grid-template-columns: 100%;
-  height: 100%;
+  height: fit-content;
 
   [data-testid='Toolbar'] {
     grid-row: 2 / -1;

@@ -178,7 +178,7 @@ export const plateUI = createPlateUI({
     styles: {
       root: {
         code: {
-          backgroundColor: 'red',
+          background: 'transparent',
         },
       },
     },

@@ -1233,7 +1233,7 @@ export const theme: DefaultTheme = {
     secondary: 'var(--colors-gray12)',
     secondary_light: 'var(--colors-mauve12)',
     secondary_light_2: 'var(--colors-slateA12)',
-    tertiary: 'var(--colors-violetA11)',
+    tertiary: 'var(--colors-indigoA3)',
     white: 'var(--colors-slateA12)',
     shadow: 'rgba(0,0,0,0.25)',
   },
