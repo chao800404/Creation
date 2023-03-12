@@ -81,7 +81,7 @@ export const WorkspaceItemPopupWrapper = styled(motion.div)`
 `
 
 export const UserPopupWrapper = styled(motion.div)`
-  padding: 0.2rem;
+  padding: ${({ theme: { padding } }) => `${padding.pd_sm}`};
   cursor: pointer;
   position: relative;
 
@@ -141,10 +141,10 @@ export const UserPopupWrapper = styled(motion.div)`
     &-item {
       display: flex;
       justify-content: start;
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
+      padding-top: ${({ theme: { padding } }) => `${padding.pd_md}`};
+      padding-bottom: ${({ theme: { padding } }) => `${padding.pd_md}`};
       padding-right: 2rem;
-      padding-left: 0.5rem;
+      padding-left: ${({ theme: { padding } }) => `${padding.pd_md}`};
       border-bottom: 1px solid;
       gap: 1rem;
 
@@ -213,7 +213,7 @@ export const ChangePopupWrapper = styled(motion.div)`
         height: 0.2rem;
         z-index: 300;
         bottom: 0rem;
-        padding: 0 0.5rem;
+        padding: ${({ theme: { padding } }) => `0 ${padding.pd_md}`};
 
         span {
           width: 100%;
@@ -246,7 +246,7 @@ export const ChangePopupWrapper = styled(motion.div)`
   }
 
   .change_popup-padding {
-    padding: 0.5rem 0.5rem;
+    padding: ${({ theme: { padding } }) => `${padding.pd_md}`};
   }
 `
 
@@ -299,7 +299,7 @@ export const LoginPopupWrapper = styled('div')`
     padding: 2rem 0;
   }
   .loginPopup_space {
-    padding: 0.5rem;
+    padding: ${({ theme: { padding } }) => `${padding.pd_md}`};
   }
 
   .loginPopup_button-google {
@@ -383,7 +383,7 @@ export const BlockPopupWrapper = styled('div')`
     color: inherit;
     width: auto;
     background-color: ${({ theme }) => theme.colors.primary};
-    padding: 0 0.5rem;
+    padding: ${({ theme: { padding } }) => `0 ${padding.pd_md}`};
     cursor: pointer;
 
     &:not(:last-child) {

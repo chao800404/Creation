@@ -204,6 +204,18 @@ export const withStyledDraggables = (components: unknown) => {
       },
     },
     {
+      key: ELEMENT_TODO_LI,
+      styles: {
+        block: {
+          overflow: 'unset',
+        },
+        gutterLeft: {
+          display: 'flex',
+          alignItems: 'center',
+        },
+      },
+    },
+    {
       key: ELEMENT_EXPANDABLE_HEADING_1,
       styles: {
         block: {

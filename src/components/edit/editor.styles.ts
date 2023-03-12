@@ -16,7 +16,7 @@ export const HeaderEditorSWrapper = styled('div').attrs<HeaderEditorType>(
   grid-template-columns: auto 1fr;
   height: fit-content;
   position: relative;
-  padding: 0.5rem 0 0 0;
+  padding: ${({ theme: { padding } }) => `${padding.pd_md} 0 0 0 `};
   margin-top: 5rem;
 
   &:hover {
@@ -29,7 +29,7 @@ export const HeaderEditorSWrapper = styled('div').attrs<HeaderEditorType>(
     position: absolute;
     left: 0;
     width: fit-content;
-    padding: 0.5rem 0.5rem;
+    padding: ${({ theme: { padding } }) => padding.pd_md};
     height: 2.5rem;
     display: flex;
     background-color: ${({ theme }) => theme.colors.primary};

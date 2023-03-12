@@ -38,8 +38,11 @@ export const ImageItemWrapper = styled('div').attrs<ImageItemProps>(
     width: 14rem;
     background-color: ${({ theme }) => theme.colors.white};
     border-radius: 5px;
-    box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.3);
-    border: 1px solid ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0.2rem ${({ theme: { colors } }) => colors.shadow};
+    border: ${({ isActive }) =>
+      isActive
+        ? '1.2px solid var(--colors-gray1)'
+        : '1px solid var(--colors-gray11)'};
     will-change: scale;
     position: relative;
 
@@ -95,7 +98,7 @@ export const ImageItemWrapper = styled('div').attrs<ImageItemProps>(
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 0.2rem ${({ theme: { colors } }) => colors.shadow};
         transform: rotate(90deg) translateX(-0.8rem);
         margin: auto;
         border-radius: 5px;
@@ -211,7 +214,7 @@ export const ImageItemRowWrapper = styled('div').attrs<ImageItemRowProps>(
     ...props,
   })
 )<ImageItemRowProps>`
-  padding: 0.2rem;
+  padding: ${({ theme: { padding } }) => padding.pd_sm};
 
   &:hover {
     & > .image_item-row {

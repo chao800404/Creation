@@ -19,7 +19,7 @@ export const ImageComponentWrapper = styled('div').attrs<ImageComponentProps>(
   })
 )<ImageComponentProps>`
   width: auto;
-  padding: 0.5rem 0;
+  padding: ${({ theme: { padding } }) => `${padding.pd_md} 0`};
 
   figure {
     position: relative;
@@ -56,12 +56,29 @@ export const ImageComponentWrapper = styled('div').attrs<ImageComponentProps>(
       `inset 0 0 0 transparent, 0 0 0 1px ${
         focused ? theme.colors.primary : 'transparent'
       }`};
+    border-radius: 5px;
+    overflow: hidden;
 
     & {
       .drag_box,
       .image_controller {
         opacity: ${({ focused }) => (focused ? 1 : 0)};
         visibility: ${({ focused }) => (focused ? 'visible' : 'hidden')};
+      }
+    }
+
+    .image_controller {
+      position: absolute;
+      top: 0.2rem;
+      right: 0.2rem;
+      z-index: 30;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+      .image_controller {
+        opacity: 1;
+        visibility: visible;
       }
     }
   }
@@ -80,64 +97,6 @@ export const ImageComponentWrapper = styled('div').attrs<ImageComponentProps>(
       padding: 0.2rem;
       height: auto !important;
     }
-  }
-
-  .image_controller {
-    position: absolute;
-    width: fit-content;
-    padding: 0.5rem;
-    top: 0.2rem;
-    left: 0.2rem;
-    border-radius: 5px;
-    background-color: ${({ theme }) => theme.colors.primary};
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    span {
-      width: 1px;
-      height: 13px;
-      background-color: ${({ theme }) => theme.colors.primary_3};
-    }
-
-    div.base_btn-img {
-      width: 1.3rem;
-      height: 1.3rem;
-      color: ${({ theme }) => theme.colors.white};
-      padding: 2px;
-      border-radius: 2px;
-      cursor: pointer;
-
-      &:hover {
-        background-color: ${({ theme }) => theme.colors.primary_3};
-      }
-      svg {
-        display: block;
-      }
-    }
-
-    div.active {
-      background-color: ${({ theme }) => theme.colors.primary_3};
-    }
-
-    & > [data-type='controller-drag-img'] {
-      background-color: ${({ dragging, theme }) =>
-        dragging ? theme.colors.primary_3 : 'unset'};
-    }
-  }
-
-  .image_controller,
-  .drag_box {
-    visibility: hidden;
-    transition: all 0.3s ease-in-out;
-    opacity: 0;
-    z-index: 20;
-  }
-
-  .image_popup {
-    position: absolute;
-    top: 2.8rem;
-    left: 0.2rem;
   }
 `
 
@@ -175,8 +134,8 @@ export const BaseImageElementWrapper = styled('div')`
   .base_image-commad {
     position: absolute;
     right: 1rem;
-    padding: 0.2rem 0.5rem;
-    background-color: ${({ theme }) => theme.colors.primary_2};
+    padding: ${({ theme: { padding } }) => `${padding.pd_sm} ${padding.pd_md}`};
+
     font-size: 0.6rem;
     border-radius: 5px;
     font-weight: 700;
@@ -205,5 +164,32 @@ export const ImagePopupItemWrapper = styled('div')`
 
   .searchFields_color {
     color: red;
+  }
+`
+
+type IsActive = {
+  isActive: boolean
+}
+
+export const ImageControllBtn = styled('button').attrs<IsActive>(
+  (props) => props
+)<IsActive>`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  color: ${({ isActive }) =>
+    isActive ? 'rgba(255, 255, 255);' : 'rgba(255, 255, 255, 0.5);'};
+  gap: 0.3rem;
+  padding: 0.2rem;
+
+  .image_controller-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.9);
+    background-color: ${({ theme }) => theme.colors.primary_3};
   }
 `

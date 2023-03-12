@@ -28,15 +28,16 @@ import {
   createAlignPlugin,
   createImagePlugin,
   createTrailingBlockPlugin,
+  MentionPlugin,
 } from '@udecode/plate'
-
+import { createBlockSelectionPlugin } from '@udecode/plate-selection'
 import { basicNodesPlugins } from '../basic-nodes'
 import { plateUI } from '../common/plateUI'
 import { MyEditor, MyValue } from '../plateTypes'
 import { exitBreakPlugin } from './exitBreakPlugin'
 import { withStyledPlaceHolders } from '../withWrapper/withPlaceholder'
 import { softBreakPlugin } from './softBreakPlugin'
-import { mentionPlugin } from './mentionPlugin'
+import { mentionPlugin } from '../mention/plugin/mentionPlugin'
 import { resetBlockTypePlugin } from './resetBlockTypePlugin'
 import { createDndPlugin } from '@udecode/plate-ui-dnd'
 import { withStyledDraggables } from '../withWrapper/withStyledDraggables'
@@ -58,6 +59,7 @@ import {
 import { createEHeadingPlugin } from '../eHeading-element/eHeadingPlugin'
 import { createDescBlock } from '../desc'
 import { createExpandableHeadingPlugin } from '../expandableHeading'
+import { tagMentionPlugin } from '../mention/plugin/tagMentionPlugin'
 
 // import { normalizeTypePlugin } from './normalizeTypePlugin'
 
@@ -82,9 +84,17 @@ export const Plugins = () =>
       createLinkButton(),
       createComboboxPlugin(),
       createReactPlugin(),
-      // createBlockSelectionPlugin(),
+      // createBlockSelectionPlugin({
+      //   options: {
+      //     query: {
+      //       maxLevel: 5,
+      //     },
+      //   },
+      // }),
       createMentionPlugin(mentionPlugin),
-      // createMentionPlugin(),
+      createMentionPlugin<MentionPlugin<{ color: string }>, MyValue, MyEditor>(
+        tagMentionPlugin
+      ),
       createExitBreakPlugin(exitBreakPlugin),
       createSoftBreakPlugin(softBreakPlugin),
       createResetNodePlugin(resetBlockTypePlugin),

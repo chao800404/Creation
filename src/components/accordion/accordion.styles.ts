@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
 export const AccordionWrapper = styled(motion.div)`
-  padding: 0 0.5rem;
+  padding: ${({ theme: { padding } }) => `0 ${padding.pd_sm}`};
   font-size: inherit;
   font-weight: inherit;
 

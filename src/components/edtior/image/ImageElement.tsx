@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useMemo } from 'react'
 import { Box } from '@udecode/plate-core'
 import { ElementPopover } from '@udecode/plate-floating'
 import { Caption, Image, Media } from '@udecode/plate-media'
-import { useReadOnly } from 'slate-react'
+import { useFocused, useReadOnly, useSelected } from 'slate-react'
 import { ImageAdd } from '@styled-icons/boxicons-regular/ImageAdd'
 import { saveAs } from 'file-saver'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -24,7 +24,6 @@ import {
 import useWindowPointerToggle from '../../../utils/useWindowPointerToggle'
 import {
   Align,
-  ImageControllerProps,
   ImageElements,
   HandleUrlSet,
   BaseImageProps,
@@ -36,6 +35,8 @@ import InternalLink from '../blockPopup/internalLink'
 import ExternalLink from '../blockPopup/externalLink'
 import { ImagePopupItem } from './imagePopupItem'
 import { UploadImageElement } from './uploadImageElement'
+import { IMAGE_CONTROLLER_ITEMS } from './imageControllerItems'
+import { OptionTool } from '@/components/optionTool/optionTool'
 
 const labels = [
   { name: 'INTERNAL LINK' },
@@ -116,7 +117,7 @@ const BaseImageElement: React.FC<BaseImageProps<ImagePopupItemProps>> = ({
       <motion.div
         className="base_image"
         whileTap={{ y: 1, scale: 0.99 }}
-        whileHover={{ backgroundColor: 'rgb(57,57,57)' }}
+        whileHover={{ backgroundColor: 'var(--colors-gray4)' }}
         contentEditable={false}
         onClick={(e) => {
           e.preventDefault()
@@ -152,55 +153,22 @@ const ImageElement = React.memo(
     } = props
 
     const { as, ...rootProps } = props
-    const [showPopup, setShowPopup] = useState(false)
+    const isFocused = useFocused()
+    const isSelected = useSelected()
     const readOnly = useReadOnly()
     const element = useElement<ImageElements>()
     const editor = useEditorRef()
     const path = findNodePath(editor, element)
     const [dragging, setDragging] = useState(false)
     const { url, width, align = 'center', vertical = 'center' } = element
-
-    const {
-      ref,
-      toggle: focused,
-      handleToggleSet,
-    } = useWindowPointerToggle<HTMLDivElement>(() => {
-      setDragging(false)
-      setShowPopup(false)
-    })
-
-    useEffect(() => {
-      handleToggleSet(true)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const handleAlign: ImageControllerProps['handleAlign'] = useCallback(
-      (align) => setNodes<TImageElement>(editor, { align }, { at: path }),
-      [editor, path]
-    )
+    const memoController = useMemo(() => IMAGE_CONTROLLER_ITEMS, [])
 
     const handleUrlSet: HandleUrlSet<ImagePopupItemProps> = useCallback(
       ({ src }) => {
         setNodes<TImageElement>(editor, { url: src }, { at: path })
-        setShowPopup(false)
       },
       [editor, path]
     )
-
-    const handleVertical: ImageControllerProps['handleVertical'] = useCallback(
-      (vertical) => setNodes<TImageElement>(editor, { vertical }, { at: path }),
-      [editor, path]
-    )
-
-    const handleDownload = useCallback(() => saveAs(url, 'image.jpg'), [url])
-
-    const handleDelete = useCallback(
-      () => removeNodes(editor, { at: path }),
-      [editor, path]
-    )
-
-    const handleShowPopup = useCallback(() => setShowPopup((prev) => !prev), [])
-    const handleHiddenPopup = useCallback(() => setShowPopup(false), [])
 
     const setAlign = useCallback((align: Align) => {
       switch (align) {
@@ -215,21 +183,16 @@ const ImageElement = React.memo(
 
     const ImageProps = {
       align,
-      focused,
       dragging,
       vertical,
+      focused: isFocused && isSelected,
     }
 
     return url ? (
-      // eslint-disable-next-line react/jsx-no-undef
       <ElementPopover floatingOptions={mediaFloatingOptions}>
         <ImageComponentWrapper {...ImageProps}>
           <Media.Root {...rootProps}>
-            <figure
-              contentEditable={false}
-              ref={ref}
-              onPointerDown={(e) => handleToggleSet(true)}
-            >
+            <figure contentEditable={false}>
               <Media.Resizable
                 handleComponent={{
                   left: <Box className="drag_box drag_box-1" />,
@@ -241,29 +204,15 @@ const ImageElement = React.memo(
                 {...resizableProps}
               >
                 {!readOnly && (
-                  <>
-                    <div className="image_controller">
-                      <ImageController
-                        url={url}
-                        align={align}
-                        vertical={vertical}
-                        showPopup={showPopup}
-                        handleAlign={handleAlign}
-                        handleVertical={handleVertical}
-                        handleDownload={handleDownload}
-                        handleDelete={handleDelete}
-                        handleShowPopup={handleShowPopup}
-                      />
-                    </div>
-                    <div className="image_popup">
-                      <ImagePopup
-                        toggle={showPopup}
-                        handleUrlSet={handleUrlSet}
-                        handleHiddenPopup={handleHiddenPopup}
-                        items={list}
-                      />
-                    </div>
-                  </>
+                  <OptionTool className="image_controller" showHeight="215px">
+                    <ImageController
+                      items={memoController}
+                      url={url}
+                      editor={editor}
+                      path={path}
+                      element={element}
+                    />
+                  </OptionTool>
                 )}
                 <Image className="image_container" {...nodeProps} />
               </Media.Resizable>

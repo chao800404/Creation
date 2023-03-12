@@ -11,7 +11,7 @@ import React, { useCallback } from 'react'
 import { LinkButtonPopup } from './linkButtonPopup'
 import { LinkButtonElem, LinkItem } from './type'
 import { useRouter } from 'next/router'
-import { useReadOnly } from 'slate-react'
+import { useFocused, useReadOnly, useSelected } from 'slate-react'
 import useWindowPointerToggle from '../../../utils/useWindowPointerToggle'
 import { httpParser } from '../../../utils/filterFile'
 import { ELEMENT_LINK_BUTTON } from './linkButtonPlugin'
@@ -19,13 +19,14 @@ import { ELEMENT_LINK_BUTTON } from './linkButtonPlugin'
 export const LinkButtonElement = (props: LinkButtonElem<LinkItem>) => {
   const textAlign = props?.style?.textAlign
   const router = useRouter()
+  const selected = useSelected()
+  const focused = useFocused()
 
   const { ref, toggle, handleToggleSet } =
     useWindowPointerToggle<HTMLDivElement>()
 
   const { children, list, editor, element } = props
   const path = findNodePath(editor, element)
-  const node = getAboveNode(editor, { match: { type: ELEMENT_LINK_BUTTON } })
   const readOnly = useReadOnly()
 
   const handleSet = useCallback(
@@ -57,7 +58,7 @@ export const LinkButtonElement = (props: LinkButtonElem<LinkItem>) => {
     <LinkButtonWrapper
       style={{ justifyContent: textAlign || 'left' }}
       open={toggle}
-      isFocus={!!node}
+      isFocus={selected && focused}
     >
       <div ref={ref}>
         <button className="link_button-container" onClick={handleTransferPath}>

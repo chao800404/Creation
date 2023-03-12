@@ -9,17 +9,6 @@ export type ImageElements = {
 
 export type HandleFn<T> = (props: T) => void
 export type HandleUrlSet<T> = HandleFn<T>
-export type ImageControllerProps = {
-  url: string
-  align: Align
-  showPopup: boolean
-  vertical: Vertical
-  handleAlign: HandleFn<Align>
-  handleDownload: () => void
-  handleVertical: HandleFn<Vertical>
-  handleDelete: () => void
-  handleShowPopup: () => void
-}
 
 export type BaseImageProps<T> = {
   handleUrlSet: HandleUrlSet<T>

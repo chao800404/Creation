@@ -17,7 +17,7 @@ export const ButtonBlockWrapper = styled.div`
     border-radius: 0.3rem;
     overflow: hidden;
     font-weight: 800;
-    box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 0.2rem ${({ theme: { colors } }) => colors.shadow};
     transition: all 0.3s ease-in-out;
 
     &:hover {
@@ -127,6 +127,10 @@ export const ButtonBlockPopupWrapper = styled.div`
       border: 1.5px solid ${({ theme }) => theme.colors.primary_high};
       padding: 0 0.5rem;
     }
+
+    button {
+      color: ${({ theme: { colors } }) => colors.primary};
+    }
   }
 
   .popup_field-name {
@@ -216,7 +220,7 @@ export const SelectItemWrapper = styled('div').attrs<SelectItemWrapperProps>(
     active ? colors.secondary : colors.white};
 
   color: ${({ theme: { colors }, active }) =>
-    active ? colors.primary : colors.secondary_dark};
+    active ? colors.primary : colors.primary_2};
 
   border-radius: 5px;
 

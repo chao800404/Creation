@@ -1,74 +1,44 @@
-import { AlignBtn, VirticalBtn } from './controlItems'
-import { ImageControllerProps } from './type'
-import { CloudDownload } from '@styled-icons/boxicons-solid/CloudDownload'
-import { Images } from '@styled-icons/bootstrap/Images'
-import { DeleteLines } from '@styled-icons/fluentui-system-regular/DeleteLines'
+import { ImageControllerItem, PathType } from './imageControllerItems'
+import React from 'react'
+import { PlateEditor, Value } from '@udecode/plate'
+import { ImageControllBtn } from './imageElement.styles'
+import { StyledIcon } from '@styled-icons/styled-icon'
+import { ImageElements } from './type'
 
-export const ImageController = ({
-  url,
-  align,
-  showPopup,
-  vertical,
-  handleAlign,
-  handleDownload,
-  handleVertical,
-  handleDelete,
-  handleShowPopup,
-}: ImageControllerProps) => {
-  return (
-    <>
-      <div
-        className={`base_btn-img ${showPopup && 'active'}`}
-        onClick={handleShowPopup}
-      >
-        <Images />
-      </div>
-      <span />
-      {VirticalBtn.map(({ name, icon }) => (
-        <div
-          onClick={(e) => {
-            e.preventDefault()
-            handleVertical(name)
-          }}
-          key={name}
-          className={`base_btn-img ${vertical === name && 'active'}`}
-        >
-          {icon}
-        </div>
-      ))}
-      <span />
-      {AlignBtn.map(({ name, icon }) => (
-        <div
-          onClick={(e) => {
-            e.preventDefault()
-            handleAlign(name)
-          }}
-          className={`base_btn-img ${align === name && 'active'}`}
-          key={name}
-        >
-          {icon}
-        </div>
-      ))}
+type ImageControllerProps = {
+  items: ImageControllerItem[]
+  editor: PlateEditor<Value>
+  element: ImageElements
+} & PathType
 
-      <span />
-      <div
-        className="base_btn-img"
-        onClick={(e) => {
-          e.preventDefault()
-          handleDownload()
-        }}
-      >
-        <CloudDownload />
-      </div>
-      <div
-        className="base_btn-img"
-        onClick={(e) => {
-          e.preventDefault()
-          handleDelete()
-        }}
-      >
-        <DeleteLines />
-      </div>
-    </>
-  )
-}
+export const ImageController = React.memo(
+  ({ items, path, url, editor, element }: ImageControllerProps) => {
+    const render = React.useCallback(
+      (icon: StyledIcon) => React.createElement(icon),
+      []
+    )
+
+    const { vertical, align } = element
+
+    console.log(element)
+
+    return (
+      <>
+        {items.map((item, i) => (
+          <ImageControllBtn
+            key={`${item.name}_${i}`}
+            onClick={() => item.command(editor, { path, url })}
+            isActive={
+              item.pos === element.align || item.pos === element.vertical
+            }
+          >
+            <span className="image_controller-icon">{render(item.icon)}</span>
+            <span className="image_controller-desc">{item.name}</span>
+          </ImageControllBtn>
+        ))}
+      </>
+    )
+  }
+)
+
+ImageController.displayName = 'ImageController'

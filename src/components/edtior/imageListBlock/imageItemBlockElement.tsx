@@ -204,11 +204,7 @@ export const ImageItemBlockElement = (
             {!readOnly &&
               (element.url ? (
                 <OptionTool className="option">
-                  <>
-                    {BUTTON_HASURL_ITEMS.map((item, i) =>
-                      renderOption(item, i)
-                    )}
-                  </>
+                  {BUTTON_HASURL_ITEMS.map((item, i) => renderOption(item, i))}
                 </OptionTool>
               ) : (
                 BUTTON_ITEMS.map((item, i) => renderButton(item, i))

@@ -153,7 +153,7 @@ export const WorkspaceItemWrapper = styled('div').attrs<WorkspaceItemType>(
     min-height: inherit;
 
     .workspace-item-icon {
-      padding: 0.2rem;
+      padding: ${({ theme: { padding } }) => `${padding.pd_sm} `};
     }
 
     p {

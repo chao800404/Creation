@@ -9,7 +9,7 @@ import {
   ELEMENT_DEFAULT,
   getParentNode,
 } from '@udecode/plate'
-import { MyPlatePlugin } from '../plateTypes'
+import { MyPlatePlugin } from '../../plateTypes'
 
 export const mentionPlugin: Partial<MyPlatePlugin<MentionPlugin>> = {
   key: '/',

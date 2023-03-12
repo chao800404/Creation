@@ -29,7 +29,7 @@ export const DashboardNavbar = styled('header')`
     width: 15rem;
     background-color: ${({ theme }) => theme.colors.primary};
     transform-origin: top left;
-    padding: 0.5rem 0;
+    padding: ${({ theme: { padding } }) => `${padding.pd_md} 0`};
     box-shadow: 0rem 0.1rem 0.2rem rgba(0, 0, 0, 1);
     color: ${({ theme }) => theme.colors.white};
     border: 1px solid ${({ theme }) => theme.colors.primary_2};
@@ -54,7 +54,7 @@ export const DashboardNavDotWrapper = styled('li')`
   position: relative;
   cursor: pointer;
   .link_gap {
-    padding: 0 0.2rem;
+    padding: ${({ theme: { padding } }) => `0 ${padding.pd_sm}`};
   }
 
   .link_popup {
@@ -76,7 +76,7 @@ export const DashboardPopupItemWrapper = styled('li')`
   border-bottom: 1px solid ${({ theme }) => theme.colors.primary_2};
   display: flex;
   align-items: center;
-  padding: 0 0.5rem;
+  padding: ${({ theme: { padding } }) => `0 ${padding.pd_md}`};
   cursor: pointer;
   a {
     width: inherit;
@@ -109,7 +109,7 @@ export const DashboardNavbarLinkWrapper = styled('li')`
   }
 
   .link_gap {
-    padding: 0 0.2rem;
+    padding: ${({ theme: { padding } }) => `0 ${padding.pd_sm}`};
   }
 
   a {

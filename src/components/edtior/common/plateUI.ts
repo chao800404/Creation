@@ -2,6 +2,7 @@ import {
   CodeBlockElement,
   createPlateUI,
   ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
   ELEMENT_DEFAULT,
   ELEMENT_H1,
   ELEMENT_H2,
@@ -45,17 +46,9 @@ import {
 } from '../expandableHeading'
 import { ELEMENT_EH1, ELEMENT_EH2, ELEMENT_EH3 } from '../eHeading-element'
 import { TodoListElement } from '../todoList/todoListElement'
+import { CodeLineElement } from '../codeBlock'
 
 export const plateUI = createPlateUI({
-  [ELEMENT_CODE_BLOCK]: withProps(CodeBlockElement, {
-    styles: {
-      root: {
-        code: {
-          backgroundColor: 'transparent',
-        },
-      },
-    },
-  }),
   [ELEMENT_DESC]: withProps(StyledElement, {
     as: 'p',
     styles: {
@@ -181,6 +174,16 @@ export const plateUI = createPlateUI({
       },
     },
   }),
+  [ELEMENT_CODE_BLOCK]: withProps(CodeBlockElement, {
+    styles: {
+      root: {
+        code: {
+          backgroundColor: 'red',
+        },
+      },
+    },
+  }),
+  [ELEMENT_CODE_LINE]: CodeLineElement,
   [ELEMENT_IMAGE]: ImageElement,
   [ELEMENT_LINK_BUTTON]: LinkButtonElement,
   [ELEMENT_TR]: TableRowElement,

@@ -1,34 +1,42 @@
-import React, { useState } from 'react'
+import React, { useMemo } from 'react'
 import { OptionToolWrapper } from './optionTool.styles'
-import { DiagonalArrowLeftDownOutline } from '@styled-icons/evaicons-outline/DiagonalArrowLeftDownOutline'
 import { motion, AnimatePresence } from 'framer-motion'
 import useWindowPointerToggle from '@/utils/useWindowPointerToggle'
 import { ThreeDots } from '@styled-icons/bootstrap/ThreeDots'
 
-const variants = {
-  open: {
-    width: '135px',
-    height: '122px',
-    transition: { ease: [0.17, 0.67, 0.83, 0.67] },
-  },
-  closed: {
-    width: '30px',
-    height: '20px',
-    transition: { ease: [0.17, 0.67, 0.83, 0.67] },
-  },
-}
-
 type OptionToolProps = {
   className: string
   children: React.ReactNode
+  showWidth?: string
+  showHeight?: string
 }
 
-const OptionTool: React.FC<OptionToolProps> = ({ className, children }) => {
+const OptionTool: React.FC<OptionToolProps> = ({
+  className,
+  children,
+  showWidth = null,
+  showHeight = null,
+}) => {
   const {
     ref,
     handleToggleSet,
     toggle: isOpen,
   } = useWindowPointerToggle<HTMLDivElement>()
+
+  const variants = useMemo(() => {
+    return {
+      open: {
+        width: showWidth ? showWidth : '135px',
+        height: showHeight ? showHeight : '122px',
+        transition: { ease: [0.17, 0.67, 0.83, 0.67] },
+      },
+      closed: {
+        width: '30px',
+        height: '20px',
+        transition: { ease: [0.17, 0.67, 0.83, 0.67] },
+      },
+    }
+  }, [showHeight, showWidth])
 
   return (
     <OptionToolWrapper

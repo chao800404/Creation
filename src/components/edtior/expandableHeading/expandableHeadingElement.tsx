@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
 import { ExpandableHeadingWrapper } from './expandableHeading.styles'
-import { LeftArrow } from '@styled-icons/boxicons-solid/LeftArrow'
 import {
   setNodes,
   findNodePath,
@@ -8,17 +7,11 @@ import {
   getEndPoint,
   getFirstNode,
   StyledElementProps,
-  getAboveNode,
-  getParentNode,
+  select,
 } from '@udecode/plate'
 import { MyExpandableHeading } from '../plateTypes'
-import { useReadOnly } from 'slate-react'
-import { motion } from 'framer-motion'
-import {
-  ELEMENT_EXPANDABLE_HEADING_1,
-  ELEMENT_EXPANDABLE_HEADING_2,
-  ELEMENT_EXPANDABLE_HEADING_3,
-} from '.'
+import { useFocused, useReadOnly, useSelected } from 'slate-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 type ExpandableHeadingElementProps = StyledElementProps<
   MyExpandableHeading[],
@@ -26,11 +19,38 @@ type ExpandableHeadingElementProps = StyledElementProps<
 >
 
 const variants = {
+  init: {
+    boxShadow: '0 0 0 0.3rem rgba(0,0,0,0)',
+  },
   open: {
     boxShadow: '0 0 0 0.2rem rgba(0,0,0,0.3)',
   },
+  hover: {
+    boxShadow: '0 0 0 0.2rem rgba(0,0,0,0.3)',
+    transition: {
+      repeat: Infinity,
+      duration: 1,
+    },
+  },
   closed: {
-    boxShadow: '0 0 0 1rem rgba(0,0,0,0)',
+    boxShadow: '0 0 0 0.5rem rgba(0,0,0,0)',
+  },
+}
+
+const container = {
+  open: { opacity: 1 },
+  closed: {
+    opacity: 0,
+    height: 0,
+    overflow: 'hidden',
+    transition: { when: 'afterChildren' },
+  },
+}
+
+const item = {
+  closed: {
+    opacity: 0,
+    transition: { type: 'tween' },
   },
 }
 
@@ -41,17 +61,8 @@ export const ExpandableHeadingElement = (
   const [title, ...other] = children
   const path = findNodePath(editor, element)
   const readOnly = useReadOnly()
-  const node = getAboveNode(editor, {
-    match: {
-      type: [
-        ELEMENT_EXPANDABLE_HEADING_1,
-        ELEMENT_EXPANDABLE_HEADING_2,
-        ELEMENT_EXPANDABLE_HEADING_3,
-      ],
-    },
-  })
-
-  const focus = useMemo(() => node?.[0].id === element.id, [element.id, node])
+  const selected = useSelected()
+  const focused = useFocused()
 
   const handleShow = useCallback(() => {
     if (readOnly) return
@@ -67,12 +78,14 @@ export const ExpandableHeadingElement = (
   }, [path, readOnly])
 
   return (
-    <ExpandableHeadingWrapper open={element.show} focus={focus}>
+    <ExpandableHeadingWrapper open={element.show} focus={selected && focused}>
       <span className="open_icon" onClick={handleShow} contentEditable={false}>
         <motion.span
           variants={variants}
           animate={element.show ? 'open' : 'closed'}
           className="open_icon-content"
+          whileHover={element.show ? 'open' : 'hover'}
+          initial="init"
         />
       </span>
       <div contentEditable={false} className="border">
@@ -81,7 +94,13 @@ export const ExpandableHeadingElement = (
       <div className="title">
         <span>{title}</span>
       </div>
-      {element.show && <div className="content">{other}</div>}
+      <AnimatePresence>
+        {element.show && (
+          <motion.div exit="closed" variants={container} className="content">
+            <motion.div variants={item}>{other}</motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </ExpandableHeadingWrapper>
   )
 }

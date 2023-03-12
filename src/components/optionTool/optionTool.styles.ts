@@ -20,6 +20,8 @@ export const OptionToolWrapper = styled('div')`
     overflow: hidden;
     width: 30px;
     height: 20px;
+    right: 0;
+    top: 0;
 
     & > svg {
       width: 100%;

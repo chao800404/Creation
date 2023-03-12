@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const SelectBlockItem = styled('div')`
   width: 100%;
-  padding: 0.5rem;
+  padding: ${({ theme: { padding } }) => padding.pd_md};
   border-bottom: 1px solid ${({ theme }) => theme.colors.secondary_light};
 
   .select_block-btn {
@@ -65,4 +65,24 @@ export const SelectBlockItem = styled('div')`
       }
     }
   }
+`
+
+type Props = {
+  isFocus: boolean
+  backgroundColor: string
+}
+
+export const MentionElementWrapper = styled('span').attrs<Props>(
+  (props) => props
+)<Props>`
+  font-size: 0.9rem;
+  background: ${({ backgroundColor }) => backgroundColor};
+  padding: 1px 0.4rem;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-left: 0.2rem;
+  box-shadow: 0 0 0 2px
+    ${({ isFocus }) => (isFocus ? `rgba(0,0,0,0.2)` : 'transparent')};
+
+  color: rgba(255, 255, 255, 0.7);
 `

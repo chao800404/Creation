@@ -42,14 +42,14 @@ export const DragPreviewWrapper = styled.div`
   align-items: 'center';
   background-color: #1c1c1c;
   border-radius: 4px;
-  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 24px -6px ${({ theme: { colors } }) => colors.shadow},
+    0 0 0 1px ${({ theme: { colors } }) => colors.shadow};
   color: #fff;
   display: inline-flex;
   font-size: 14px;
-  padding: 0.5rem 0.8rem;
+  padding: ${({ theme: { padding } }) => `${padding.pd_sm} ${padding.pd_lg}`};
   pointer-events: none;
-  gap: 0.5rem;
+  gap: ${({ theme }) => theme.padding.pd_md};
   transform: translate(-50%, -50%);
 
   .image_container {
@@ -92,7 +92,7 @@ export const CustomNodeWrapper = styled.div.attrs<CustomNodeType>(
     height: 32px;
     position: relative;
     z-index: 1;
-    padding: 0 0.5rem;
+    padding: ${({ theme: { padding } }) => `0 ${padding.pd_md}`};
     color: ${({ isSelected, isParent, theme }) =>
       isSelected
         ? '#ffffff'
@@ -122,7 +122,7 @@ export const CustomNodeWrapper = styled.div.attrs<CustomNodeType>(
       transform: rotate(0deg);
 
       & > .arrow_icon {
-        padding: 0.2rem;
+        padding: ${({ theme: { padding } }) => padding.pd_sm};
       }
     }
 
@@ -134,7 +134,7 @@ export const CustomNodeWrapper = styled.div.attrs<CustomNodeType>(
       align-items: center;
       display: flex;
       justify-content: center;
-      padding: 0.2rem;
+      padding: ${({ theme: { padding } }) => padding.pd_sm};
     }
 
     .isOpen {
@@ -147,7 +147,7 @@ export const CustomNodeWrapper = styled.div.attrs<CustomNodeType>(
       right: 0;
       display: flex;
       align-items: center;
-      padding: 0 0.5rem;
+      padding: 0 ${({ theme: { padding } }) => padding.pd_md};
       height: 100%;
       gap: 0.3rem;
       visibility: hidden;
@@ -177,7 +177,7 @@ export const CustomNodeWrapper = styled.div.attrs<CustomNodeType>(
     }
 
     .label {
-      padding-inline-start: 0.2rem;
+      padding-inline-start: ${({ theme: { padding } }) => padding.pd_sm};
       color: inherit;
       font-size: 0.8rem;
       margin-top: 0.1rem;

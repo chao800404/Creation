@@ -8,7 +8,7 @@ export const LineHeightDropdownWrapper = styled('div')`
   border-radius: 5px;
 
   & > div.toolbarDropdown-item {
-    padding: 0.2rem 0.5rem;
+    padding: ${({ theme: { padding } }) => `${padding.pd_sm} ${padding.pd_md}`};
     display: flex;
     align-items: center;
 

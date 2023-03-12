@@ -4,19 +4,21 @@ import { Plate, Toolbar } from '@udecode/plate'
 import { MyValue } from './plateTypes'
 import { Plugins } from './plugins/plugins'
 import getSuggestionItems from './mention/items'
-import { ELEMENT_PARAGRAPH, PlateProvider } from '@udecode/plate'
+import {
+  ELEMENT_PARAGRAPH,
+  PlateProvider,
+  MentionCombobox as MentionBaseCombobox,
+} from '@udecode/plate'
 import ToolbarButtons from './ToolbarButtons'
 import cuid from 'cuid'
 import dynamic from 'next/dynamic'
 import { EditorWrapper } from './styles'
 import { updateData } from '@/utils/fetch'
 import { useDebounce, useDebouncedCallback } from 'use-debounce'
-import { differenceBy } from 'lodash'
-import { useRouter } from 'next/router'
+import { MentionElement } from './mention/mentionElement'
 import { UpdateNode } from '@/hook/type'
 import { useStatusStore } from '@/store/useStatusStore'
 import { shallow } from 'zustand/shallow'
-import { useReadOnly } from 'slate-react'
 import { MENTIONABLES } from '@/data/mentionData'
 
 const MentionCombobox = dynamic(() => import('./mention/mentionCombobox'))
@@ -56,6 +58,8 @@ const Editor = ({
   //   }
   // }, [debugValue, onChange, node])
 
+  // console.log(debugValue)
+
   return (
     <EditorWrapper>
       <PlateProvider<MyValue>
@@ -74,6 +78,7 @@ const Editor = ({
             readOnly: !editable,
           })}
         >
+          <MentionBaseCombobox items={MENTIONABLES} pluginKey="#" />
           <MentionCombobox items={items} pluginKey="/" />
           {/* <CursorOverlayContainer containerRef={containerRef} /> */}
           {/* <MentionCombobox items={MENTIONABLES} /> */}

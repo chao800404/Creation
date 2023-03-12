@@ -7,8 +7,11 @@ import {
   TNodeEntry,
   Hotkeys,
   setNodes,
-} from '@udecode/plate'
-import {
+  isStartPoint,
+  getPointBefore,
+  getPointAfter,
+  findNode,
+  isEndPoint,
   KeyboardHandlerReturnType,
   PlateEditor,
   Value,
@@ -18,8 +21,8 @@ import {
   insertEmptyElement,
   isBlockAboveEmpty,
   removeNodes,
-} from '@udecode/plate-core'
-import isHotkey from 'is-hotkey'
+  getFirstNode,
+} from '@udecode/plate'
 import { ELEMENT_EH1, ELEMENT_EH2, ELEMENT_EH3 } from '../../eHeading-element'
 import {
   ELEMENT_EXPANDABLE_HEADING_1,
@@ -71,7 +74,6 @@ export const handleOnKeydown =
     if (hotKey && node) {
       const focusNode = getAboveNode(editor)
       if (focusNode && checkType(focusNode[0].type as string)) {
-        console.log(node[0])
         setNodes<MyExpandableHeading>(
           editor,
           { show: !node[0].show },
@@ -95,6 +97,52 @@ export const handleOnKeydown =
           removeNodes(editor, { at: focusNode[1] })
           insertParentNext(node)
         }
+      }
+    }
+
+    if (event.key === 'Backspace' || event.key === 'ArrowLeft') {
+      const focusNode = getAboveNode(editor)
+      if (focusNode) {
+        const prePos = getPointBefore(editor, focusNode[1])
+        if (!prePos) return
+        const parentNode = findNode(editor, {
+          at: prePos,
+          match: {
+            type: [
+              ELEMENT_EXPANDABLE_HEADING_1,
+              ELEMENT_EXPANDABLE_HEADING_2,
+              ELEMENT_EXPANDABLE_HEADING_3,
+            ],
+          },
+        })
+        const startPoint = isStartPoint(
+          editor,
+          editor?.selection?.anchor,
+          focusNode[1]
+        )
+
+        if (parentNode && !parentNode[0].show && startPoint) {
+          const children = getFirstNode(editor, parentNode[1])
+          if (children) {
+            event.preventDefault()
+            event.stopPropagation()
+            selectEditor(editor, { at: getEndPoint(editor, children[1]) })
+          }
+        }
+      }
+    }
+
+    if (event.key === 'ArrowRight' && node && !node[0].show) {
+      const focusNode = getAboveNode(editor)
+      const isEnd =
+        focusNode && isEndPoint(editor, editor?.selection?.anchor, focusNode[1])
+      if (isEnd) {
+        event.preventDefault()
+        event.stopPropagation()
+        const nextPoint = getPointAfter(editor, node[1])
+        nextPoint
+          ? selectEditor(editor, { at: getEndPoint(editor, nextPoint.path) })
+          : insertParentNext(node)
       }
     }
   }
